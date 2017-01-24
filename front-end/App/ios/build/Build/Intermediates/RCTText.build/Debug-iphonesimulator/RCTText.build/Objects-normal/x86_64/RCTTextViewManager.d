@@ -1,0 +1,30 @@
+dependencies: \
+  /Users/dpiotti/307/307Project/front-end/App/node_modules/react-native/Libraries/Text/RCTTextViewManager.m \
+  /Users/dpiotti/307/307Project/front-end/App/node_modules/react-native/Libraries/Text/RCTTextViewManager.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTViewManager.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTEventDispatcher.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTFont.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTShadowView.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/dpiotti/307/307Project/front-end/App/node_modules/react-native/Libraries/Text/RCTTextView.h \
+  /Users/dpiotti/307/307Project/front-end/App/ios/build/Build/Products/Debug-iphonesimulator/include/React/RCTView.h \
+  /Users/dpiotti/307/307Project/front-end/App/node_modules/react-native/Libraries/Text/RCTConvert+Text.h
