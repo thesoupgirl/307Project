@@ -1,0 +1,9 @@
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\bin\Debug\netcoreapp1.0\RoostApp.deps.json
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\bin\Debug\netcoreapp1.0\RoostApp.runtimeconfig.json
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\bin\Debug\netcoreapp1.0\RoostApp.runtimeconfig.dev.json
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\bin\Debug\netcoreapp1.0\RoostApp.dll
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\bin\Debug\netcoreapp1.0\RoostApp.pdb
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.AssemblyInfo.cs
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.dll
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.pdb
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.csprojResolveAssemblyReference.cache
