@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace RoostApp.Controllers
 {
     [Route("api/activities")]
@@ -14,7 +12,7 @@ namespace RoostApp.Controllers
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
         [HttpGet("{id:int}/{dist}")]
-        public IActionResult findActivities()
+        public IActionResult FindActivities()
         {
             return View();
         }
@@ -22,7 +20,7 @@ namespace RoostApp.Controllers
         // GET: /api/activities/category/{id}/{dist}
         // Gets list of activities within certain radius of user by category
         [HttpGet("{id:int}/{dist}")]
-        public IActionResult findActivitiesByCategory()
+        public IActionResult FindActivitiesByCategory()
         {
             return View();
         }
@@ -30,7 +28,7 @@ namespace RoostApp.Controllers
         // POST: /api/activities/{id}/createactivity
         // Creates an activity
         [HttpPost("{id:int}/createactivity")]
-        public IActionResult createActivity()
+        public IActionResult CreateActivity()
         {
             return View();
         }
@@ -38,7 +36,7 @@ namespace RoostApp.Controllers
         // POST: /api/activities/{id}/deleteactivity
         // Deletes an activity
         [HttpPost("{id:int}/deleteactivity")]
-        public IActionResult deleteActivity()
+        public IActionResult DeleteActivity()
         {
             return View();
         }

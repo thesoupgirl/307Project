@@ -14,14 +14,15 @@ namespace RoostApp.Controllers
         // PUT: /api/user/{id}/updateuser
         // Update user info
         [HttpPut("{id:int}/updateuser")]
-        public IActionResult updateUser()
+        public IActionResult UpdateUser()
         {
             return View();
         }
 
         // POST: /api/user/create
         [HttpPost("create")]
-        public IActionResult createUser()
+        // Create a new user
+        public IActionResult CreateUser()
         {
             return View();
         }
