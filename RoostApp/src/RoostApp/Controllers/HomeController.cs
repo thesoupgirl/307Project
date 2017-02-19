@@ -15,5 +15,11 @@ namespace RoostApp.Controllers
         {
             return View();
         }
+
+        // GET: /api/gettoken
+        // GET: /api/activities/{id}/{dist}
+        // GET: /api/activities/category/{id}/{dist}
+        // GET: /api/chat/{id}/{chat}/messages
+        // GET: /api/chat/{id}/threads
     }
 }

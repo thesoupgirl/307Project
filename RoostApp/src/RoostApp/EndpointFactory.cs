@@ -7,5 +7,6 @@ namespace RoostApp
 {
     public class EndpointFactory
     {
+
     }
 }
