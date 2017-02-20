@@ -7,6 +7,7 @@ import {
   Text,
   View
 } from 'react-native';
+//import Login from './login.js';
 
 /*  
   The launch compoent determines if the user is logged in.
