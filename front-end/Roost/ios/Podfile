@@ -9,6 +9,7 @@ target 'App' do
 
   target 'AppTests' do
     inherit! :search_paths
+pod 'Google'
 pod 'Google/SignIn'
     # Pods for testing
   end
