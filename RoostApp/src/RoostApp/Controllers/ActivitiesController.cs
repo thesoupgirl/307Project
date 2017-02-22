@@ -27,7 +27,7 @@ namespace RoostApp.Controllers
 
         // POST: /api/activities/{id}/createactivity
         // Creates an activity
-        [HttpPost("{id:int}/createactivity")]
+        [HttpPost("{id}/createactivity")]
         public IActionResult CreateActivity()
         {
             return View();

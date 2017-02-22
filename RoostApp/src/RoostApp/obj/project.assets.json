@@ -2,7 +2,7 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
-      "AWSSDK.Core/3.3.0": {
+      "AWSSDK.Core/3.3.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.0.1",
@@ -32,6 +32,18 @@
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.3.2.1": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.3.8, 3.4.0)"
+        },
+        "compile": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.3.0.3": {
@@ -1295,6 +1307,22 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "build": {
+          "build/netstandard1.0/Microsoft.Extensions.Configuration.UserSecrets.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.1.0": {
@@ -4407,7 +4435,7 @@
       }
     },
     ".NETCoreApp,Version=v1.0/win": {
-      "AWSSDK.Core/3.3.0": {
+      "AWSSDK.Core/3.3.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.0.1",
@@ -4437,6 +4465,18 @@
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.3.2.1": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.3.8, 3.4.0)"
+        },
+        "compile": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.3.0.3": {
@@ -5666,6 +5706,22 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "build": {
+          "build/netstandard1.0/Microsoft.Extensions.Configuration.UserSecrets.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.1.0": {
@@ -8832,7 +8888,7 @@
       }
     },
     ".NETCoreApp,Version=v1.0/win-x64": {
-      "AWSSDK.Core/3.3.0": {
+      "AWSSDK.Core/3.3.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.0.1",
@@ -8862,6 +8918,18 @@
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.3.2.1": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.3.8, 3.4.0)"
+        },
+        "compile": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.3.0.3": {
@@ -10091,6 +10159,22 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "build": {
+          "build/netstandard1.0/Microsoft.Extensions.Configuration.UserSecrets.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.1.0": {
@@ -13257,7 +13341,7 @@
       }
     },
     ".NETCoreApp,Version=v1.0/win-x86": {
-      "AWSSDK.Core/3.3.0": {
+      "AWSSDK.Core/3.3.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.CSharp": "4.0.1",
@@ -13287,6 +13371,18 @@
         },
         "runtime": {
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
+        }
+      },
+      "AWSSDK.DynamoDBv2/3.3.2.1": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.3.8, 3.4.0)"
+        },
+        "compile": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll": {}
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.3.0.3": {
@@ -14516,6 +14612,22 @@
         },
         "runtime": {
           "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Configuration.UserSecrets/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Json": "1.1.0",
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll": {}
+        },
+        "build": {
+          "build/netstandard1.0/Microsoft.Extensions.Configuration.UserSecrets.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/1.1.0": {
@@ -17683,20 +17795,22 @@
     }
   },
   "libraries": {
-    "AWSSDK.Core/3.3.0": {
-      "sha512": "3vdBNgrxQ1JlK8nMInnioczStfkWMF9C8Fqkr0vNtLiKKB418tv9JnmiQNHNy1ZvSzCy9v2RlEZy/hogyPrItQ==",
+    "AWSSDK.Core/3.3.8": {
+      "sha512": "sDEABDAYvdjkXk9bNHzMbxmN+ubpr8YhaKlZgAhNs5N8dptVKaFTvPq9dK3/bDHxDGYJGSJcNFJ9FobUh/tsWg==",
       "type": "package",
-      "path": "awssdk.core/3.3.0",
+      "path": "awssdk.core/3.3.8",
       "files": [
-        "awssdk.core.3.3.0.nupkg.sha512",
+        "awssdk.core.3.3.8.nupkg.sha512",
         "awssdk.core.nuspec",
+        "lib/MonoAndroid10/AWSSDK.Core.XML",
+        "lib/MonoAndroid10/AWSSDK.Core.dll",
+        "lib/MonoAndroid10/AWSSDK.Core.pdb",
+        "lib/MonoTouch10/AWSSDK.Core.XML",
+        "lib/MonoTouch10/AWSSDK.Core.dll",
         "lib/Xamarin.Mac20/AWSSDK.Core.XML",
         "lib/Xamarin.Mac20/AWSSDK.Core.dll",
         "lib/Xamarin.iOS10/AWSSDK.Core.XML",
         "lib/Xamarin.iOS10/AWSSDK.Core.dll",
-        "lib/monoandroid/AWSSDK.Core.XML",
-        "lib/monoandroid/AWSSDK.Core.dll",
-        "lib/monoandroid/AWSSDK.Core.pdb",
         "lib/net35/AWSSDK.Core.XML",
         "lib/net35/AWSSDK.Core.dll",
         "lib/net35/AWSSDK.Core.pdb",
@@ -17706,12 +17820,15 @@
         "lib/netstandard1.3/AWSSDK.Core.dll",
         "lib/netstandard1.3/AWSSDK.Core.pdb",
         "lib/netstandard1.3/AWSSDK.Core.xml",
-        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10/AWSSDK.Core.XML",
-        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10/AWSSDK.Core.dll",
-        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid10+xamarinios10+MonoTouch10/AWSSDK.Core.pdb",
-        "lib/windows8/AWSSDK.Core.XML",
-        "lib/windows8/AWSSDK.Core.dll",
-        "lib/windows8/AWSSDK.Core.pdb",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.Core.XML",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.Core.dll",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.Core.pdb",
+        "lib/uap/AWSSDK.Core.XML",
+        "lib/uap/AWSSDK.Core.dll",
+        "lib/uap/AWSSDK.Core.pdb",
+        "lib/win8/AWSSDK.Core.XML",
+        "lib/win8/AWSSDK.Core.dll",
+        "lib/win8/AWSSDK.Core.pdb",
         "lib/wp8/AWSSDK.Core.XML",
         "lib/wp8/AWSSDK.Core.dll",
         "lib/wp8/AWSSDK.Core.pdb",
@@ -17719,6 +17836,37 @@
         "lib/wpa81/AWSSDK.Core.dll",
         "lib/wpa81/AWSSDK.Core.pdb",
         "tools/account-management.ps1"
+      ]
+    },
+    "AWSSDK.DynamoDBv2/3.3.2.1": {
+      "sha512": "04NpNiPmxs4nbXdtVgTahq3tz3vEg0WdURn6+doVZwgg2q4e8h9NrmK8DnS1Lre+LaFb3ZBB7EQuTQ3KppXWFA==",
+      "type": "package",
+      "path": "awssdk.dynamodbv2/3.3.2.1",
+      "files": [
+        "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
+        "awssdk.dynamodbv2.3.3.2.1.nupkg.sha512",
+        "awssdk.dynamodbv2.nuspec",
+        "lib/MonoAndroid10/AWSSDK.DynamoDBv2.XML",
+        "lib/MonoAndroid10/AWSSDK.DynamoDBv2.dll",
+        "lib/MonoTouch10/AWSSDK.DynamoDBv2.XML",
+        "lib/MonoTouch10/AWSSDK.DynamoDBv2.dll",
+        "lib/MonoTouch10/AWSSDK.DynamoDBv2.pdb",
+        "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.XML",
+        "lib/Xamarin.iOS10/AWSSDK.DynamoDBv2.dll",
+        "lib/net35/AWSSDK.DynamoDBv2.XML",
+        "lib/net35/AWSSDK.DynamoDBv2.dll",
+        "lib/net35/AWSSDK.DynamoDBv2.pdb",
+        "lib/net45/AWSSDK.DynamoDBv2.XML",
+        "lib/net45/AWSSDK.DynamoDBv2.dll",
+        "lib/net45/AWSSDK.DynamoDBv2.pdb",
+        "lib/netstandard1.3/AWSSDK.DynamoDBv2.dll",
+        "lib/netstandard1.3/AWSSDK.DynamoDBv2.pdb",
+        "lib/netstandard1.3/AWSSDK.DynamoDBv2.xml",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.DynamoDBv2.XML",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.DynamoDBv2.dll",
+        "lib/portable-net45+win8+wpa81+wp8/AWSSDK.DynamoDBv2.pdb",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
       ]
     },
     "AWSSDK.Extensions.NETCore.Setup/3.3.0.3": {
@@ -18762,6 +18910,20 @@
         "lib/netstandard1.3/Microsoft.Extensions.Configuration.Json.xml",
         "microsoft.extensions.configuration.json.1.1.0.nupkg.sha512",
         "microsoft.extensions.configuration.json.nuspec"
+      ]
+    },
+    "Microsoft.Extensions.Configuration.UserSecrets/1.1.0": {
+      "sha512": "dwnc4zAXjdh+j/T08UXwhfobzQms3Ta0j3mCGOavRsbO5f2PA929kfQTjaMxPDdFZ6MFP0eeEjgPorf3tpTqVw==",
+      "type": "package",
+      "path": "microsoft.extensions.configuration.usersecrets/1.1.0",
+      "files": [
+        "build/netstandard1.0/Microsoft.Extensions.Configuration.UserSecrets.targets",
+        "lib/net451/Microsoft.Extensions.Configuration.UserSecrets.dll",
+        "lib/net451/Microsoft.Extensions.Configuration.UserSecrets.xml",
+        "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.dll",
+        "lib/netstandard1.5/Microsoft.Extensions.Configuration.UserSecrets.xml",
+        "microsoft.extensions.configuration.usersecrets.1.1.0.nupkg.sha512",
+        "microsoft.extensions.configuration.usersecrets.nuspec"
       ]
     },
     "Microsoft.Extensions.DependencyInjection/1.1.0": {
@@ -25062,6 +25224,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v1.0": [
+      "AWSSDK.DynamoDBv2 >= 3.3.2.1",
       "AWSSDK.Extensions.NETCore.Setup >= 3.3.0.3",
       "BundlerMinifier.Core >= 2.3.327",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.0.0",
@@ -25077,6 +25240,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer.Design >= 1.1.0",
       "Microsoft.Extensions.Configuration.EnvironmentVariables >= 1.1.0",
       "Microsoft.Extensions.Configuration.Json >= 1.1.0",
+      "Microsoft.Extensions.Configuration.UserSecrets >= 1.1.0",
       "Microsoft.Extensions.Logging >= 1.1.0",
       "Microsoft.Extensions.Logging.Console >= 1.1.0",
       "Microsoft.Extensions.Logging.Debug >= 1.1.0",
@@ -25161,6 +25325,14 @@
             "autoReferenced": true
           },
           "Microsoft.VisualStudio.Web.BrowserLink": {
+            "target": "Package",
+            "version": "1.1.0"
+          },
+          "AWSSDK.DynamoDBv2": {
+            "target": "Package",
+            "version": "3.3.2.1"
+          },
+          "Microsoft.Extensions.Configuration.UserSecrets": {
             "target": "Package",
             "version": "1.1.0"
           },

@@ -7,3 +7,4 @@ C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\Roo
 C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.dll
 C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.pdb
 C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\RoostApp.csprojResolveAssemblyReference.cache
+C:\Users\josep\Documents\Roost\RoostApp\src\RoostApp\obj\Debug\netcoreapp1.0\UserSecretsAssemblyInfo.cs

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Routing;
+using Amazon.DynamoDBv2;
 
 namespace RoostApp
 {
@@ -26,6 +27,8 @@ namespace RoostApp
 
             if (env.IsDevelopment())
             {
+
+                //builder.AddUserSecrets();
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
@@ -43,6 +46,14 @@ namespace RoostApp
             services.AddReact();
 
             services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddAWSService<IAmazonDynamoDB>();
+
+            // Add AWS secret keys
+           /* services.Configure(options =>
+            {
+
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +67,7 @@ namespace RoostApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
             }
             else
             {
