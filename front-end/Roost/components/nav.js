@@ -33,7 +33,6 @@ export default class Nav extends Component {
     }
 
     selectedPage() {
-        console.log('yp')
         if (this.state.page === 'explore')
             return <SwipeActivities/>
         else if (this.state.page === 'categories')

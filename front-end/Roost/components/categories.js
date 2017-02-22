@@ -20,13 +20,15 @@ export default class Categories extends Component {
   constructor(props) {
         super(props)
         this.state = {
-            
+          page: 'explore',
+          active: true
         }
        this.click = this.click.bind(this)
     }
 
     click () {
-      console.log('hi')
+      if (this.state.page === 'explore')
+            return <SwipeActivities/>
     }
     
 
