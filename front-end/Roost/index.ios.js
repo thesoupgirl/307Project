@@ -4,6 +4,8 @@
  * @flow
  */
 import Launch from './components/launch.js'
+import Login from './components/login.js'
+import Signup from './components/signup.js'
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -13,4 +15,4 @@ import {
 } from 'react-native';
 
 
-AppRegistry.registerComponent('App', () => Launch);
+AppRegistry.registerComponent('App', () => Login);
