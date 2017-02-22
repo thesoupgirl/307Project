@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Footer, 
 Icon, FooterTab, Header, View, Left, Body, Title,
-Right, DeckSwiper, Card, CardItem, Thumbnail, H1} from 'native-base';
+Right, DeckSwiper, Card, CardItem, Thumbnail, H1, ListItem, connectStyle} from 'native-base';
 var styles = require('./styles'); 
 import {
   AppRegistry,
@@ -9,6 +9,7 @@ import {
   Navigator,
   Image
 } from 'react-native';
+
 
 /*  
     
@@ -21,16 +22,48 @@ export default class Categories extends Component {
         this.state = {
             
         }
-       
+       this.click = this.click.bind(this)
     }
+
+    click () {
+      console.log('hi')
+    }
+    
 
   render() {
     return (
-      <Container>
-          <H1>Categories</H1>
+      
+      <Container>  
+        <View>
+        <View style={styles.center}>
+          <H1 style={styles.title}>Categories</H1>
+        </View>
+          <ListItem onClick={this.click()}>
+                <Text>Sports</Text>
+            </ListItem>
+            <ListItem>
+                <Text>Eat</Text>
+            </ListItem>
+            <ListItem >
+                <Text>Adventures</Text>
+            </ListItem>
+            <ListItem>
+                <Text>Study Groups</Text>
+            </ListItem>
+            </View>
       </Container>
     );
   }
 }
+
+const styles = {
+    title: {
+      color: 'red',
+    },
+    center: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
+};
 
 

@@ -14,6 +14,29 @@ import {
     
 */
 
+const cards = [
+    {
+        text: 'Card One',
+        name: 'One',
+        image: require('./img/water.png')
+    },
+    {
+        text: 'Card One',
+        name: 'Two',
+        image: require('./img/water.png')
+    },
+    {
+        text: 'Card One',
+        name: 'Three',
+        image: require('./img/water.png')
+    },
+    {
+        text: 'Card One',
+        name: 'Four',
+        image: require('./img/water.png')
+    }
+];
+
 
 export default class SwipeActivities extends Component {
   constructor(props) {
@@ -28,7 +51,40 @@ export default class SwipeActivities extends Component {
   render() {
     return (
       <Container>
-        <H1>Swipe Activites</H1>
+        <View padder >
+             <DeckSwiper
+                        dataSource={cards}
+                        renderItem={item =>
+                            <Card style={{ elevation: 3 }}>
+                                <CardItem>
+                                    <Left>
+                                        <Thumbnail source={item.image} />
+                                    </Left>
+                                    <Body>
+                                        <Text>{item.text}</Text>
+                                        <Text note>NativeBase</Text>
+                                    </Body>
+                                </CardItem>
+                                <CardItem cardBody>
+                                    <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
+                                </CardItem>
+                                <CardItem>
+                                    <Left>
+                                    <Button danger><Text> Skip </Text></Button>
+                                    </Left>
+                                    <H1>
+                                    <Text>{item.name}</Text>
+                                    </H1>
+                                    <Right>
+                                    <Button success><Text> Join </Text></Button>
+                                    </Right>
+                                </CardItem>
+                                
+                            </Card>
+                        }
+                    />
+                                
+        </View>
       </Container>
     );
   }
