@@ -14,7 +14,11 @@ namespace RoostApp
     /// </summary>
     public class DBHelper
     {
-        private readonly AmazonDynamoDBClient client;
+        public readonly AmazonDynamoDBClient client;
+
+        /// <summary>
+        /// The constructor sets the credentials and configures settings such as the region endpoint.
+        /// </summary>
         public DBHelper()
         {
             var config = new ConfigurationBuilder()
@@ -22,6 +26,7 @@ namespace RoostApp
             .Build();
 
             // You may have to add these values to your secrets.json file first.
+            // secrets.json is located in C:\User\AppData\Roaming\, not the project folder
             var accessKey = config["AWSAccessKey"];
             var secretKey = config["AWSSecretKey"];
 
