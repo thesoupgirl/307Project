@@ -27,6 +27,14 @@ export default class MessageThreads extends Component {
   render() {
     return (
       <Container>
+        <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
           <H1>Message Threads</H1>
       </Container>
     );

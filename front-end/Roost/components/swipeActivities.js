@@ -51,6 +51,14 @@ export default class SwipeActivities extends Component {
   render() {
     return (
       <Container>
+          <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
         <View padder >
              <DeckSwiper
                         dataSource={cards}

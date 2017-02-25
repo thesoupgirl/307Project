@@ -27,6 +27,14 @@ export default class AddActivity extends Component {
   render() {
     return (
       <Container>
+        <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
           <H1>Add</H1>
       </Container>
     );
