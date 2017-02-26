@@ -35,7 +35,7 @@ export default class MessageThreads extends Component {
             </Body>
             <Right/>
         </Header>
-          <H1>Message Threads</H1>
+          <Text>Message Threads</Text>
       </Container>
     );
   }

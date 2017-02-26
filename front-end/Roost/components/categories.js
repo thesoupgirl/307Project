@@ -45,7 +45,7 @@ export default class Categories extends Component {
             <Right/>
         </Header>
         <View style={styles.center}>
-          <H1 style={styles.title}>Categories</H1>
+          <Text style={styles.title}>Categories</Text>
         </View>
           <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
                 <Text>Sports</Text>

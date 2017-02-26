@@ -80,9 +80,9 @@ export default class SwipeActivities extends Component {
                                     <Left>
                                     <Button danger><Text> Skip </Text></Button>
                                     </Left>
-                                    <H1>
+                                   
                                     <Text>{item.name}</Text>
-                                    </H1>
+                                    
                                     <Right>
                                     <Button success><Text> Join </Text></Button>
                                     </Right>

@@ -35,7 +35,7 @@ export default class AddActivity extends Component {
             </Body>
             <Right/>
         </Header>
-          <H1>Add</H1>
+          <Text>Add</Text>
       </Container>
     );
   }

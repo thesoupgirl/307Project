@@ -35,7 +35,7 @@ export default class Profile extends Component {
             </Body>
             <Right/>
         </Header>
-          <H1>Profile</H1>
+          <Text>Profile</Text>
       </Container>
     );
   }
