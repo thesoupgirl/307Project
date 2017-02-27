@@ -63,7 +63,6 @@ export default class Login extends Component {
       );
   }
 }
-
   /*
      render() {
      return (
@@ -211,4 +210,5 @@ width,
     marginLeft: 5,
   }
 });
+
 */
