@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "705785466919",
+    "project_id": "roost-73059"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705785466919:android:6f9b857bd20411a1",
+        "android_client_info": {
+          "package_name": "com.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705785466919-1sa8lnd53dbass778r5oa3hgn75ocnai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app",
+            "certificate_hash": "9ba89aa0b60423cb9c89d1d71b7d89c2ae4b071c"
+          }
+        },
+        {
+          "client_id": "705785466919-5i86kohrp29pi63tamv193krdm95kmvs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDi_FTQx64SGWMNjZAGYg98zrr8xAj1N0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
