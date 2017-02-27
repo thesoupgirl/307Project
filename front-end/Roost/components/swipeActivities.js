@@ -51,6 +51,14 @@ export default class SwipeActivities extends Component {
   render() {
     return (
       <Container>
+          <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
         <View padder >
              <DeckSwiper
                         dataSource={cards}
@@ -72,9 +80,9 @@ export default class SwipeActivities extends Component {
                                     <Left>
                                     <Button danger><Text> Skip </Text></Button>
                                     </Left>
-                                    <H1>
+                                   
                                     <Text>{item.name}</Text>
-                                    </H1>
+                                    
                                     <Right>
                                     <Button success><Text> Join </Text></Button>
                                     </Right>

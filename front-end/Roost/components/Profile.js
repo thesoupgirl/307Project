@@ -27,7 +27,15 @@ export default class Profile extends Component {
   render() {
     return (
       <Container>
-          <H1>Profile</H1>
+        <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
+          <Text>Profile</Text>
       </Container>
     );
   }

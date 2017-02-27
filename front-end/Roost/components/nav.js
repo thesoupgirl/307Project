@@ -48,16 +48,6 @@ export default class Nav extends Component {
        render() {
         return (
             <Container>
-                <Header>
-                    <Left>
-                        
-                    </Left>
-                    <Body>
-                       <Text>Roost</Text>
-                    </Body>
-                    <Right />
-                </Header>
-
                 <Content>
                     {this.selectedPage()}
                 </Content>

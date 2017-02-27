@@ -9,6 +9,7 @@ import {
   Navigator,
   Image
 } from 'react-native';
+import Login from './login'
 
 
 /*  
@@ -20,39 +21,74 @@ export default class Categories extends Component {
   constructor(props) {
         super(props)
         this.state = {
-          page: 'explore',
+          page: 'search',
           active: true
         }
        this.click = this.click.bind(this)
+       this.renderCategory = this.renderCategory.bind(this)
     }
 
-    click () {
-      if (this.state.page === 'explore')
-            return <SwipeActivities/>
+    click (page) {
+      this.state.page = page
+    }
+
+    renderCategory() {
+      if (this.state.page === 'search') {
+        return (  
+        <View>
+        <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right/>
+        </Header>
+        <View style={styles.center}>
+          <Text style={styles.title}>Categories</Text>
+        </View>
+          <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
+                <Text>Sports</Text>
+            </ListItem>
+            <ListItem button onPress={() => {this.setState({ page: 'Eat' })}}>
+                <Text>Eat</Text>
+            </ListItem>
+            <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
+                <Text>Adventures</Text>
+            </ListItem>
+            <ListItem button onPress={() => {this.setState({ page: 'Study Groups' })}}>
+                <Text>Study Groups</Text>
+            </ListItem>
+            </View>
+        )
+      }
+      else {
+        return (
+        <View>
+          <Header>
+            <Left>
+                <Button transparent onPress={() => {this.setState({ page: 'search' })}}>
+                    <Icon name='arrow-back' />
+                </Button>
+            </Left>
+            <Body>
+                <Title>Roost</Title>
+            </Body>
+            <Right>
+            </Right>
+        </Header>
+        <Text>{this.state.page}</Text>
+        </View>
+        )
+      }
+      
     }
     
 
   render() {
     return (
-      
-      <Container>  
-        <View>
-        <View style={styles.center}>
-          <H1 style={styles.title}>Categories</H1>
-        </View>
-          <ListItem onClick={this.click()}>
-                <Text>Sports</Text>
-            </ListItem>
-            <ListItem>
-                <Text>Eat</Text>
-            </ListItem>
-            <ListItem >
-                <Text>Adventures</Text>
-            </ListItem>
-            <ListItem>
-                <Text>Study Groups</Text>
-            </ListItem>
-            </View>
+      <Container>
+        {this.renderCategory()}
       </Container>
     );
   }
