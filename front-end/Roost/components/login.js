@@ -62,6 +62,7 @@ export default class Login extends Component {
       </View>
       );
   }
+}
 
   /*
      render() {
@@ -210,5 +211,4 @@ width,
     marginLeft: 5,
   }
 });
-
 */
