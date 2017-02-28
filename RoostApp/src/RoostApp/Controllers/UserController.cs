@@ -15,34 +15,38 @@ namespace RoostApp.Controllers
 
         // PUT: /api/user/{id}/updateuser
         // Update user info
-        [HttpPut("{id}/updateuser")]
-        public IActionResult UpdateUser()
+        [HttpPut("{id}/update")]
+        public string UpdateUser(string id)
         {
-            return View();
+            return "User is updated here";
         }
 
         // POST: /api/user/create
         [HttpPost("create")]
         // Create a new user
-        public IActionResult CreateUser()
+        public string CreateUser()
         {
-            return View();
+            return "Create user here.";
         }
 
-        // POST: /api/user/{id}/settings/update
-        [HttpPost("{id}/savesettings")]
+        // POST: /api/user/{id}
+        [HttpPost("{id}")]
         // Saves user settings in DB
-        public async void SaveSettings()
+        public async void SaveSettings(string id)
         {
             await db.client.PutItemAsync(
                 tableName: "User",
                 item: new Dictionary<string, AttributeValue>
                 {
                     // Save the settings as a string
-                    {"UserId", new AttributeValue {S = "{id}"} },
-                    {"Settings", new AttributeValue {S = ""} }
+                    // Settings will be received as JSON
+                    {"userId", new AttributeValue {S = id} },
+                    {"displayName", new AttributeValue {S = "Hello world"} },
+                    {"settings", new AttributeValue {S = "Distance: 10mi"} }
                 }
             );
+
+           
         }
     }
 }
