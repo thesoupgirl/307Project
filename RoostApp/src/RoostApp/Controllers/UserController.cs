@@ -25,9 +25,16 @@ namespace RoostApp.Controllers
         // POST: /api/user/create
         [HttpPost("create")]
         // Create a new user
-        public string CreateUser()
+        public async void CreateUser()
         {
-            return "Create user here.";
+            await db.client.PutItemAsync(
+                tableName: "User",
+                item: new Dictionary<string, AttributeValue>
+                {
+                    {"userId", new AttributeValue {S = ""} },
+                    {"displayName", new AttributeValue {S = ""} }
+                }
+            );
         }
 
         // POST: /api/user/{id}
@@ -35,48 +42,21 @@ namespace RoostApp.Controllers
         // Saves user settings in DB
         public async void SaveSettings(string id)
         {
-
             await db.client.UpdateItemAsync(
                 tableName: "User",
                 key: new Dictionary<string, AttributeValue>
                 {
+                    // Find the user based on their id and display name
                     {"userId", new AttributeValue {S = id} },
                     {"displayName", new AttributeValue {S = "Hello world"} }
                 },
 
+                // Choose the attribute(s) we want to update
                 attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                 {
-                    {
-                        "settings", new AttributeValueUpdate(new AttributeValue {S = "Distance: 15mi"}, AttributeAction.PUT)
-
-                    }
+                    {"settings", new AttributeValueUpdate(new AttributeValue {S = "Distance: 15mi"}, AttributeAction.PUT)}
                 }
             );
-
-            /*var user = await db.client.GetItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, AttributeValue>
-                {
-                    // Save the settings as a string
-                    // Settings will be received as JSON
-                    {"userId", new AttributeValue {S = id} }
-                }
-            );
-
-
-           await db.client.PutItemAsync(
-                tableName: "User",
-                item: new Dictionary<string, AttributeValue>
-                {
-                    // Save the settings as a string
-                    // Settings will be received as JSON
-                    {"userId", new AttributeValue {S = id} },
-                    {"displayName", new AttributeValue {S = "Hello world"} },
-                    {"settings", new AttributeValue {S = "Distance: 10mi"} }
-                }
-            );*/
-
-           
         }
     }
 }
