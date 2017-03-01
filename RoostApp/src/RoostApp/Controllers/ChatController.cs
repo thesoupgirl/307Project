@@ -12,7 +12,7 @@ namespace RoostApp.Controllers
         // GET: /api/chat/{id}/{chat}/messages
         [HttpGet("{id}/{chat}/messages")]
         // Gets messages for a thread
-        public IActionResult GetMessages()
+        public IActionResult GetMessages(string id, string chat)
         {
             return View();
         }
@@ -20,7 +20,7 @@ namespace RoostApp.Controllers
         // POST: /api/chat/{id}/send
         [HttpPost("{id}/send")]
         // Sends message to the group
-        public IActionResult SendMessage()
+        public IActionResult SendMessage(string id)
         {
             return View();
         }
@@ -28,7 +28,7 @@ namespace RoostApp.Controllers
         // GET: /api/chat/{id}/threads
         [HttpGet("{id}/threads")]
         // Gets a list of the threads a user is subscribed to
-        public IActionResult GetThreads()
+        public IActionResult GetThreads(string id)
         {
             return View();
         }

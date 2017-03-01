@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2;
 
 namespace RoostApp.Controllers
 {
@@ -34,7 +35,36 @@ namespace RoostApp.Controllers
         // Saves user settings in DB
         public async void SaveSettings(string id)
         {
-            await db.client.PutItemAsync(
+
+            await db.client.UpdateItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, AttributeValue>
+                {
+                    {"userId", new AttributeValue {S = id} },
+                    {"displayName", new AttributeValue {S = "Hello world"} }
+                },
+
+                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                {
+                    {
+                        "settings", new AttributeValueUpdate(new AttributeValue {S = "Distance: 15mi"}, AttributeAction.PUT)
+
+                    }
+                }
+            );
+
+            /*var user = await db.client.GetItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, AttributeValue>
+                {
+                    // Save the settings as a string
+                    // Settings will be received as JSON
+                    {"userId", new AttributeValue {S = id} }
+                }
+            );
+
+
+           await db.client.PutItemAsync(
                 tableName: "User",
                 item: new Dictionary<string, AttributeValue>
                 {
@@ -44,7 +74,7 @@ namespace RoostApp.Controllers
                     {"displayName", new AttributeValue {S = "Hello world"} },
                     {"settings", new AttributeValue {S = "Distance: 10mi"} }
                 }
-            );
+            );*/
 
            
         }
