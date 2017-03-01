@@ -1,8 +1,0 @@
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/bin/Release/netcoreapp1.1/RoostApp.deps.json
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/bin/Release/netcoreapp1.1/RoostApp.runtimeconfig.json
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/bin/Release/netcoreapp1.1/RoostApp.runtimeconfig.dev.json
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/bin/Release/netcoreapp1.1/RoostApp.dll
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/bin/Release/netcoreapp1.1/RoostApp.pdb
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/obj/Release/netcoreapp1.1/RoostApp.AssemblyInfo.cs
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/obj/Release/netcoreapp1.1/RoostApp.dll
-/Users/lisacampbell/307Shit/307Project/RoostApp/src/RoostApp/obj/Release/netcoreapp1.1/RoostApp.pdb
