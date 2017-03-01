@@ -15,6 +15,13 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <RuntimeIdentifiers>win10-x64;win10-x86;osx-10.10-x64;</RuntimeIdentifiers>
+    <SuppressDockerTargets>true</SuppressDockerTargets>
+  </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />
     <DnxInvisibleContent Include=".bowerrc" />
