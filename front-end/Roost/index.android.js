@@ -4,6 +4,7 @@
  * @flow
  */
 import Launch from './components/launch.js'
+import Login from './components/login.js'
 import React, { Component } from 'react';
 import {
   AppRegistry,
