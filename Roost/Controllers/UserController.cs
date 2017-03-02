@@ -41,6 +41,7 @@ namespace RoostApp.Controllers
         [HttpPut("{id}/update")]
         public async void UpdateUser(string id)
         {
+            string updatedInfo = Response.Headers["updatedInfo"];
             try
             {
                 await db.client.UpdateItemAsync(
@@ -54,7 +55,7 @@ namespace RoostApp.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
+                        {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
                     }
                 );
             } catch (Exception)
@@ -69,9 +70,10 @@ namespace RoostApp.Controllers
         // Create a new user
         public async Task<string> CreateUser()
         {
+            string info = Response.Headers["userInfo"];
             try
             {
-                var response = await db.client.PutItemAsync(
+                await db.client.PutItemAsync(
                     tableName: "User",
                     item: new Dictionary<string, AttributeValue>
                     {
@@ -95,11 +97,11 @@ namespace RoostApp.Controllers
         public async Task<string> SaveSettings(string id)
         {
             // The settings will be stored as JSON in the response header.
-            string settings = Json(Response.Headers.ToList()).ToString();
+            string settings = Response.Headers["settings"];
 
             try
             {
-                var response = await db.client.UpdateItemAsync(
+                await db.client.UpdateItemAsync(
                     tableName: "User",
                     key: new Dictionary<string, AttributeValue>
                     {
@@ -114,7 +116,7 @@ namespace RoostApp.Controllers
                         }
                     }
                 );
-                return "userID";
+                return settings;
             } catch (Exception)
             {
                 return "Error: something went wrong.";
