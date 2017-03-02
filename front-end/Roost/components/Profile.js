@@ -65,9 +65,10 @@ export default class Profile extends Component {
                         <Item label="40 miles" value="50" />
                    </Picker>
                 </Content>
-          <Button light block style={styles.center} onPress={() => this.setState({logout: true},
-             this.props.hideNav())}><Text>Logout</Text></Button>
-        </Content>
+                 </Content>
+         //<Button light block style={styles.center} onPress={() => this.setState({logout: true},
+             //this.props.hideNav())}><Text>Logout</Text></Button>}}
+       
       )
     
   }
