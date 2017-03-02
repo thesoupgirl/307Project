@@ -16,7 +16,7 @@ namespace RoostApp.Controllers
 
         // GET: /api/user/login
         [HttpGet("login")]
-        public async void Login()
+        public async Task<string> Login()
         {
             try
             {
@@ -24,14 +24,15 @@ namespace RoostApp.Controllers
                     tableName: "User",
                     key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
-                        // Find the user based on their display name and password
-                        // and set a bool to true
+                        {"userId", new AttributeValue {S = "777"} },
+                        {"displayName", new AttributeValue {S = "joe"} },
+                        {"password", new AttributeValue {S = "blah"} }
                     }
                 );
-
+                return "User exists";
             } catch (Exception)
             {
-
+                return "Error: Incorrect username or password";
             }
         }
 
@@ -72,10 +73,11 @@ namespace RoostApp.Controllers
             {
                 var response = await db.client.PutItemAsync(
                     tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
+                    item: new Dictionary<string, AttributeValue>
                     {
                         {"userId", new AttributeValue {S = "777"} },
-                        {"displayName", new AttributeValue {S = "joe"} }
+                        {"displayName", new AttributeValue {S = "joe"} },
+                        {"password", new AttributeValue {S = "blah"} }
                     }
                 );
 
