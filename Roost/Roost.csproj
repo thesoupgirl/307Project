@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>Roost</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>Roost</PackageId>
+    <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot;web.config">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.1.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.3" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.0.3" />
+  </ItemGroup>
+
+</Project>
