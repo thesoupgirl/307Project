@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text, Footer, 
 Icon, FooterTab, Header, View, Left, Body, Title,
 Right, DeckSwiper, Card, CardItem, Thumbnail, H1, Item,
-Picker, Input, Label, Form} from 'native-base';
+Picker, Input, Label, Form, CheckBox, ListItem} from 'native-base';
 var styles = require('./styles'); 
 import {
   AppRegistry,
@@ -26,12 +26,17 @@ export default class Profile extends Component {
             username:'',
             password:'',
             dist: '5',
+            push: true,
             logout: false,
             updateSetttings: false
         }
        //this.logoff = this.logoff.bind(this);
        this.disp = this.disp.bind(this);
        this.info = this.info.bind(this);
+       this.userUpdate = this.userUpdate.bind(this)
+  }
+  userUpdate () {
+    //send change to database
   }
 
   componentWillMount() {
@@ -52,6 +57,12 @@ export default class Profile extends Component {
               </Item>
           </Form>
           <Content>
+            <ListItem>
+                        <CheckBox onPress={() => this.setState({push: !this.state.push})} checked={this.state.push} />
+                        <Body>
+                            <Text>Push notificaitons</Text>
+                        </Body>
+                    </ListItem>
             <Text>choose distance:</Text>
                     <Picker
                         iosHeader="Select one"
@@ -65,9 +76,11 @@ export default class Profile extends Component {
                         <Item label="40 miles" value="50" />
                    </Picker>
                 </Content>
+                 <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings},
+             this.userUpdate())}>
+                   <Text>Confirm Changes</Text></Button>
                  </Content>
-         //<Button light block style={styles.center} onPress={() => this.setState({logout: true},
-             //this.props.hideNav())}><Text>Logout</Text></Button>}}
+        
        
       )
     
@@ -75,7 +88,7 @@ export default class Profile extends Component {
     disp() {
       if (this.state.logout) {
         return (<Launch/>)
-      }
+  }
       else {
         return (
         <Container>

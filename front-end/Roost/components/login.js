@@ -19,7 +19,8 @@ import {
   Alert,
   
 } from 'react-native';
-import { Container, Button, Content, Header, H1} from 'native-base';
+import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right} from 'native-base';
+import LegalRights from './legalRights.js'
 
 /*  
   LOGIN: SOPHIA
@@ -182,20 +183,31 @@ export default class Login extends Component {
       </View>
     ); 
   }
-  else if (this.state.page = 'rights') {
+  else if (this.state.page === 'rights') {
     return (
       <Container>
+        <Header>
+          <Left>
+                <Button transparent onPress={() => {this.setState({ page: 'login' })}}>
+                    <Icon name='arrow-back' />
+                </Button>
+            </Left>
+          <Body>
+            <Title>Legal Rights</Title>
+            </Body>
+            <Right>
+            </Right>
+            </Header>
       <Content>
-        <Text></Text><Text></Text>
-        <View style={styles.center}><H1 >Legal Rights</H1></View>
+        
+        <LegalRights/>
         <Text></Text>
-        <Text>Rights go here</Text>
+        <Button onPress={() => this.setState({page: "create"})} block success><Text> Accept </Text></Button>
         <Text></Text>
-        <Button block success><Text> Accept </Text></Button>
-        <Text></Text>
-         <Button block danger><Text> Decline </Text></Button>
+         <Button onPress={() => this.setState({page: "login"})} block danger><Text> Decline </Text></Button>
       </Content>
       </Container>
+     
     )
   }
   else if (this.state.page === 'create') {
