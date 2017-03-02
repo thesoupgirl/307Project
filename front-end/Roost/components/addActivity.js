@@ -31,7 +31,7 @@ export default class AddActivity extends Component {
             <Left>
             </Left>
             <Body>
-                <Title>Roost</Title>
+                <Title>Add Activity</Title>
             </Body>
             <Right/>
         </Header>

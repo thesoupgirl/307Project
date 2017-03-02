@@ -55,7 +55,7 @@ export default class SwipeActivities extends Component {
             <Left>
             </Left>
             <Body>
-                <Title>Roost</Title>
+                <Title>Explore</Title>
             </Body>
             <Right/>
         </Header>

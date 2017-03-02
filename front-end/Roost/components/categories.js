@@ -40,7 +40,7 @@ export default class Categories extends Component {
             <Left>
             </Left>
             <Body>
-                <Title>Roost</Title>
+                <Title>Categories</Title>
             </Body>
             <Right/>
         </Header>
