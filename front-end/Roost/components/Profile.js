@@ -66,8 +66,7 @@ export default class Profile extends Component {
                    </Picker>
                 </Content>
                  </Content>
-         //<Button light block style={styles.center} onPress={() => this.setState({logout: true},
-             //this.props.hideNav())}><Text>Logout</Text></Button>}}
+       
        
       )
     
