@@ -17,9 +17,23 @@ namespace RoostApp.Controllers
         // PUT: /api/user/{id}/updateuser
         // Update user info
         [HttpPut("{id}/update")]
-        public string UpdateUser(string id)
+        public async void UpdateUser(string id)
         {
-            return "User is updated here";
+            await db.client.UpdateItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, AttributeValue>
+                {
+                    // Find the user based on their id and display name
+                    {"userId", new AttributeValue {S = id} },
+                    {"displayName", new AttributeValue {S = "Hello world"} }
+                },
+
+                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                {
+                    {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
+                }
+            );
+
         }
 
         // POST: /api/user/create
@@ -33,6 +47,20 @@ namespace RoostApp.Controllers
                 {
                     {"userId", new AttributeValue {S = ""} },
                     {"displayName", new AttributeValue {S = ""} }
+                }
+            );
+        }
+
+        // GET: /api/user/login
+        [HttpGet("login")]
+        public async void Login()
+        {
+            var response = await db.client.GetItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                {
+                    // Find the user based on their display name and password
+                    // and set a bool to true
                 }
             );
         }
@@ -54,7 +82,7 @@ namespace RoostApp.Controllers
                 // Choose the attribute(s) we want to update
                 attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                 {
-                    {"settings", new AttributeValueUpdate(new AttributeValue {S = "Distance: 15mi"}, AttributeAction.PUT)}
+                    {"settings", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
                 }
             );
         }

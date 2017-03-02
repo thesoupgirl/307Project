@@ -34,7 +34,7 @@
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.2.1": {
+      "AWSSDK.DynamoDBv2/3.3.3": {
         "type": "package",
         "dependencies": {
           "AWSSDK.Core": "[3.3.8, 3.4.0)"
@@ -60,11 +60,11 @@
           "lib/netstandard1.3/AWSSDK.Extensions.NETCore.Setup.dll": {}
         }
       },
-      "BundlerMinifier.Core/2.3.327": {
+      "BundlerMinifier.Core/2.4.337": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.App": "1.1.0",
-          "NUglify": "1.5.4",
+          "NUglify": "1.5.5",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -2084,7 +2084,7 @@
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
         }
       },
-      "NUglify/1.5.4": {
+      "NUglify/1.5.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
@@ -4467,7 +4467,7 @@
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.2.1": {
+      "AWSSDK.DynamoDBv2/3.3.3": {
         "type": "package",
         "dependencies": {
           "AWSSDK.Core": "[3.3.8, 3.4.0)"
@@ -4493,11 +4493,11 @@
           "lib/netstandard1.3/AWSSDK.Extensions.NETCore.Setup.dll": {}
         }
       },
-      "BundlerMinifier.Core/2.3.327": {
+      "BundlerMinifier.Core/2.4.337": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.App": "1.1.0",
-          "NUglify": "1.5.4",
+          "NUglify": "1.5.5",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -6477,7 +6477,7 @@
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
         }
       },
-      "NUglify/1.5.4": {
+      "NUglify/1.5.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
@@ -8920,7 +8920,7 @@
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.2.1": {
+      "AWSSDK.DynamoDBv2/3.3.3": {
         "type": "package",
         "dependencies": {
           "AWSSDK.Core": "[3.3.8, 3.4.0)"
@@ -8946,11 +8946,11 @@
           "lib/netstandard1.3/AWSSDK.Extensions.NETCore.Setup.dll": {}
         }
       },
-      "BundlerMinifier.Core/2.3.327": {
+      "BundlerMinifier.Core/2.4.337": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.App": "1.1.0",
-          "NUglify": "1.5.4",
+          "NUglify": "1.5.5",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -10930,7 +10930,7 @@
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
         }
       },
-      "NUglify/1.5.4": {
+      "NUglify/1.5.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
@@ -13373,7 +13373,7 @@
           "lib/netstandard1.3/AWSSDK.Core.dll": {}
         }
       },
-      "AWSSDK.DynamoDBv2/3.3.2.1": {
+      "AWSSDK.DynamoDBv2/3.3.3": {
         "type": "package",
         "dependencies": {
           "AWSSDK.Core": "[3.3.8, 3.4.0)"
@@ -13399,11 +13399,11 @@
           "lib/netstandard1.3/AWSSDK.Extensions.NETCore.Setup.dll": {}
         }
       },
-      "BundlerMinifier.Core/2.3.327": {
+      "BundlerMinifier.Core/2.4.337": {
         "type": "package",
         "dependencies": {
           "Microsoft.NETCore.App": "1.1.0",
-          "NUglify": "1.5.4",
+          "NUglify": "1.5.5",
           "Newtonsoft.Json": "9.0.1"
         },
         "compile": {
@@ -15383,7 +15383,7 @@
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
         }
       },
-      "NUglify/1.5.4": {
+      "NUglify/1.5.5": {
         "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
@@ -17838,13 +17838,13 @@
         "tools/account-management.ps1"
       ]
     },
-    "AWSSDK.DynamoDBv2/3.3.2.1": {
-      "sha512": "04NpNiPmxs4nbXdtVgTahq3tz3vEg0WdURn6+doVZwgg2q4e8h9NrmK8DnS1Lre+LaFb3ZBB7EQuTQ3KppXWFA==",
+    "AWSSDK.DynamoDBv2/3.3.3": {
+      "sha512": "3+EW+W/RySIW/IyW/c5JeriBKTMaSp02Xm2nV/+jJzFE3xFkSwk0C4L6+Tc/52FpgUNUi8QwqjSWJFoGOBKfVA==",
       "type": "package",
-      "path": "awssdk.dynamodbv2/3.3.2.1",
+      "path": "awssdk.dynamodbv2/3.3.3",
       "files": [
         "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
-        "awssdk.dynamodbv2.3.3.2.1.nupkg.sha512",
+        "awssdk.dynamodbv2.3.3.3.nupkg.sha512",
         "awssdk.dynamodbv2.nuspec",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.XML",
         "lib/MonoAndroid10/AWSSDK.DynamoDBv2.dll",
@@ -17880,16 +17880,18 @@
         "lib/netstandard1.3/AWSSDK.Extensions.NETCore.Setup.pdb"
       ]
     },
-    "BundlerMinifier.Core/2.3.327": {
-      "sha512": "KfPBhOq4M4ud88q+Qcht8kvr0oilgPe5hNML6iLRGzb61mR9MjTpWUDWfNsSSy9GYMJ1Q3qRKgiOybo/KCw+iw==",
+    "BundlerMinifier.Core/2.4.337": {
+      "sha512": "dJrgItLLzsp7qWeTYDieGhVIPZU2KRwUwOlQq+UakqSHieMnbZocscfy29ZFwzTUrNUjmr/G94ej5wVLcCGrgQ==",
       "type": "package",
-      "path": "bundlerminifier.core/2.3.327",
+      "path": "bundlerminifier.core/2.4.337",
       "files": [
-        "bundlerminifier.core.2.3.327.nupkg.sha512",
+        "bundlerminifier.core.2.4.337.nupkg.sha512",
         "bundlerminifier.core.nuspec",
         "lib/net452/dotnet-bundle.exe",
+        "lib/net452/dotnet-bundle.runtimeconfig.json",
         "lib/netcoreapp1.0/dotnet-bundle.dll",
-        "lib/netcoreapp1.0/dotnet-bundle.runtimeconfig.json"
+        "lib/netcoreapp1.0/dotnet-bundle.runtimeconfig.json",
+        "prefercliruntime"
       ]
     },
     "JavaScriptEngineSwitcher.ChakraCore/2.3.2": {
@@ -19626,10 +19628,10 @@
         "nuget.frameworks.nuspec"
       ]
     },
-    "NUglify/1.5.4": {
-      "sha512": "MxYC4UDAjkGf2Zn5hpLqy163DQ36OAhOpoqe8r29KvY/MJ6N8Wdeee+D0XiutGzCF65DcFKjlEhRtmtw8pe2gQ==",
+    "NUglify/1.5.5": {
+      "sha512": "XguQgUPUHMOmfOGlSgVRHIMVBJYz86cViTP8kiD1Oa4EKKUrvfL4a4BhWUxdg5rZBLrIAcoYu/V43F5iH/PucA==",
       "type": "package",
-      "path": "nuglify/1.5.4",
+      "path": "nuglify/1.5.5",
       "files": [
         "lib/net35/NUglify.dll",
         "lib/net35/NUglify.xml",
@@ -19637,7 +19639,7 @@
         "lib/net40/NUglify.xml",
         "lib/netstandard1.3/NUglify.dll",
         "lib/netstandard1.3/NUglify.xml",
-        "nuglify.1.5.4.nupkg.sha512",
+        "nuglify.1.5.5.nupkg.sha512",
         "nuglify.nuspec"
       ]
     },
@@ -25224,9 +25226,9 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v1.0": [
-      "AWSSDK.DynamoDBv2 >= 3.3.2.1",
+      "AWSSDK.DynamoDBv2 >= 3.3.3",
       "AWSSDK.Extensions.NETCore.Setup >= 3.3.0.3",
-      "BundlerMinifier.Core >= 2.3.327",
+      "BundlerMinifier.Core >= 2.4.337",
       "Microsoft.ApplicationInsights.AspNetCore >= 2.0.0",
       "Microsoft.AspNetCore >= 1.1.0",
       "Microsoft.AspNetCore.Diagnostics >= 1.1.0",
@@ -25281,7 +25283,7 @@
           },
           "BundlerMinifier.Core": {
             "target": "Package",
-            "version": "2.3.327"
+            "version": "2.4.337"
           },
           "Microsoft.AspNetCore": {
             "target": "Package",
@@ -25330,7 +25332,7 @@
           },
           "AWSSDK.DynamoDBv2": {
             "target": "Package",
-            "version": "3.3.2.1"
+            "version": "[3.3.3, )"
           },
           "Microsoft.Extensions.Configuration.UserSecrets": {
             "target": "Package",
