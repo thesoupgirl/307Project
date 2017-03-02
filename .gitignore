@@ -1,1 +1,8 @@
 front-end/Roost/node_modules/
+~/src/RoostApp/obj/*
+~/.vs/config/applicationhost.config
+~/RoostApp.sln
+~/global.json
+~/src/RoostApp/bin/*
+~/src/RoostApp/RoostApp.xproj
+~/src/RoostApp/RoostApp.xproj.user
