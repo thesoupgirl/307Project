@@ -18,14 +18,21 @@ namespace RoostApp.Controllers
         [HttpGet("login")]
         public async void Login()
         {
-            var response = await db.client.GetItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                {
-                    // Find the user based on their display name and password
-                    // and set a bool to true
-                }
-            );
+            try
+            {
+                await db.client.GetItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    {
+                        // Find the user based on their display name and password
+                        // and set a bool to true
+                    }
+                );
+
+            } catch (Exception)
+            {
+
+            }
         }
 
         // PUT: /api/user/{id}/updateuser
@@ -33,20 +40,26 @@ namespace RoostApp.Controllers
         [HttpPut("{id}/update")]
         public async void UpdateUser(string id)
         {
-            await db.client.UpdateItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, AttributeValue>
-                {
-                    // Find the user based on their id and display name
-                    {"userId", new AttributeValue {S = id} },
-                    {"displayName", new AttributeValue {S = "Hello world"} }
-                },
+            try
+            {
+                await db.client.UpdateItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, AttributeValue>
+                    {
+                        // Find the user based on their id and display name
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = "Hello world"} }
+                    },
 
-                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                {
-                    {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
-                }
-);
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                    {
+                        {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
+                    }
+                );
+            } catch (Exception)
+            {
+
+            }
         }
 
         // POST: /api/user/create
@@ -57,7 +70,7 @@ namespace RoostApp.Controllers
         {
             try
             {
-                var response = await db.client.GetItemAsync(
+                var response = await db.client.PutItemAsync(
                     tableName: "User",
                     key: new Dictionary<string, AttributeValue>
                     {
@@ -66,7 +79,7 @@ namespace RoostApp.Controllers
                     }
                 );
 
-                return response.Item["userId"].S;
+                return "User created successfully";
             } catch (Exception)
             {
                 return "User not found.";
@@ -79,7 +92,8 @@ namespace RoostApp.Controllers
         // Saves user settings in DB
         public async Task<string> SaveSettings(string id)
         {
-            string settings = Response.Body.ToString();
+            // The settings will be stored as JSON in the response header.
+            string settings = Json(Response.Headers.ToList()).ToString();
 
             try
             {
@@ -98,7 +112,7 @@ namespace RoostApp.Controllers
                         }
                     }
                 );
-                return "Settings have been updated.";
+                return "userID";
             } catch (Exception)
             {
                 return "Error: something went wrong.";
