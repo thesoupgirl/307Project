@@ -20,37 +20,30 @@ var styles = require('./styles');
   
 export default class Nav extends Component {
 
-  constructor(props) {
-        super(props)
+  constructor({handler}) {
+        super()
         this.state = {
           page: 'explore',
-          active: true
+          active: true,
+          show: true
+
             
         }
 
         this.selectedPage = this.selectedPage.bind(this)
+        this.renderNav = this.renderNav.bind(this)
+        this.hideNav = this.hideNav.bind(this)
        
     }
 
-    selectedPage() {
-        if (this.state.page === 'explore')
-            return <SwipeActivities/>
-        else if (this.state.page === 'categories')
-            return <Categories/>
-        else if (this.state.page === 'add')
-            return <AddActivity/>
-        else if (this.state.page === 'messages')
-            return <MessageThreads/>
-        else if (this.state.page === 'profile')
-            return <Profile/>
+    hideNav () {
+        this.setState({show: false})
     }
 
-       render() {
-        return (
-            <Container>
-                <Content>
-                    {this.selectedPage()}
-                </Content>
+    renderNav() {
+        if (this.state.show) {
+            return (
+               
                 <Footer>
                       <FooterTab>
                           <Button active={this.state.page === 'explore'}
@@ -80,6 +73,32 @@ export default class Nav extends Component {
                           </Button>
                       </FooterTab>
                   </Footer>
+            
+            )
+        }
+    }
+
+    selectedPage() {
+        if (this.state.page === 'explore')
+            return <SwipeActivities handler = {this.props.handler}/>
+        else if (this.state.page === 'categories')
+            return <Categories handler = {this.props.handler}/>
+        else if (this.state.page === 'add')
+            return <AddActivity handler = {this.props.handler}/>
+        else if (this.state.page === 'messages')
+            return <MessageThreads handler = {this.props.handler}/>
+        else if (this.state.page === 'profile')
+            return <Profile handler = {this.props.handler}
+                            hideNav = {this.hideNav}/>
+    }
+
+       render() {
+        return (
+            <Container>
+                <Content>
+                    {this.selectedPage()}
+                </Content>
+                {this.renderNav()}
             </Container>
         );
     }

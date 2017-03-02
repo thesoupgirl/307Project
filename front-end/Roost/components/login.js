@@ -15,8 +15,11 @@ import {
   Dimensions,
   TextInput,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert,
+  
 } from 'react-native';
+import { Container} from 'native-base';
 
 /*  
   LOGIN: SOPHIA
@@ -32,36 +35,65 @@ const personIcon = require("./img/person.png");
 
 export default class Login extends Component {
 
-  constructor(props) {
-        super(props)
+  constructor({handler}) {
+        super()
         this.state = {
+          users : [
+            {username:'Dpiotti',pass:'123'},
+            {username:'roost',pass:'123'}
+        ],
+        login: false,
+        username: '',
+        password: '',
+        isLoggedIn: false,
+        page: 'login'
         }
-     
+     this.loginPressed = this.loginPressed.bind(this)
+     this.createAccountPressed = this.createAccountPressed.bind(this)
+    this.renderPage = this.renderPage.bind(this)
     }
-    
-    /*
-  render() {
-    return (
-     <View style={styles.container}>
-       <H1> Log In</H1>
-      </View>
-    );
 
-  }
-}
+    loginPressed() {
+        var i;
+        //call to authenticate
+        for (i = 0; i < this.state.users.length; i++) {
+          if (this.state.users[i].username === this.state.username &&
+              this.state.users[i].pass === this.state.password) {
+                    this.props.handler(this.state.username, this.state.password, true)
+                    return;
+              }
+        }
+              Alert.alert(
+            'Login Failed',
+          )
+      
+            
+        }
 
-/*
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#7B68EE'
-  }
-});
-*/
+    createAccountPressed() {
+      var user = {username: this.state.username , pass: this.state.password}
+      this.setState({ 
+        users: [this.state.users.concat(user)]
+        
+      })
+      if (this.state.username == '' ||
+          this.state.password == '') {
+              Alert.alert('Your username or password is empty')
+            return;    
+          }
+      else if (this.state.password.length < 6) {
+        Alert.alert('password must be greater than 6 characters')
+        return;
+      }
+      this.props.handler(true)
+      //call to add user
+    }
 
-  render() {
-    return (
-      <View style={styles.container}>
+
+  renderPage () {
+    if (this.state.page ==='login') {
+      return (
+       <View style={styles.container}>
         <Image source={background} style={styles.background} resizeMode="cover">
           <View style={styles.markWrap}>
             <Image source={mark} style={styles.mark} resizeMode="contain" />
@@ -71,10 +103,13 @@ const styles = StyleSheet.create({
               <View style={styles.iconWrap}>
                 <Image source={personIcon} style={styles.icon} resizeMode="contain" />
               </View>
-              <TextInput 
-                placeholder="Username" 
+              <TextInput
                 placeholderTextColor="#FFF"
-                style={styles.input} 
+                placeholder="Username" 
+                style={styles.input}
+                value={this.state.username}
+                onChangeText={username => this.setState({username})}
+          
               />
             </View>
             <View style={styles.inputWrap}>
@@ -86,14 +121,11 @@ const styles = StyleSheet.create({
                 placeholder="Password" 
                 style={styles.input} 
                 secureTextEntry 
+                value={this.state.password}
+                onChangeText={password => this.setState({password})}
               />
             </View>
-            <TouchableOpacity activeOpacity={.5}>
-              <View>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5}>
+            <TouchableOpacity onPress={this.loginPressed} activeOpacity={.5}>
               <View style={styles.button}>
                 <Text style={styles.buttonText}>Sign In</Text>
               </View>
@@ -102,7 +134,8 @@ const styles = StyleSheet.create({
           <View style={styles.container}>
             <View style={styles.signupWrap}>
               <Text style={styles.accountText}>Do not have an account?</Text>
-              <TouchableOpacity activeOpacity={.5}>
+              <TouchableOpacity activeOpacity={.5} onPress={() => {this.setState({page: 'create'});
+                this.setState({username: '', password:''})}}>
                 <View>
                   <Text style={styles.signupLinkText}>Sign Up</Text>
                 </View>
@@ -111,9 +144,72 @@ const styles = StyleSheet.create({
           </View>
         </Image>
       </View>
-    );
+    ); 
   }
-}
+  else if (this.state.page === 'create') {
+    return (<View style={styles.container}>
+        <Image source={background} style={styles.background} resizeMode="cover">
+          <View style={styles.markWrap}>
+            <Image source={mark} style={styles.mark} resizeMode="contain" />
+          </View>
+          <View style={styles.wrapper}>
+            <View style={styles.inputWrap}>
+              <View style={styles.iconWrap}>
+                <Image source={personIcon} style={styles.icon} resizeMode="contain" />
+              </View>
+              <TextInput
+                placeholderTextColor="#FFF"
+                placeholder="Username" 
+                style={styles.input}
+                value={this.state.username}
+                onChangeText={username => this.setState({username})}
+          
+              />
+            </View>
+            <View style={styles.inputWrap}>
+              <View style={styles.iconWrap}>
+                <Image source={lockIcon} style={styles.icon} resizeMode="contain" />
+              </View>
+              <TextInput 
+                placeholderTextColor="#FFF"
+                placeholder="Password" 
+                style={styles.input} 
+                secureTextEntry 
+                value={this.state.password}
+                onChangeText={password => this.setState({password})}
+              />
+            </View>
+            <TouchableOpacity onPress={this.createAccountPressed} activeOpacity={.5}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}>Sign Up!</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+           <View style={styles.signupWrap}>
+              <Text style={styles.accountText}></Text>
+              <TouchableOpacity activeOpacity={.5} onPress={() => {this.setState({page: 'login'});
+                this.setState({username: '', password:''})}}>
+                <View>
+                  <Text style={styles.signupLinkText}>Login with account</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Image>
+      </View>)
+  }
+
+  }
+
+  render() {
+    return (
+      <Container>
+        {this.renderPage()}
+      </Container>
+    )
+  }}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -185,5 +281,3 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   }
 });
-
-

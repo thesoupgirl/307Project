@@ -1,5 +1,6 @@
 import Nav from './nav.js';
 import React, { Component } from 'react';
+import Login from './login.js'
 var styles = require('./styles'); 
 import {
   AppRegistry,
@@ -20,16 +21,34 @@ export default class Launch extends Component {
   constructor(props) {
         super(props)
         this.state = {
-            isLoggedIn: true
+            isLoggedIn: false,
+            user: '',
+            password: ''
         }
-        this.display = this.display.bind(this);        
+        this.display = this.display.bind(this);
+        this.handler = this.handler.bind(this);
+        //this.callbackParent = this.callbackParent.bind(this);      
+    }
+
+    handler(user, pass, status) {
+      this.setState({isLoggedIn: status});
+      this.setState({username: user});
+      this.setState({password: pass});
+      this.display()
+
+    }
+
+    handler(status) {
+      this.setState({isLoggedIn: status});
+      //call to add user
+    
     }
 
   display () {
     if (this.state.isLoggedIn) {
-      return (<Nav/>)
+      return (<Nav handler = {this.handler}/>)
     }
-    return (<Text style={styles.welcome}>Not Logged in</Text>)
+    return (<Login handler = {this.handler}/>)
   }
   
   render() {
