@@ -191,8 +191,9 @@ export default class Login extends Component {
         <Text></Text>
         <Text>Rights go here</Text>
         <Text></Text>
-        <Button success><Text> Accept </Text></Button>
-         <Button danger><Text> Decline </Text></Button>
+        <Button block success><Text> Accept </Text></Button>
+        <Text></Text>
+         <Button block danger><Text> Decline </Text></Button>
       </Content>
       </Container>
     )

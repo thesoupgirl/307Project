@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Footer, 
 Icon, FooterTab, Header, View, Left, Body, Title,
-Right, DeckSwiper, Card, CardItem, Thumbnail, H1} from 'native-base';
+Right, DeckSwiper, Card, CardItem, Thumbnail, H1, Item,
+Picker, Input, Label, Form} from 'native-base';
 var styles = require('./styles'); 
 import {
   AppRegistry,
@@ -22,10 +23,53 @@ export default class Profile extends Component {
   constructor({handler}) {
         super()
         this.state = {
-            logout: false
+            username:'',
+            password:'',
+            dist: '5',
+            logout: false,
+            updateSetttings: false
         }
        //this.logoff = this.logoff.bind(this);
        this.disp = this.disp.bind(this);
+       this.info = this.info.bind(this);
+  }
+
+  componentWillMount() {
+    //CALL TO GET USER INFORMATION
+  }
+  info () {
+    if (this.state.updateSetttings)
+      return (
+        <Content>
+          <Form>
+              <Item stackedLabel>
+                  <Label>Username</Label>
+                  <Input />
+              </Item>
+              <Item stackedLabel last>
+                  <Label>Password</Label>
+                  <Input />
+              </Item>
+          </Form>
+          <Content>
+            <Text>choose distance:</Text>
+                    <Picker
+                        iosHeader="Select one"
+                        mode="dropdown"
+                        selectedValue={this.state.dist}
+                        onValueChange={(distance) => {this.setState({dist: distance})}}>
+                        <Item label="5 miles" value="5" />
+                        <Item label="10 miles" value="10" />
+                        <Item label="20 miles" value="20" />
+                        <Item label="30 miles" value="30" />
+                        <Item label="40 miles" value="50" />
+                   </Picker>
+                </Content>
+          <Button light block style={styles.center} onPress={() => this.setState({logout: true},
+             this.props.hideNav())}><Text>Logout</Text></Button>
+        </Content>
+      )
+    
   }
     disp() {
       if (this.state.logout) {
@@ -38,12 +82,17 @@ export default class Profile extends Component {
             <Left>
             </Left>
             <Body>
-                <Title>Roost</Title>
+                <Title>Profile</Title>
             </Body>
             <Right/>
         </Header>
-          <Text>Profile</Text>
-          <Button block style={styles.center} onPress={() => this.setState({logout: true}, this.props.hideNav())}><Text>Logout</Text></Button>
+        <Text></Text>
+         <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings})
+         }><Text>Update Profile</Text></Button>
+            {this.info()}
+        <Text></Text>
+          <Button light block style={styles.center} onPress={() => this.setState({logout: true},
+             this.props.hideNav())}><Text>Logout</Text></Button>
       </Container>
       )}
     }
