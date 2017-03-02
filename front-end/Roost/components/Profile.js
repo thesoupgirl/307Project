@@ -43,7 +43,7 @@ export default class Profile extends Component {
             <Right/>
         </Header>
           <Text>Profile</Text>
-          <Button style={styles.center} onPress={() => this.setState({logout: true}, this.props.hideNav())}><Text>Logout</Text></Button>
+          <Button block style={styles.center} onPress={() => this.setState({logout: true}, this.props.hideNav())}><Text>Logout</Text></Button>
       </Container>
       )}
     }

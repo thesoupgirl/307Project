@@ -6,6 +6,7 @@ import { Container, Content, Button, Text, Footer,
 Icon, FooterTab, Header, View, Left, Body, Title,
 Right, DeckSwiper, Card, CardItem, Thumbnail, H1} from 'native-base'; 
 */
+
 import {
   AppRegistry,
   StyleSheet,
@@ -14,12 +15,11 @@ import {
   Image,
   Dimensions,
   TextInput,
-  Button,
   TouchableOpacity,
   Alert,
   
 } from 'react-native';
-import { Container} from 'native-base';
+import { Container, Button, Content, Header, H1} from 'native-base';
 
 /*  
   LOGIN: SOPHIA
@@ -56,6 +56,26 @@ export default class Login extends Component {
     loginPressed() {
         var i;
         //call to authenticate
+        /*
+        console.log('Sign Up Succesful.')
+            var id = this.state.userame
+            var passcode = this.state.password
+
+            let ws = `http://localhost:3000/api/verify/${id}/${passcode}`
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                this.setState({message: 'Valid credentials', login: true});
+                console.log(xhr.responseText)
+            } else {
+                console.log('err')
+                this.setState({message: 'Bad credentials'});
+
+            }
+            }; xhr.send()
+            this.renderBody
+        */
         for (i = 0; i < this.state.users.length; i++) {
           if (this.state.users[i].username === this.state.username &&
               this.state.users[i].pass === this.state.password) {
@@ -85,6 +105,22 @@ export default class Login extends Component {
         Alert.alert('password must be greater than 6 characters')
         return;
       }
+      /* handle the user sign up
+        var id = this.state.userame
+        var passcode = this.state.password
+        let ws = `http://localhost:3000/api/test`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            //console.log(xhr.responseText)
+        } else {
+            console.log('err')
+        }
+        }; xhr.send(`username=${id}&password=${passcode}`)
+
+      */
       this.props.handler(true)
       //call to add user
     }
@@ -134,7 +170,7 @@ export default class Login extends Component {
           <View style={styles.container}>
             <View style={styles.signupWrap}>
               <Text style={styles.accountText}>Do not have an account?</Text>
-              <TouchableOpacity activeOpacity={.5} onPress={() => {this.setState({page: 'create'});
+              <TouchableOpacity activeOpacity={.5} onPress={() => {this.setState({page: 'rights'});
                 this.setState({username: '', password:''})}}>
                 <View>
                   <Text style={styles.signupLinkText}>Sign Up</Text>
@@ -145,6 +181,21 @@ export default class Login extends Component {
         </Image>
       </View>
     ); 
+  }
+  else if (this.state.page = 'rights') {
+    return (
+      <Container>
+      <Content>
+        <Text></Text><Text></Text>
+        <View style={styles.center}><H1 >Legal Rights</H1></View>
+        <Text></Text>
+        <Text>Rights go here</Text>
+        <Text></Text>
+        <Button success><Text> Accept </Text></Button>
+         <Button danger><Text> Decline </Text></Button>
+      </Content>
+      </Container>
+    )
   }
   else if (this.state.page === 'create') {
     return (<View style={styles.container}>
@@ -279,5 +330,9 @@ const styles = StyleSheet.create({
   signupLinkText: {
     color: "#FFF",
     marginLeft: 5,
-  }
+  },
+   center: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
 });
