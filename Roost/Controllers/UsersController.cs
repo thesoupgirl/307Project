@@ -9,6 +9,8 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2;
 using Roost.Interfaces;
 using Roost.Models;
+using System.IO;
+using System.Text;
 
 namespace Roost.Controllers
 {
@@ -58,7 +60,7 @@ namespace Roost.Controllers
 
             return "rawr";
         }
-        // GET: /api/user/login
+        // GET: /api/users/login
         [HttpGet("login/{id}/{passHash}")]
         public async Task<HttpResponseMessage> Login(String id, String passHash)
         {
@@ -99,6 +101,54 @@ namespace Roost.Controllers
                 Response.StatusCode = 400;
 		HttpResponseMessage response = new HttpResponseMessage();
 		return response;
+            }
+        }
+
+        // GET: /api/users/login
+        [HttpPost("login")]
+        public async Task<HttpResponseMessage> Login()
+        {
+            //this takes request parameters only from the query string
+             //Workaround - copy original Stream
+
+        
+            try
+            {
+                string username = Request.Form["username"];
+                string password = Request.Form["password"];
+                Console.WriteLine(username);
+                Console.WriteLine(password);
+                PutItemResponse stuff = await db.client.PutItemAsync(
+                    tableName: "User",
+                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    {
+                        {"userId", new AttributeValue {S = username} },
+                        {"displayName", new AttributeValue {S = username} },
+                        {"password", new AttributeValue {S = password} }
+                    }
+                );
+
+            Response.StatusCode = 200;
+            HttpResponseMessage response = new HttpResponseMessage();
+            return response;
+        //if(stuff.Item["password"].S == passHash) {
+        //    Response.StatusCode = 200;
+        //    HttpResponseMessage response = new HttpResponseMessage();
+        //    return response;
+        //}
+        //else {
+        //    Response.StatusCode = 400; 
+        //    HttpResponseMessage response = new HttpResponseMessage();
+        //    return response;
+
+        //}       
+        //return "meow";
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+        HttpResponseMessage response = new HttpResponseMessage();
+        return response;
             }
         }
 
