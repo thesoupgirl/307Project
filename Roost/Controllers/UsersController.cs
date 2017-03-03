@@ -14,10 +14,12 @@ namespace Roost.Controllers
     [Route("api/users")]
     public class UsersController : Controller
     {
+
         private readonly IUserRepository _userRepository;
         DBHelper db = new DBHelper();
 
         public UsersController(IUserRepository userRepository)
+
         {
             _userRepository = userRepository;
             //Congrats, I'm initialized!
@@ -56,11 +58,22 @@ namespace Roost.Controllers
             return "rawr";
         }
         // GET: /api/user/login
-        [HttpGet("login")]
-        public async Task<string> Login()
+        [HttpGet("login/{id}/{passHash}")]
+        public async Task<String> Login()
         {
+            //this takes request parameters only from the query string
             try
             {
+		var queryStrings = Request.Query;
+		var qsList = new List<String>();
+ 		foreach(var key in queryStrings.Keys)
+ 		{
+      			qsList.Add(queryStrings[key]);
+ 		}
+		string[] array = new string[queryStrings.Count];
+		
+		//queryStrings.CopyTo(array, 0);
+
                 await db.client.GetItemAsync(
                     tableName: "User",
                     key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
@@ -70,7 +83,7 @@ namespace Roost.Controllers
                         //{"password", new AttributeValue {S = "blah"} }
                     }
                 );
-                return "User exists";
+                return qsList[0];
             }
             catch (Exception)
             {
