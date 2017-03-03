@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Amazon.DynamoDBv2.Model;
-using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2;
 
 namespace RoostApp.Controllers
 {
@@ -16,20 +16,20 @@ namespace RoostApp.Controllers
         DBHelper db = new DBHelper();
 
         // GET: /api/user/login
-        [HttpGet("login")]
-        public async Task<string> Login()
+        [HttpGet("login/{id}/{password}")]
+        public async Task<string> Login(string id, string password)
         {
             string login = Response.Headers["loginInfo"];
 
-            //var loginJson = Document.FromJson(login);
+            var loginJson = Document.FromJson(login);
 
             try
             {
                 await db.client.GetItemAsync(
                     tableName: "User",
-                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    key: new Dictionary<string, AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = "777"} },
+                        {"userId", new AttributeValue {S = id} },
                         {"displayName", new AttributeValue {S = "joe"} },
                         //{"password", new AttributeValue {S = "blah"} }
                     }
@@ -57,7 +57,7 @@ namespace RoostApp.Controllers
                     key: new Dictionary<string, AttributeValue>
                     {
                         // Find the user based on their id and display name
-                        {"userId", new AttributeValue {S = id} },
+                        {"userId", new AttributeValue {N = "1"} },
                         {"displayName", new AttributeValue {S = infoJson["displayName"]} }
                     },
 
@@ -82,13 +82,15 @@ namespace RoostApp.Controllers
 
             var infoJson = Document.FromJson(info);
 
+            int id = 0;
+
             try
             {
-                await db.client.PutItemAsync(
+                var newUser = await db.client.PutItemAsync(
                     tableName: "User",
                     item: new Dictionary<string, AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = "777"} },
+                        {"userId", new AttributeValue {S = infoJson["displayName"]} },
                         {"displayName", new AttributeValue {S = infoJson["displayName"]} },
                         {"password", new AttributeValue {S = infoJson["password"]} }
                     }
