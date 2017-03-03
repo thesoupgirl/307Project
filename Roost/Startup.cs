@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Routing;
 using Amazon.DynamoDBv2;
+using Roost.Models;
+using Roost.Interfaces;
+using Roost.Services;
 
 namespace Roost
 {
@@ -42,13 +45,14 @@ namespace Roost
             // Add framework services.
             services.AddMvc();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            //services.AddReact();
+          //  services.AddSingleton<IUserRepository,UserRepository>();
+		//services.AddReact();
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddRouting();
+            //services.AddRouting();
 
-            services.AddAWSService<IAmazonDynamoDB>();
+            //services.AddAWSService<IAmazonDynamoDB>();
 
             // Add AWS secret keys
            /* services.Configure(options =>
@@ -97,14 +101,17 @@ namespace Roost
            // });
 
             app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-             {
-                 routes.MapRoute(
-                     name: "default",
-                     template: "api/{controller=Home}/{action=Index}");
-             });
-
+	
+        //    app.UseMvc(routes =>
+          //   {
+            //     routes.MapRoute(
+              //       name: "default",
+                //     template: "api/{controller=Home}/{action=Index}");
+		// routes.MapRoute(
+		//	name: "user",
+		//	template: "api/{controller=User}/{action=login}");
+            // });
+		app.UseMvc();
         }
     }
 }

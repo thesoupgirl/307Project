@@ -3,19 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2;
+using Roost.Interfaces;
+using Roost.Models;
 
-namespace RoostApp.Controllers
+namespace Roost.Controllers
 {
-    [Route("api/user")]
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    public class UsersController : Controller
     {
-
+	private readonly IUserRepository _userRepository;
         DBHelper db = new DBHelper();
-
-        // GET: /api/user/login
-        [HttpGet("login")]
+	
+	public UsersController(IUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+		//Congrats, I'm initialized!
+		//TODO:  Initialize DBHelper here bruh
+        }
+	[HttpGet]
+	//public IActionResult List()
+	//{
+	//	return Ok(_userRepository.All);
+	//}
+       
+	[HttpGet]
+	public String Get()
+	{
+		return "rawr";
+	}
+	 // GET: /api/user/login
+        /*[HttpGet("login")]
         public async Task<string> Login()
         {
             try
@@ -123,5 +143,6 @@ namespace RoostApp.Controllers
             }
             
         }
+	*/
     }
 }
