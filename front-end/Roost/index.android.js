@@ -14,4 +14,4 @@ import {
 } from 'react-native';
 
 
-AppRegistry.registerComponent('App', () => Login);
+AppRegistry.registerComponent('App', () => Launch);

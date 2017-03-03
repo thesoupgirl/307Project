@@ -31,11 +31,10 @@ export default class MessageThreads extends Component {
             <Left>
             </Left>
             <Body>
-                <Title>Roost</Title>
+                <Title>Messaging</Title>
             </Body>
             <Right/>
         </Header>
-          <Text>Message Threads</Text>
       </Container>
     );
   }
