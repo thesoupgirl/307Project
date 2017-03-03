@@ -59,7 +59,7 @@ export default class Login extends Component {
         var i;
         //call to authenticate
         
-            console.warn(md5(this.state.password));
+            //console.warn(md5(this.state.password));
             var username = this.state.username
             var password = md5(this.state.password)
 
@@ -70,10 +70,10 @@ export default class Login extends Component {
             xhr.onload = () => {
             if (xhr.status===200) {
                 this.props.handler(this.state.username, this.state.password, true)
-                console.warn(xhr.responseText)
+                //console.warn(xhr.responseText)
             } else {
                  Alert.alert(
-            'Login Failed',
+                  'Login Failed',
           )
 
             }
@@ -102,11 +102,10 @@ export default class Login extends Component {
         }
 
     createAccountPressed() {
-      var user = {username: this.state.username , pass: this.state.password}
-      this.setState({ 
-        users: [this.state.users.concat(user)]
-        
-      })
+      /*
+      var username = this.state.username
+      var password = md5(this.state.password)
+
       if (this.state.username == '' ||
           this.state.password == '') {
               Alert.alert('Your username or password is empty')
@@ -116,23 +115,25 @@ export default class Login extends Component {
         Alert.alert('password must be greater than 6 characters')
         return;
       }
-      /* handle the user sign up
-        var id = this.state.userame
-        var passcode = this.state.password
-        let ws = `http://localhost:3000/api/test`
+      this.props.handler(true)
+      */
+      //handle the user sign up
+        var username = this.state.userame
+        var password = this.state.password
+        let ws = `http://localhost:5000/api/login`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws, true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = () => {
         if (xhr.status===200) {
-            //console.log(xhr.responseText)
+            this.props.handler(true)
         } else {
             console.log('err')
         }
-        }; xhr.send(`username=${id}&password=${passcode}`)
+        }; xhr.send(`username=${username}&password=${password}`)
 
-      */
-      this.props.handler(true)
+      
+      
       //call to add user
     }
 
