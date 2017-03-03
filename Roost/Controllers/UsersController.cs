@@ -15,7 +15,7 @@ namespace Roost.Controllers
     public class UsersController : Controller
     {
 	private readonly IUserRepository _userRepository;
-        DBHelper db = new DBHelper();
+       // DBHelper db = new DBHelper();
 	
 	public UsersController(IUserRepository userRepository)
         {
@@ -28,10 +28,30 @@ namespace Roost.Controllers
 	//{
 	//	return Ok(_userRepository.All);
 	//}
-       
+
+	//route is localhost:5000/api/users
+	//this route actually works...       
 	[HttpGet]
-	public String Get()
+	public async Task<String> Get()
 	{
+		try
+            	{
+                	//await db.client.GetItemAsync(
+                	//tableName: "User",
+                    	//key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    	//{	
+                        //{"userId", new AttributeValue {S = "777"} },
+                        //{"displayName", new AttributeValue {S = "joe"} },
+                        //{"password", new AttributeValue {S = "blah"} }
+                    	//}
+			return "Soup";
+               // );
+                //return "User exists";
+            } catch (Exception)
+            {
+                return "Error: Incorrect username or password";
+            }
+
 		return "rawr";
 	}
 	 // GET: /api/user/login
