@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right} from 'native-base';
 import LegalRights from './legalRights.js'
+var md5 = require('md5');
 
 /*  
   LOGIN: SOPHIA
@@ -57,46 +58,54 @@ export default class Login extends Component {
     loginPressed() {
         var i;
         //call to authenticate
-        /*
-        console.log('Sign Up Succesful.')
-            var id = this.state.userame
-            var passcode = this.state.password
+        
+            //console.warn(md5(this.state.password));
+            var username = this.state.username
+            var password = md5(this.state.password)
 
-            let ws = `http://localhost:3000/api/verify/${id}/${passcode}`
+
+            let ws = `http://localhost:5000/api/users/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
-                this.setState({message: 'Valid credentials', login: true});
-                console.log(xhr.responseText)
+                this.props.handler(this.state.username, this.state.password, true)
+                //console.warn(xhr.responseText)
             } else {
-                console.log('err')
-                this.setState({message: 'Bad credentials'});
-
+                 Alert.alert(
+                  'Login Failed',      
+          )
+          //console.warn(xhr.responseText)
             }
             }; xhr.send()
             this.renderBody
-        */
+        
+
+
+        /*
         for (i = 0; i < this.state.users.length; i++) {
           if (this.state.users[i].username === this.state.username &&
               this.state.users[i].pass === this.state.password) {
                     this.props.handler(this.state.username, this.state.password, true)
+                    console.warn(md5(this.state.password));
                     return;
               }
+              
         }
               Alert.alert(
             'Login Failed',
           )
+
+          */
       
             
         }
 
     createAccountPressed() {
-      var user = {username: this.state.username , pass: this.state.password}
-      this.setState({ 
-        users: [this.state.users.concat(user)]
-        
-      })
+      /*
+      var username = this.state.username
+      var password = md5(this.state.password)
+
       if (this.state.username == '' ||
           this.state.password == '') {
               Alert.alert('Your username or password is empty')
@@ -106,23 +115,25 @@ export default class Login extends Component {
         Alert.alert('password must be greater than 6 characters')
         return;
       }
-      /* handle the user sign up
-        var id = this.state.userame
-        var passcode = this.state.password
-        let ws = `http://localhost:3000/api/test`
+      this.props.handler(true)
+      */
+      //handle the user sign up
+        var username = this.state.userame
+        var password = this.state.password
+        let ws = `http://localhost:5000/api/login`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws, true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.onload = () => {
         if (xhr.status===200) {
-            //console.log(xhr.responseText)
+            this.props.handler(true)
         } else {
             console.log('err')
         }
-        }; xhr.send(`username=${id}&password=${passcode}`)
+        }; xhr.send(`username=${username}&password=${password}`)
 
-      */
-      this.props.handler(true)
+      
+      
       //call to add user
     }
 

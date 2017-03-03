@@ -22,7 +22,7 @@ export default class Launch extends Component {
         super(props)
         this.state = {
             isLoggedIn: false,
-            user: '',
+            username: '',
             password: ''
         }
         this.display = this.display.bind(this);
