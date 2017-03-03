@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2;
 using Roost.Interfaces;
@@ -59,35 +60,45 @@ namespace Roost.Controllers
         }
         // GET: /api/user/login
         [HttpGet("login/{id}/{passHash}")]
-        public async Task<String> Login()
+        public async Task<HttpResponseMessage> Login(String id, String passHash)
         {
             //this takes request parameters only from the query string
             try
             {
-		var queryStrings = Request.Query;
-		var qsList = new List<String>();
- 		foreach(var key in queryStrings.Keys)
- 		{
-      			qsList.Add(queryStrings[key]);
- 		}
-		string[] array = new string[queryStrings.Count];
+		Console.WriteLine("meow " + id);
+		//Console.WriteLine("meow" + qsList.size());
+		//System.Diagnostics.Debug.WriteLine("arf");
+		//string[] array = new string[queryStrings.Count];
 		
 		//queryStrings.CopyTo(array, 0);
 
-                await db.client.GetItemAsync(
+                GetItemResponse stuff = await db.client.GetItemAsync(
                     tableName: "User",
                     key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = "777"} },
-                        {"displayName", new AttributeValue {S = "joe"} },
-                        //{"password", new AttributeValue {S = "blah"} }
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = id} },
+                        //{"password", new AttributeValue {S = "202cb962ac59075b964b07152b234b70"} }
                     }
                 );
-                return qsList[0];
+		if(stuff.Item["password"].S == passHash) {
+			Response.StatusCode = 200;
+			HttpResponseMessage response = new HttpResponseMessage();
+			return response;
+		}
+		else {
+			Response.StatusCode = 400; 
+			HttpResponseMessage response = new HttpResponseMessage();
+			return response;
+
+		}		
+		//return "meow";
             }
             catch (Exception)
             {
-                return "Error: Incorrect username or password";
+                Response.StatusCode = 400;
+		HttpResponseMessage response = new HttpResponseMessage();
+		return response;
             }
         }
 
