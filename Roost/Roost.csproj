@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <RuntimeFrameworkVersion>2.0.0-beta-001509-00</RuntimeFrameworkVersion>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>Roost</AssemblyName>
@@ -12,6 +8,7 @@
     <PackageId>Roost</PackageId>
     <RuntimeFrameworkVersion>1.1.0</RuntimeFrameworkVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dotnet5.6;portable-net45+win8</PackageTargetFallback>
+    <UserSecretsId>f75906bb-1abc-4a5d-afef-ff80b014e893</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
