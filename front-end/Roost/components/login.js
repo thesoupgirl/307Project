@@ -63,22 +63,24 @@ export default class Login extends Component {
             var username = this.state.username
             var password = md5(this.state.password)
 
-
             let ws = `http://localhost:5000/api/users/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
                 this.props.handler(this.state.username, this.state.password, true)
-                //console.warn(xhr.responseText)
+               
             } else {
                  Alert.alert(
                   'Login Failed',      
           )
-          //console.warn(xhr.responseText)
+                      
+
+          //
             }
             }; xhr.send()
             this.renderBody
+
         
 
 
@@ -118,9 +120,10 @@ export default class Login extends Component {
       this.props.handler(true)
       */
       //handle the user sign up
+        
         var username = this.state.userame
         var password = this.state.password
-        let ws = `http://localhost:5000/api/login`
+        let ws = `http://localhost:5000/api/users/login`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws, true);
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -128,7 +131,9 @@ export default class Login extends Component {
         if (xhr.status===200) {
             this.props.handler(true)
         } else {
-            console.log('err')
+           Alert.alert(
+                  'Sign-Up Failed',      
+          )
         }
         }; xhr.send(`username=${username}&password=${password}`)
 
