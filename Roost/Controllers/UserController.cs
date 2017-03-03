@@ -21,7 +21,7 @@ namespace RoostApp.Controllers
         {
             string login = Response.Headers["loginInfo"];
 
-            var loginJson = Document.FromJson(login);
+            //var loginJson = Document.FromJson(login);
 
             try
             {
@@ -31,7 +31,7 @@ namespace RoostApp.Controllers
                     {
                         {"userId", new AttributeValue {S = "777"} },
                         {"displayName", new AttributeValue {S = "joe"} },
-                        {"password", new AttributeValue {S = "blah"} }
+                        //{"password", new AttributeValue {S = "blah"} }
                     }
                 );
                 return "User exists";
