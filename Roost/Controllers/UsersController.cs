@@ -11,7 +11,7 @@ using Roost.Models;
 
 namespace Roost.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;

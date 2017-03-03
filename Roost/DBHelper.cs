@@ -22,7 +22,7 @@ namespace Roost
         public DBHelper()
         {
             var config = new ConfigurationBuilder()
-            .AddUserSecrets()
+           // .AddUserSecrets()
             .Build();
 
             // You may have to add these values to your secrets.json file first.
