@@ -37,7 +37,7 @@ namespace Roost
                 RegionEndpoint = RegionEndpoint.USEast2
             };
 
-            client = new AmazonDynamoDBClient(credentials, dbConfig);
+            client = new AmazonDynamoDBClient(dbConfig);
         }
     }
 }

@@ -11,51 +11,52 @@ using Roost.Models;
 
 namespace Roost.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     public class UsersController : Controller
     {
-	private readonly IUserRepository _userRepository;
-       // DBHelper db = new DBHelper();
-	
-	public UsersController(IUserRepository userRepository)
+        private readonly IUserRepository _userRepository;
+        DBHelper db = new DBHelper();
+
+        public UsersController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-		//Congrats, I'm initialized!
-		//TODO:  Initialize DBHelper here bruh
+            //Congrats, I'm initialized!
+            //TODO:  Initialize DBHelper here bruh
         }
-	[HttpGet]
-	//public IActionResult List()
-	//{
-	//	return Ok(_userRepository.All);
-	//}
+        //[HttpGet]
+        //public IActionResult List()
+        //{
+        //	return Ok(_userRepository.All);
+        //}
 
-	//route is localhost:5000/api/users
-	//this route actually works...       
-	[HttpGet]
-	public async Task<String> Get()
-	{
-		try
-            	{
-                	//await db.client.GetItemAsync(
-                	//tableName: "User",
-                    	//key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                    	//{	
-                        //{"userId", new AttributeValue {S = "777"} },
-                        //{"displayName", new AttributeValue {S = "joe"} },
-                        //{"password", new AttributeValue {S = "blah"} }
-                    	//}
-			return "Soup";
-               // );
+        //route is localhost:5000/api/users
+        //this route actually works...       
+        [HttpGet]
+        public async Task<String> Get()
+        {
+            try
+            {
+                //await db.client.GetItemAsync(
+                //tableName: "User",
+                //key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                //{	
+                //{"userId", new AttributeValue {S = "777"} },
+                //{"displayName", new AttributeValue {S = "joe"} },
+                //{"password", new AttributeValue {S = "blah"} }
+                //}
+                return "Soup";
+                // );
                 //return "User exists";
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return "Error: Incorrect username or password";
             }
 
-		return "rawr";
-	}
-	 // GET: /api/user/login
-        /*[HttpGet("login")]
+            return "rawr";
+        }
+        // GET: /api/user/login
+        [HttpGet("login")]
         public async Task<string> Login()
         {
             try
@@ -66,11 +67,12 @@ namespace Roost.Controllers
                     {
                         {"userId", new AttributeValue {S = "777"} },
                         {"displayName", new AttributeValue {S = "joe"} },
-                        {"password", new AttributeValue {S = "blah"} }
+                        //{"password", new AttributeValue {S = "blah"} }
                     }
                 );
                 return "User exists";
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return "Error: Incorrect username or password";
             }
@@ -98,7 +100,8 @@ namespace Roost.Controllers
                         {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
                     }
                 );
-            } catch (Exception)
+            }
+            catch (Exception)
             {
 
             }
@@ -124,7 +127,8 @@ namespace Roost.Controllers
                 );
 
                 return "User created successfully";
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return "User not found.";
             }
@@ -157,12 +161,13 @@ namespace Roost.Controllers
                     }
                 );
                 return settings;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return "Error: something went wrong.";
             }
-            
+
         }
-	*/
+
     }
 }
