@@ -29,7 +29,7 @@ import LegalRights from './legalRights.js'
 */
 const { width, height } = Dimensions.get("window");
 
-const background = require("./img/purple.jpg");
+const background = require("./img/header.jpg");
 const mark = require("./img/roost2.png");
 const lockIcon = require("./img/lock.png");
 const personIcon = require("./img/person.png");
