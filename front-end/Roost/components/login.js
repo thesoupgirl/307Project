@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right} from 'native-base';
 import LegalRights from './legalRights.js'
+var md5 = require('md5');
 
 /*  
   LOGIN: SOPHIA
@@ -57,36 +58,45 @@ export default class Login extends Component {
     loginPressed() {
         var i;
         //call to authenticate
-        /*
-        console.log('Sign Up Succesful.')
-            var id = this.state.userame
-            var passcode = this.state.password
+        
+            console.warn(md5(this.state.password));
+            var username = this.state.username
+            var password = md5(this.state.password)
 
-            let ws = `http://localhost:3000/api/verify/${id}/${passcode}`
+
+            let ws = `http://localhost:5000/api/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
-                this.setState({message: 'Valid credentials', login: true});
-                console.log(xhr.responseText)
+                this.props.handler(this.state.username, this.state.password, true)
+                console.warn(xhr.responseText)
             } else {
-                console.log('err')
-                this.setState({message: 'Bad credentials'});
+                 Alert.alert(
+            'Login Failed',
+          )
 
             }
             }; xhr.send()
             this.renderBody
-        */
+        
+
+
+        /*
         for (i = 0; i < this.state.users.length; i++) {
           if (this.state.users[i].username === this.state.username &&
               this.state.users[i].pass === this.state.password) {
                     this.props.handler(this.state.username, this.state.password, true)
+                    console.warn(md5(this.state.password));
                     return;
               }
+              
         }
               Alert.alert(
             'Login Failed',
           )
+
+          */
       
             
         }
