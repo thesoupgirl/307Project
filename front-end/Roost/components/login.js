@@ -121,8 +121,8 @@ export default class Login extends Component {
       */
       //handle the user sign up
         
-        var username = this.state.userame
-        var password = this.state.password
+        var username = this.state.username
+        var password = md5(this.state.password)
         let ws = `http://localhost:5000/api/users/login`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws, true);
