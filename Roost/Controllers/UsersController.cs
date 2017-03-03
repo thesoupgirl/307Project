@@ -15,7 +15,7 @@ namespace Roost.Controllers
     public class UsersController : Controller
     {
 	private readonly IUserRepository _userRepository;
-       // DBHelper db = new DBHelper();
+        DBHelper db = new DBHelper();
 	
 	public UsersController(IUserRepository userRepository)
         {
