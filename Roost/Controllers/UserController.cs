@@ -16,16 +16,24 @@ namespace RoostApp.Controllers
 
         // GET: /api/user/login
         [HttpGet("login")]
-        public async void Login()
+        public async Task<string> Login()
         {
-            var response = await db.client.GetItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                {
-                    // Find the user based on their display name and password
-                    // and set a bool to true
-                }
-            );
+            try
+            {
+                await db.client.GetItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    {
+                        {"userId", new AttributeValue {S = "777"} },
+                        {"displayName", new AttributeValue {S = "joe"} },
+                        {"password", new AttributeValue {S = "blah"} }
+                    }
+                );
+                return "User exists";
+            } catch (Exception)
+            {
+                return "Error: Incorrect username or password";
+            }
         }
 
         // PUT: /api/user/{id}/updateuser
@@ -33,60 +41,87 @@ namespace RoostApp.Controllers
         [HttpPut("{id}/update")]
         public async void UpdateUser(string id)
         {
-            await db.client.UpdateItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, AttributeValue>
-                {
-                    // Find the user based on their id and display name
-                    {"userId", new AttributeValue {S = id} },
-                    {"displayName", new AttributeValue {S = "Hello world"} }
-                },
+            string updatedInfo = Response.Headers["updatedInfo"];
+            try
+            {
+                await db.client.UpdateItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, AttributeValue>
+                    {
+                        // Find the user based on their id and display name
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = "Hello world"} }
+                    },
 
-                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                {
-                    {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
-                }
-);
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                    {
+                        {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
+                    }
+                );
+            } catch (Exception)
+            {
+
+            }
         }
 
         // POST: /api/user/create
         [HttpPost("create")]
+        [HttpGet("create")]
         // Create a new user
-        public async void CreateUser()
+        public async Task<string> CreateUser()
         {
-            await db.client.PutItemAsync(
-                tableName: "User",
-                item: new Dictionary<string, AttributeValue>
-                {
-                    {"userId", new AttributeValue {S = ""} },
-                    {"displayName", new AttributeValue {S = ""} }
-                }
-            );
+            string info = Response.Headers["userInfo"];
+            try
+            {
+                await db.client.PutItemAsync(
+                    tableName: "User",
+                    item: new Dictionary<string, AttributeValue>
+                    {
+                        {"userId", new AttributeValue {S = "777"} },
+                        {"displayName", new AttributeValue {S = "joe"} },
+                        {"password", new AttributeValue {S = "blah"} }
+                    }
+                );
+
+                return "User created successfully";
+            } catch (Exception)
+            {
+                return "User not found.";
+            }
         }
 
         // POST: /api/user/{id}
         [HttpPost("{id}")]
+        [HttpGet("{id}")]
         // Saves user settings in DB
-        public async void SaveSettings(string id)
+        public async Task<string> SaveSettings(string id)
         {
+            // The settings will be stored as JSON in the response header.
+            string settings = Response.Headers["settings"];
 
-            await db.client.UpdateItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, AttributeValue>
-                {
-                    {"userId", new AttributeValue {S = id} },
-                    {"displayName", new AttributeValue {S = "Hello world"} }
-                },
-
-                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                {
+            try
+            {
+                await db.client.UpdateItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, AttributeValue>
                     {
-                        "settings", new AttributeValueUpdate(new AttributeValue {S = "Distance: 15mi"}, AttributeAction.PUT)
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = "Hello world"} }
+                    },
 
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                    {
+                        {
+                            "settings", new AttributeValueUpdate(new AttributeValue {S = settings}, AttributeAction.PUT)
+                        }
                     }
-                }
-            );
-           
+                );
+                return settings;
+            } catch (Exception)
+            {
+                return "Error: something went wrong.";
+            }
+            
         }
     }
 }
