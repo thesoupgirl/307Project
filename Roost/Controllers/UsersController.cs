@@ -9,8 +9,8 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace RoostApp.Controllers
 {
-    [Route("api/user")]
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    public class UsersController : Controller
     {
 
         DBHelper db = new DBHelper();
@@ -124,8 +124,22 @@ namespace RoostApp.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
+                        // Change username and password (string), push notifications (boolean), distance (int)
                         {
-                            "settings", new AttributeValueUpdate(new AttributeValue {S = sJson.ToJsonPretty()}, AttributeAction.PUT)
+                            "displayName",
+                            new AttributeValueUpdate(new AttributeValue {S = sJson["newUsername"]}, AttributeAction.PUT)
+                        },
+                        {
+                            "password",
+                            new AttributeValueUpdate(new AttributeValue {S = sJson["password"]}, AttributeAction.PUT)
+                        },
+                        {
+                            "notifications",
+                            new AttributeValueUpdate(new AttributeValue {BOOL = sJson["notifications"].AsBoolean()}, AttributeAction.PUT)
+                        },
+                        {
+                            "distance",
+                            new AttributeValueUpdate(new AttributeValue {N = sJson["distance"]}, AttributeAction.PUT)
                         }
                     }
                 );
