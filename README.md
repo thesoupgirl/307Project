@@ -10,6 +10,6 @@ If it doesn't build, manage NuGet packages and add React.AspNet, Microsoft.NETCo
 ### Local Deployment - Command Line
 If you'd like to run it via your terminal...
 Then go to the directory with the repo and go to `/RoostApp/src/RoostApp`
-Type the following: `dotnet publish -c Release -r osx`
+Type the following: `dotnet run`
 Note:  Must have dotnet cli installed for this to work...if you have issues, run `dotnet restore`
 To deploy, run `dotnet run` after that and it'll tell you which port it deploys to.
