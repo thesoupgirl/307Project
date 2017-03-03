@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace RoostApp.Controllers
 {
@@ -18,6 +19,10 @@ namespace RoostApp.Controllers
         [HttpGet("login")]
         public async Task<string> Login()
         {
+            string login = Response.Headers["loginInfo"];
+
+            var loginJson = Document.FromJson(login);
+
             try
             {
                 await db.client.GetItemAsync(
@@ -42,6 +47,9 @@ namespace RoostApp.Controllers
         public async void UpdateUser(string id)
         {
             string updatedInfo = Response.Headers["updatedInfo"];
+
+            var infoJson = Document.FromJson("updatedInfo");
+
             try
             {
                 await db.client.UpdateItemAsync(
@@ -50,7 +58,7 @@ namespace RoostApp.Controllers
                     {
                         // Find the user based on their id and display name
                         {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "Hello world"} }
+                        {"displayName", new AttributeValue {S = infoJson["displayName"]} }
                     },
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
@@ -71,6 +79,9 @@ namespace RoostApp.Controllers
         public async Task<string> CreateUser()
         {
             string info = Response.Headers["userInfo"];
+
+            var infoJson = Document.FromJson(info);
+
             try
             {
                 await db.client.PutItemAsync(
@@ -78,8 +89,8 @@ namespace RoostApp.Controllers
                     item: new Dictionary<string, AttributeValue>
                     {
                         {"userId", new AttributeValue {S = "777"} },
-                        {"displayName", new AttributeValue {S = "joe"} },
-                        {"password", new AttributeValue {S = "blah"} }
+                        {"displayName", new AttributeValue {S = infoJson["displayName"]} },
+                        {"password", new AttributeValue {S = infoJson["password"]} }
                     }
                 );
 
@@ -99,6 +110,8 @@ namespace RoostApp.Controllers
             // The settings will be stored as JSON in the response header.
             string settings = Response.Headers["settings"];
 
+            var sJson = Document.FromJson(settings);
+
             try
             {
                 await db.client.UpdateItemAsync(
@@ -112,7 +125,7 @@ namespace RoostApp.Controllers
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
                         {
-                            "settings", new AttributeValueUpdate(new AttributeValue {S = settings}, AttributeAction.PUT)
+                            "settings", new AttributeValueUpdate(new AttributeValue {S = sJson.ToJsonPretty()}, AttributeAction.PUT)
                         }
                     }
                 );
