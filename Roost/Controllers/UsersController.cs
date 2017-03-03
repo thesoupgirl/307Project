@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
+using System.Net.Http;
 
 namespace RoostApp.Controllers
 {
@@ -17,7 +18,7 @@ namespace RoostApp.Controllers
 
         // GET: /api/user/login
         [HttpGet("login/{id}/{password}")]
-        public async Task<string> Login(string id, string password)
+        public async Task<HttpResponseMessage> Login(string id, string password)
         {
             string login = Response.Headers["loginInfo"];
 
@@ -34,17 +35,23 @@ namespace RoostApp.Controllers
                         //{"password", new AttributeValue {S = "blah"} }
                     }
                 );
-                return "User exists";
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+
             } catch (Exception)
             {
-                return "Error: Incorrect username or password";
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
         }
 
         // PUT: /api/user/{id}/updateuser
         // Update user info
         [HttpPut("{id}/update")]
-        public async void UpdateUser(string id)
+        public async Task<HttpResponseMessage> UpdateUser(string id)
         {
             string updatedInfo = Response.Headers["updatedInfo"];
 
@@ -66,9 +73,14 @@ namespace RoostApp.Controllers
                         {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
                     }
                 );
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             } catch (Exception)
             {
-
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
         }
 
@@ -76,7 +88,7 @@ namespace RoostApp.Controllers
         [HttpPost("create")]
         [HttpGet("create")]
         // Create a new user
-        public async Task<string> CreateUser()
+        public async Task<HttpResponseMessage> CreateUser()
         {
             string info = Response.Headers["userInfo"];
 
@@ -96,10 +108,14 @@ namespace RoostApp.Controllers
                     }
                 );
 
-                return "User created successfully";
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             } catch (Exception)
             {
-                return "User not found.";
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
         }
 
@@ -107,7 +123,7 @@ namespace RoostApp.Controllers
         [HttpPost("{id}")]
         [HttpGet("{id}")]
         // Saves user settings in DB
-        public async Task<string> SaveSettings(string id)
+        public async Task<HttpResponseMessage> SaveSettings(string id)
         {
             // The settings will be stored as JSON in the response header.
             string settings = Response.Headers["settings"];
@@ -145,10 +161,14 @@ namespace RoostApp.Controllers
                         }
                     }
                 );
-                return settings;
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             } catch (Exception)
             {
-                return "Error: something went wrong.";
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
             
         }
