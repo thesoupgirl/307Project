@@ -14,20 +14,54 @@ namespace RoostApp.Controllers
 
         DBHelper db = new DBHelper();
 
+        // GET: /api/user/login
+        [HttpGet("login")]
+        public async void Login()
+        {
+            var response = await db.client.GetItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                {
+                    // Find the user based on their display name and password
+                    // and set a bool to true
+                }
+            );
+        }
+
         // PUT: /api/user/{id}/updateuser
         // Update user info
         [HttpPut("{id}/update")]
-        public string UpdateUser(string id)
+        public async void UpdateUser(string id)
         {
-            return "User is updated here";
+            await db.client.UpdateItemAsync(
+                tableName: "User",
+                key: new Dictionary<string, AttributeValue>
+                {
+                    // Find the user based on their id and display name
+                    {"userId", new AttributeValue {S = id} },
+                    {"displayName", new AttributeValue {S = "Hello world"} }
+                },
+
+                attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                {
+                    {"info", new AttributeValueUpdate(new AttributeValue {S = ""}, AttributeAction.PUT)}
+                }
+);
         }
 
         // POST: /api/user/create
         [HttpPost("create")]
         // Create a new user
-        public string CreateUser()
+        public async void CreateUser()
         {
-            return "Create user here.";
+            await db.client.PutItemAsync(
+                tableName: "User",
+                item: new Dictionary<string, AttributeValue>
+                {
+                    {"userId", new AttributeValue {S = ""} },
+                    {"displayName", new AttributeValue {S = ""} }
+                }
+            );
         }
 
         // POST: /api/user/{id}
@@ -52,28 +86,6 @@ namespace RoostApp.Controllers
                     }
                 }
             );
-
-            /*var user = await db.client.GetItemAsync(
-                tableName: "User",
-                key: new Dictionary<string, AttributeValue>
-                {
-                    // Save the settings as a string
-                    // Settings will be received as JSON
-                    {"userId", new AttributeValue {S = id} }
-                }
-            );
-           await db.client.PutItemAsync(
-                tableName: "User",
-                item: new Dictionary<string, AttributeValue>
-                {
-                    // Save the settings as a string
-                    // Settings will be received as JSON
-                    {"userId", new AttributeValue {S = id} },
-                    {"displayName", new AttributeValue {S = "Hello world"} },
-                    {"settings", new AttributeValue {S = "Distance: 10mi"} }
-                }
-            );*/
-
            
         }
     }
