@@ -3,6 +3,6 @@ front-end/Roost/node_modules/
 ~/.vs/config/applicationhost.config
 ~/RoostApp.sln
 ~/global.json
-~/src/RoostApp/bin/*
-~/src/RoostApp/RoostApp.xproj
-~/src/RoostApp/RoostApp.xproj.user
+~/Roost/project.lock.json
+~/Roost/bin/Debug/netcoreapp1.1/
+~/Roost/obj/Debug/netcoreapp1.1/
