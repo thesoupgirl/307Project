@@ -14,10 +14,12 @@ namespace Roost.Controllers
     [Route("api/users")]
     public class UsersController : Controller
     {
+
         private readonly IUserRepository _userRepository;
         DBHelper db = new DBHelper();
 
         public UsersController(IUserRepository userRepository)
+
         {
             _userRepository = userRepository;
             //Congrats, I'm initialized!
