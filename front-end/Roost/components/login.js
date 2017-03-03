@@ -64,7 +64,7 @@ export default class Login extends Component {
             var password = md5(this.state.password)
 
 
-            let ws = `http://localhost:5000/api/login/${username}/${password}`
+            let ws = `http://localhost:5000/api/users/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
@@ -73,9 +73,9 @@ export default class Login extends Component {
                 //console.warn(xhr.responseText)
             } else {
                  Alert.alert(
-                  'Login Failed',
+                  'Login Failed',      
           )
-
+          //console.warn(xhr.responseText)
             }
             }; xhr.send()
             this.renderBody
