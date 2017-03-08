@@ -8,7 +8,9 @@ import {
   AppRegistry,
   StyleSheet,
   Navigator,
-  Image
+  Image,
+  TextInput,
+  Switch
 } from 'react-native';
 import Login from './login.js'
 import Launch from './launch.js'
@@ -20,7 +22,7 @@ import Launch from './launch.js'
 
 
 export default class Profile extends Component {
-  constructor({handler}) {
+  constructor({hideNav, user}) {
         super()
         this.state = {
             username:'',
@@ -41,28 +43,34 @@ export default class Profile extends Component {
 
   componentWillMount() {
     //CALL TO GET USER INFORMATION
+    this.setState({push: !this.state.push})
+    this.setState({username: this.props.user.username, 
+                   password: this.props.user.password,
+                   push: this.props.user.push})
+  }
+  componentDidMount() {
+    //console.warn(this.props.user)
   }
   info () {
     if (this.state.updateSetttings)
       return (
         <Content>
-          <Form>
-              <Item stackedLabel>
-                  <Label>Username</Label>
-                  <Input />
-              </Item>
-              <Item stackedLabel last>
-                  <Label>Password</Label>
-                  <Input />
-              </Item>
-          </Form>
-          <Content>
-            <ListItem>
-                        <CheckBox onPress={() => this.setState({push: !this.state.push})} checked={this.state.push} />
-                        <Body>
-                            <Text>Push notificaitons</Text>
-                        </Body>
-                    </ListItem>
+          <Text>username:</Text>
+          <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(username) => this.setState({username})}
+        value={this.state.username}
+      />
+      <Text>password:</Text>
+          <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+        onChangeText={(password) => this.setState({password})}
+        value={this.state.password}
+      />
+      <Text>push notifications</Text>
+      <Switch
+          onValueChange={(value) => this.setState({push: value})}
+          value={this.state.push} />
             <Text>choose distance:</Text>
                     <Picker
                         iosHeader="Select one"
@@ -75,7 +83,7 @@ export default class Profile extends Component {
                         <Item label="30 miles" value="30" />
                         <Item label="40 miles" value="50" />
                    </Picker>
-                </Content>
+               
                  <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings},
              this.userUpdate())}>
                    <Text>Confirm Changes</Text></Button>
