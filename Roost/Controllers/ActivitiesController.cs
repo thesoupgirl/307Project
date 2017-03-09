@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
-using Roost.Models;
+using Roost;
 
 namespace RoostApp.Controllers
 {
@@ -13,7 +13,7 @@ namespace RoostApp.Controllers
     public class ActivitiesController : Controller
     {
 
-        Roost.DBHelper db = new Roost.DBHelper();
+        DBHelper db = new DBHelper();
 
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
@@ -31,45 +31,59 @@ namespace RoostApp.Controllers
             return View();
         }
 
-        // POST: /api/activities/add
-        [HttpPost("add")]
-        public async Task<HttpResponseMessage> AddActivity()
+        // POST: /api/activities/{id}/createactivity
+        // Creates an activity
+        [HttpPost("{id}/createactivity")]
+        public async Task<HttpResponseMessage> CreateActivity(string id)
         {
             try
             {
-
                 await db.client.PutItemAsync(
                     tableName: "RoostActivities",
                     item: new Dictionary<String, AttributeValue>
                     {
                         // The unique activity id
-                        {"ActivityId", new AttributeValue { S = ""} }, 
+                        {"ActivityId", new AttributeValue { S = id} }, 
 
                         // The number of members in the group
-                        {"NumMembers", new AttributeValue { N = "1"} },
+                        {"numMembers", new AttributeValue { N = "1"} },
 
                         // The date the group was created
-                        {"CreatedDate", new AttributeValue { S = System.DateTime.Today.ToString()}  }
+                        {"createdDate", new AttributeValue { S = System.DateTime.Today.ToString()}  },
+
+                        // The categories the activity will be listed under
+                        {"categories", new AttributeValue {SS = new List<string>() } },
+
+                        // The name of the group
+                        {"name", new AttributeValue { S = "" } },
+
+                        // The description of the group
+                        {"description", new AttributeValue { S = "" } },
+
+                        // The unique ID of the chat assiciated with this activity
+                        {"chatId", new AttributeValue { S = "" } },
+
+                        // The identifier of whether the chat is public (open) or private (closed)
+                        {"status", new AttributeValue { S = "open"} },
+
+                        // The maximum amount of people who can join the group
+                        {"maxGroupSize", new AttributeValue{ N = "20"} },
+
+                        // The userId of the person who created the group
+                        {"groupLeader", new AttributeValue{ S = ""} }
                     }
                 );
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
             }
-        }
-
-        // POST: /api/activities/{id}/createactivity
-        // Creates an activity
-        [HttpPost("{id}/createactivity")]
-        public IActionResult CreateActivity(string id)
-        {
-            return View();
         }
 
         // POST: /api/activities/{id}/deleteactivity
