@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.1.0",
@@ -44,7 +44,8 @@
 
   "runtimeOptions": {
     "configProperties": {
-      "System.GC.Server": true
+      "System.GC.Server": true,
+      "userSecretsId": "f75906bb-1abc-4a5d-afef-ff80b014e893"
     }
   },
 

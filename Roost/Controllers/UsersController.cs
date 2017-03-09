@@ -7,40 +7,147 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
 using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+using Roost.Interfaces;
+using Roost.Models;
+using System.IO;
+using System.Text;
 
-namespace RoostApp.Controllers
+namespace Roost.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     public class UsersController : Controller
     {
 
+        private readonly IUserRepository _userRepository;
         DBHelper db = new DBHelper();
 
-        // GET: /api/user/login
-        [HttpGet("login/{id}/{password}")]
-        public async Task<HttpResponseMessage> Login(string id, string password)
-        {
-            string login = Response.Headers["loginInfo"];
+        public UsersController(IUserRepository userRepository)
 
-            var loginJson = Document.FromJson(login);
+        {
+            _userRepository = userRepository;
+            //Congrats, I'm initialized!
+            //TODO:  Initialize DBHelper here bruh
+        }
+        //[HttpGet]
+        //public IActionResult List()
+        //{
+        //	return Ok(_userRepository.All);
+        //}
+
+        //route is localhost:5000/api/users
+        //this route actually works...       
+        [HttpGet]
+        public async Task<String> Get()
+        {
+            try
+            {
+                //await db.client.GetItemAsync(
+                //tableName: "User",
+                //key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                //{	
+                //{"userId", new AttributeValue {S = "777"} },
+                //{"displayName", new AttributeValue {S = "joe"} },
+                //{"password", new AttributeValue {S = "blah"} }
+                //}
+                return "Soup";
+                // );
+                //return "User exists";
+            }
+            catch (Exception)
+            {
+                return "Error: Incorrect username or password";
+            }
+
+            return "rawr";
+        }
+        // GET: /api/users/login
+        [HttpGet("login/{id}/{passHash}")]
+        public async Task<HttpResponseMessage> Login(String id, String passHash)
+        {
+            //this takes request parameters only from the query string
+            try
+            {
+                Console.WriteLine("meow " + id);
+                //Console.WriteLine("meow" + qsList.size());
+                //System.Diagnostics.Debug.WriteLine("arf");
+                //string[] array = new string[queryStrings.Count];
+
+                //queryStrings.CopyTo(array, 0);
+
+                GetItemResponse stuff = await db.client.GetItemAsync(
+                    tableName: "User",
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    {
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = id} },
+                        //{"password", new AttributeValue {S = "202cb962ac59075b964b07152b234b70"} }
+                    }
+                );
+                if (stuff.Item["password"].S == passHash)
+                {
+                    Response.StatusCode = 200;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                }
+                else
+                {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+
+                }
+                //return "meow";
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
+
+        // GET: /api/users/login
+        [HttpPost("login")]
+        public async Task<HttpResponseMessage> Login()
+        {
+            //this takes request parameters only from the query string
+            //Workaround - copy original Stream
+
 
             try
             {
-                await db.client.GetItemAsync(
+                string username = Request.Form["username"];
+                string password = Request.Form["password"];
+                Console.WriteLine(username);
+                Console.WriteLine(password);
+                PutItemResponse stuff = await db.client.PutItemAsync(
                     tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
+                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "joe"} },
-                        //{"password", new AttributeValue {S = "blah"} }
+                        {"userId", new AttributeValue {S = username} },
+                        {"displayName", new AttributeValue {S = username} },
+                        {"password", new AttributeValue {S = password} }
                     }
                 );
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
+                //if(stuff.Item["password"].S == passHash) {
+                //    Response.StatusCode = 200;
+                //    HttpResponseMessage response = new HttpResponseMessage();
+                //    return response;
+                //}
+                //else {
+                //    Response.StatusCode = 400; 
+                //    HttpResponseMessage response = new HttpResponseMessage();
+                //    return response;
 
-            } catch (Exception)
+                //}       
+                //return "meow";
+            }
+            catch (Exception)
             {
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
@@ -51,11 +158,9 @@ namespace RoostApp.Controllers
         // PUT: /api/user/{id}/updateuser
         // Update user info
         [HttpPut("{id}/update")]
-        public async Task<HttpResponseMessage> UpdateUser(string id)
+        public async void UpdateUser(string id)
         {
             string updatedInfo = Response.Headers["updatedInfo"];
-
-            var infoJson = Document.FromJson("updatedInfo");
 
             try
             {
@@ -64,8 +169,8 @@ namespace RoostApp.Controllers
                     key: new Dictionary<string, AttributeValue>
                     {
                         // Find the user based on their id and display name
-                        {"userId", new AttributeValue {N = "1"} },
-                        {"displayName", new AttributeValue {S = infoJson["displayName"]} }
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = "Hello world"} }
                     },
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
@@ -73,14 +178,11 @@ namespace RoostApp.Controllers
                         {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
                     }
                 );
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
-            } catch (Exception)
+
+            }
+            catch (Exception)
             {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+
             }
         }
 
@@ -88,34 +190,27 @@ namespace RoostApp.Controllers
         [HttpPost("create")]
         [HttpGet("create")]
         // Create a new user
-        public async Task<HttpResponseMessage> CreateUser()
+
+        public async Task<string> CreateUser()
         {
             string info = Response.Headers["userInfo"];
-
-            var infoJson = Document.FromJson(info);
-
-            int id = 0;
-
             try
             {
-                var newUser = await db.client.PutItemAsync(
+                await db.client.PutItemAsync(
                     tableName: "User",
                     item: new Dictionary<string, AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = infoJson["displayName"]} },
-                        {"displayName", new AttributeValue {S = infoJson["displayName"]} },
-                        {"password", new AttributeValue {S = infoJson["password"]} }
+                        {"userId", new AttributeValue {S = "777"} },
+                        {"displayName", new AttributeValue {S = "joe"} },
+                        {"password", new AttributeValue {S = "blah"} }
                     }
                 );
 
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
-            } catch (Exception)
+                return "User created successfully";
+            }
+            catch (Exception)
             {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                return "User not found.";
             }
         }
 
@@ -123,7 +218,7 @@ namespace RoostApp.Controllers
         [HttpPost("{id}")]
         [HttpGet("{id}")]
         // Saves user settings in DB
-        public async Task<HttpResponseMessage> SaveSettings(string id)
+        public async Task<string> SaveSettings(string id)
         {
             // The settings will be stored as JSON in the response header.
             string settings = Response.Headers["settings"];
@@ -142,35 +237,18 @@ namespace RoostApp.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        // Change username and password (string), push notifications (boolean), distance (int)
                         {
-                            "displayName",
-                            new AttributeValueUpdate(new AttributeValue {S = sJson["newUsername"]}, AttributeAction.PUT)
-                        },
-                        {
-                            "password",
-                            new AttributeValueUpdate(new AttributeValue {S = sJson["password"]}, AttributeAction.PUT)
-                        },
-                        {
-                            "notifications",
-                            new AttributeValueUpdate(new AttributeValue {BOOL = sJson["notifications"].AsBoolean()}, AttributeAction.PUT)
-                        },
-                        {
-                            "distance",
-                            new AttributeValueUpdate(new AttributeValue {N = sJson["distance"]}, AttributeAction.PUT)
+                            "settings", new AttributeValueUpdate(new AttributeValue {S = settings}, AttributeAction.PUT)
                         }
                     }
                 );
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
-            } catch (Exception)
-            {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                return settings;
             }
-            
+            catch (Exception)
+            {
+                return "Error: something went wrong.";
+            }
+
         }
     }
 }

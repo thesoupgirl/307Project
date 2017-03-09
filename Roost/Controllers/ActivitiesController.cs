@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
+using Roost.Models;
 
 namespace RoostApp.Controllers
 {
@@ -12,7 +13,7 @@ namespace RoostApp.Controllers
     public class ActivitiesController : Controller
     {
 
-        DBHelper db = new DBHelper();
+        Roost.DBHelper db = new Roost.DBHelper();
 
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user

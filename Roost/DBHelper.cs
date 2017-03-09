@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
 
-namespace RoostApp
+namespace Roost
 {
     /// <summary>
     /// A class with methods to setup and access our database.
