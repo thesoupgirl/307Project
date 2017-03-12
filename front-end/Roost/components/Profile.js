@@ -23,6 +23,7 @@ import Launch from './launch.js'
 
 export default class Profile extends Component {
   constructor({hideNav, user}) {
+
         super()
         this.state = {
             username:'',
@@ -43,14 +44,16 @@ export default class Profile extends Component {
 
   componentWillMount() {
     //CALL TO GET USER INFORMATION
+
     this.setState({push: !this.state.push})
     this.setState({username: this.props.user.username, 
                    password: this.props.user.password,
                    push: this.props.user.push})
   }
   componentDidMount() {
-    //console.warn(this.props.user)
+
   }
+  componentHasMounted
   info () {
     if (this.state.updateSetttings)
       return (

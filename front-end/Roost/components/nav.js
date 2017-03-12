@@ -21,6 +21,7 @@ var styles = require('./styles');
 export default class Nav extends Component {
 
   constructor({handler, user}) {
+
         super()
         this.state = {
           page: 'explore',
@@ -35,10 +36,11 @@ export default class Nav extends Component {
         this.hideNav = this.hideNav.bind(this)
        
     }
-
+    
     componentDidMount() {
        //console.warn(this.props.user)
     }
+
 
     hideNav () {
         this.setState({show: false})
@@ -94,7 +96,12 @@ export default class Nav extends Component {
         else if (this.state.page === 'profile')
             return <Profile handler = {this.props.handler}
                             hideNav = {this.hideNav}
+<<<<<<< HEAD
                             user = {this.props.user}/>
+=======
+                            username ={this.props.username}
+                            password ={this.props.password}/>
+>>>>>>> origin/master
     }
 
        render() {

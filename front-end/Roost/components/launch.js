@@ -44,6 +44,7 @@ export default class Launch extends Component {
     if (this.state.isLoggedIn) {
       return (<Nav handler = {this.handler}
                   user = {this.state}/>)
+
     }
     return (<Login handler = {this.handler}/>)
   }
