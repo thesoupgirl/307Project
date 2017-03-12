@@ -20,7 +20,7 @@ import Launch from './launch.js'
 
 
 export default class Profile extends Component {
-  constructor({handler}) {
+  constructor({handler, username, password}) {
         super()
         this.state = {
             username:'',
@@ -41,7 +41,9 @@ export default class Profile extends Component {
 
   componentWillMount() {
     //CALL TO GET USER INFORMATION
+    console.warn(this.props.username)
   }
+  componentHasMounted
   info () {
     if (this.state.updateSetttings)
       return (

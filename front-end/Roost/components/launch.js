@@ -34,6 +34,7 @@ export default class Launch extends Component {
       this.setState({isLoggedIn: status});
       this.setState({username: user});
       this.setState({password: pass});
+      consile.warn(user)
       this.display()
 
     }
@@ -46,7 +47,9 @@ export default class Launch extends Component {
 
   display () {
     if (this.state.isLoggedIn) {
-      return (<Nav handler = {this.handler}/>)
+      return (<Nav handler = {this.handler}
+                username ={this.state.username}
+                password = {this.state.password}/>)
     }
     return (<Login handler = {this.handler}/>)
   }
