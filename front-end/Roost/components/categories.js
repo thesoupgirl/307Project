@@ -16,6 +16,11 @@ import Login from './login'
     
 */
 
+var data = [{category: 'sports', title: 'baseball', description: 'come play!'},
+            {category: 'sports', title: 'soccer', description: 'come play!'},
+            {category: 'sports', title: 'tennis', description: 'come play!'},
+            {category: 'sports', title: 'hockey', description: 'come play!'}]
+
 
 export default class Categories extends Component {
   constructor(props) {
@@ -26,10 +31,17 @@ export default class Categories extends Component {
         }
        this.click = this.click.bind(this)
        this.renderCategory = this.renderCategory.bind(this)
+       this.renderData = this.renderData.bind(this)
     }
 
     click (page) {
       this.state.page = page
+    }
+
+    renderData () {
+      data.map(function(item){
+        return <Text>{item.title}</Text>;
+      })
     }
 
     renderCategory() {
@@ -77,7 +89,9 @@ export default class Categories extends Component {
             <Right>
             </Right>
         </Header>
+        
         <Text>{this.state.page}</Text>
+        {this.renderData()}
         </View>
         )
       }
