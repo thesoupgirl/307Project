@@ -36,7 +36,7 @@ export default class Nav extends Component {
         this.hideNav = this.hideNav.bind(this)
        
     }
-    
+
     componentDidMount() {
        //console.warn(this.props.user)
     }
@@ -96,12 +96,8 @@ export default class Nav extends Component {
         else if (this.state.page === 'profile')
             return <Profile handler = {this.props.handler}
                             hideNav = {this.hideNav}
-<<<<<<< HEAD
                             user = {this.props.user}/>
-=======
-                            username ={this.props.username}
-                            password ={this.props.password}/>
->>>>>>> origin/master
+
     }
 
        render() {
