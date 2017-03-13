@@ -59,7 +59,7 @@ namespace Roost.Controllers
                 return "Error: Incorrect username or password";
             }
 
-            return "rawr";
+            // return "rawr";
         }
         // GET: /api/users/login
         [HttpGet("login/{id}/{passHash}")]
