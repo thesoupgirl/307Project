@@ -11,11 +11,14 @@ import {
   Image,
   TextInput,
   Switch,
-  Alert
+  Alert,
+  ScrollView
 } from 'react-native';
 import Login from './login.js'
 import Launch from './launch.js'
 var md5 = require('md5');
+import TextField from 'react-native-md-textinput';
+
 
 
 /*  
@@ -81,18 +84,16 @@ export default class Profile extends Component {
     if (this.state.updateSetttings)
       return (
         <Content>
-          <Text>username:</Text>
-          <TextInput
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(username) => this.setState({username})}
-        value={this.state.username}
-      />
-      <Text>password:</Text>
-          <TextInput password
-        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-        onChangeText={(password) => this.setState({password})}
-        value={this.state.password}
-      />
+          <ScrollView>
+        <TextField label={'username'} highlightColor={'#00BCD4'} 
+                    onChangeText={(text) => {
+                    this.state.password = text;}} />
+      </ScrollView>
+      <ScrollView>
+        <TextField label={'password'} highlightColor={'#00BCD4'}
+                   onChangeText={(text) => {
+                   this.state.username = text;}} />
+      </ScrollView>
       <Text>push notifications</Text>
       <Switch
           onValueChange={(value) => this.setState({push: value})}

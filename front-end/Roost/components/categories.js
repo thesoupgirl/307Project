@@ -26,7 +26,7 @@ var a = [{category: 'Sports', title: 'baseball', description: 'come play!'},
 
 
 export default class Categories extends Component {
-  constructor(user) {
+  constructor(props) {
         super(props)
         this.state = {
           page: 'search',
