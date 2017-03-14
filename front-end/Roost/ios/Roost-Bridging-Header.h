@@ -8,7 +8,6 @@
 
 #ifndef Roost_Bridging_Header_h
 #define Roost_Bridging_Header_h
-#import <Google/SignIn.h>
 
 
 #endif /* Roost_Bridging_Header_h */
