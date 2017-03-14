@@ -28,20 +28,35 @@ export default class AddActivity extends Component {
   constructor(props) {
         super(props)
         this.state = {
+            page: 'add',
             category: 'none',
             activity: '',
-            description: ''
+            description: '',
+            num: 0,
+            selected: []
         }
        this.submit = this.submit.bind(this)
+       this.getSelectedImages = this.getSelectedImages.bind(this)
+       this.renderPage = this.renderPage.bind(this)
+    }
+
+    getSelectedImages(images, current) {
+      var num = images.length;
+
+      this.setState({
+        num: num,
+        selected: images,
+      });
     }
 
     submit () {
       
     }
 
-  render() {
-    return (
-      <Container>
+    renderPage () {
+      if (this.state.page === 'add') {
+        return (
+      <Content>
         <Header>
             <Left>
             </Left>
@@ -77,11 +92,26 @@ export default class AddActivity extends Component {
             <Item label="Adventures" value="Adventures" />
             <Item label="Study Groups" value="Study Groups" />
         </Picker>
-        <Text>choose picture:</Text>
-        <Button block  success onPress={this.submit()}><Text>Update Profile</Text></Button>
+       
+        <Text/>
+        <Button block  success onPress={this.submit()}><Text>Submit Activity</Text></Button>
       </Content>
-      </Container>
+      </Content>
     );
+      }
+      else if (this.state.page === 'pic') {
+        return (
+          <Content>
+
+          </Content>
+        )
+      }
+    }
+
+  render() {
+    return (
+    <Container>{this.renderPage()}</Container>
+    )
   }
 }
 
@@ -92,5 +122,28 @@ const styles = {
     center: {
       justifyContent: 'center',
       alignItems: 'center',
-    }
+    },
+    container: {
+    flex: 1,
+    backgroundColor: '#F6AE2D',
+  },
+  content: {
+    marginTop: 15,
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  text: {
+    fontSize: 16,
+    alignItems: 'center',
+    color: '#fff',
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 12,
+  }
 };
