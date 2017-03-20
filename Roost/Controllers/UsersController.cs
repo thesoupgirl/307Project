@@ -154,10 +154,16 @@ namespace Roost.Controllers
 
         // PUT: /api/users/update/{id}
         // Update user info
-        [HttpPut("update/{id}")]
+        [HttpPost("update/{id}")]
         public async void UpdateUser(string id)
         {
-            string updatedInfo = Response.Headers["updatedInfo"];
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+            Console.WriteLine("\nrawr\n");
+            Console.WriteLine(username);
+            Console.WriteLine(password);
+            Console.WriteLine("\nawks\n");
+
             try
             {
                 await db.client.UpdateItemAsync(
@@ -166,12 +172,12 @@ namespace Roost.Controllers
                     {
                         // Find the user based on their id and display name
                         {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "Hello world"} }
+                        {"displayName", new AttributeValue {S = id} }
                     },
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"password", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
+                        {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)}
                     }
                 );
                 Console.WriteLine("\ntried...");
