@@ -168,27 +168,20 @@ namespace Roost.Controllers
             {
                 await db.client.UpdateItemAsync(
                     tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
                         // Find the user based on their id and display name
                         {"userId", new AttributeValue {S = id} },
                         {"displayName", new AttributeValue {S = id} }
                     },
 
-                }
-
-            }
-            try {
-                PutItemResponse stuff = await db.client.PutItemAsync(
-                    tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
-                        {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
-                        {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
+                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
+                            {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
+                            {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
                     }
                 );
-                Console.WriteLine("\ntried...");
             }
             catch (Exception)
             {
