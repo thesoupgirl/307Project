@@ -29,7 +29,7 @@ export default class AddActivity extends Component {
         super(props)
         this.state = {
             page: 'add',
-            category: 'none',
+            category: 'None',
             activity: '',
             description: '',
             num: 0,
