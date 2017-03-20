@@ -177,7 +177,9 @@ namespace Roost.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)}
+                        {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
+                        {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
+                        {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
                     }
                 );
                 Console.WriteLine("\ntried...");
