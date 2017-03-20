@@ -152,9 +152,9 @@ namespace Roost.Controllers
             }
         }
 
-        // PUT: /api/user/{id}/updateuser
+        // PUT: /api/users/update/{id}
         // Update user info
-        [HttpPut("{id}/update")]
+        [HttpPut("update/{id}")]
         public async void UpdateUser(string id)
         {
             string updatedInfo = Response.Headers["updatedInfo"];
@@ -171,9 +171,10 @@ namespace Roost.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
+                        {"password", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
                     }
                 );
+                Console.WriteLine("\ntried...");
             }
             catch (Exception)
             {
