@@ -38,8 +38,8 @@ namespace RoostApp.Controllers
         {
             try
             {
-                // Add the activity to the database table
-                await db.client.PutItemAsync(
+            // Add the activity to the database table
+            await db.client.PutItemAsync(
                     tableName: "RoostActivities",
                     item: new Dictionary<String, AttributeValue>
                     {
@@ -53,7 +53,7 @@ namespace RoostApp.Controllers
                         {"createdDate", new AttributeValue { S = System.DateTime.Today.ToString()}  },
 
                         // The categories the activity will be listed under
-                        {"categories", new AttributeValue {SS = new List<string>() } },
+                        {"categories", new AttributeValue {SS = Request.Form["categories"].ToList<string>() } },
 
                         // The name of the group
                         {"name", new AttributeValue { S = Request.Form["name"] } },
@@ -62,7 +62,7 @@ namespace RoostApp.Controllers
                         {"description", new AttributeValue { S = Request.Form["description"] } },
 
                         // The unique ID of the chat assiciated with this activity
-                        {"chatId", new AttributeValue { S = "" } },
+                        {"chatId", new AttributeValue { S = id } },
 
                         // The identifier of whether the chat is public (open) or private (closed)
                         {"status", new AttributeValue { S = Request.Form["status"]} },
@@ -71,7 +71,7 @@ namespace RoostApp.Controllers
                         {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"]} },
 
                         // The userId of the person who created the group
-                        {"groupLeader", new AttributeValue{ S = ""} }
+                        {"groupLeader", new AttributeValue{ S = "n"} }
                     }
                 );
 
@@ -81,25 +81,25 @@ namespace RoostApp.Controllers
                     item: new Dictionary<string, AttributeValue>
                     {
                         // The unique id for the chat
-                        {"chatId", new AttributeValue{S = ""} },
+                        {"chatId", new AttributeValue{S = id} },
 
                         // The ID of the activity associated with the chat 
-                        {"groupId", new AttributeValue{S = ""} },
+                        {"groupId", new AttributeValue{S = id} },
 
                         // Indicate whether there is a poll in progress
                         {"isPollActive", new AttributeValue{BOOL = false} },
 
                         // The list of users in the chat
-                        {"useridSent", new AttributeValue{SS = new List<string>()} },
+                        //{"useridSent", new AttributeValue{SS = new List<string>()} },
 
                         // The messages that have been sent
-                        {"messagesSent", new AttributeValue{SS = new List<string>()} },
+                        //{"messagesSent", new AttributeValue{SS = new List<string>()} },
 
                         // Unique ids for each message
-                        {"messageIds", new AttributeValue{SS = new List<string>()} },
+                        //{"messageIds", new AttributeValue{SS = new List<string>()} },
 
                         // Links for pictures sent in the chat
-                        {"picLinks", new AttributeValue{SS = new List<string>()} },
+                        //{"picLinks", new AttributeValue{SS = new List<string>()} },
 
                         // The current number of messages in the chat (200 max)
                         {"numMessages", new AttributeValue{N = "0"} }
