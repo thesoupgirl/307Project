@@ -67,7 +67,7 @@ namespace Roost.Controllers
             //this takes request parameters only from the query string
             try
             {
-		Console.WriteLine("meow " + id);
+		//Console.WriteLine("meow " + id);
 		//Console.WriteLine("meow" + qsList.size());
 		//System.Diagnostics.Debug.WriteLine("arf");
 		//string[] array = new string[queryStrings.Count];
@@ -152,7 +152,7 @@ namespace Roost.Controllers
             }
         }
 
-        // PUT: /api/users/update/{id}
+        // POST: /api/users/update/{id}
         // Update user info
         [HttpPost("update/{id}")]
         public async void UpdateUser(string id)
@@ -168,14 +168,20 @@ namespace Roost.Controllers
             {
                 await db.client.UpdateItemAsync(
                     tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
+                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
                         // Find the user based on their id and display name
                         {"userId", new AttributeValue {S = id} },
                         {"displayName", new AttributeValue {S = id} }
                     },
 
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                }
+
+            }
+            try {
+                PutItemResponse stuff = await db.client.PutItemAsync(
+                    tableName: "User",
+                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
                         {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
                         {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},

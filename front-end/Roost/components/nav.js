@@ -21,6 +21,7 @@ var styles = require('./styles');
 export default class Nav extends Component {
 
   constructor({handler, user}) {
+
         super()
         this.state = {
           page: 'explore',
@@ -39,6 +40,7 @@ export default class Nav extends Component {
     componentDidMount() {
        //console.warn(this.props.user)
     }
+
 
     hideNav () {
         this.setState({show: false})
@@ -84,17 +86,22 @@ export default class Nav extends Component {
 
     selectedPage() {
         if (this.state.page === 'explore')
-            return <SwipeActivities handler = {this.props.handler}/>
+            return <SwipeActivities handler = {this.props.handler}
+                                    user = {this.props.user}/>
         else if (this.state.page === 'categories')
-            return <Categories handler = {this.props.handler}/>
+            return <Categories handler = {this.props.handler}
+                                user = {this.props.user}/>
         else if (this.state.page === 'add')
-            return <AddActivity handler = {this.props.handler}/>
+            return <AddActivity handler = {this.props.handler}
+                                user = {this.props.user}/>
         else if (this.state.page === 'messages')
-            return <MessageThreads handler = {this.props.handler}/>
+            return <MessageThreads handler = {this.props.handler}
+                                   user = {this.props.user}/>
         else if (this.state.page === 'profile')
             return <Profile handler = {this.props.handler}
                             hideNav = {this.hideNav}
                             user = {this.props.user}/>
+
     }
 
        render() {
