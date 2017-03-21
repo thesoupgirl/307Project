@@ -87,12 +87,14 @@ export default class Profile extends Component {
           <ScrollView>
         <TextField label={'username'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {
-                    this.state.password = text;}} />
+                    this.state.username = text;}}
+                    value={this.state.username} />
       </ScrollView>
       <ScrollView>
         <TextField label={'password'} highlightColor={'#00BCD4'}
                    onChangeText={(text) => {
-                   this.state.username = text;}} />
+                   this.state.password = text;}}
+                   value={this.state.password} />
       </ScrollView>
       <Text>push notifications</Text>
       <Switch
