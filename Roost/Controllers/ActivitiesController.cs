@@ -26,9 +26,33 @@ namespace RoostApp.Controllers
         // GET: /api/activities/category/{id}/{dist}
         // Gets list of activities within certain radius of user by category
         [HttpGet("{id}/{dist}")]
-        public IActionResult FindActivitiesByCategory(string id, string dist)
+        public async Task<HttpResponseMessage> FindActivitiesByCategory(string id, string dist)
         {
-            return View();
+            try
+            {
+                var r = await db.client.GetItemAsync(
+                    tableName: "RoostActivities",
+                    key: new Dictionary<string, AttributeValue>
+                    {
+                        // Primary key: The unique activity id
+                        {"ActivityId", new AttributeValue { S = id} }, 
+
+                        // Sort key: The number of members in the group
+                        {"numMembers", new AttributeValue { N = Request.Form["numMembers"]} },
+
+                        // The categories the activity will be listed under
+                        {"categories", new AttributeValue {SS = Request.Form["categories"].ToList<string>() } }
+                    }
+                );
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            } catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
         }
 
         // POST: /api/activities/{id}/createactivity
@@ -43,10 +67,10 @@ namespace RoostApp.Controllers
                     tableName: "RoostActivities",
                     item: new Dictionary<String, AttributeValue>
                     {
-                        // The unique activity id
+                        // Primary key: The unique activity id
                         {"ActivityId", new AttributeValue { S = id} }, 
 
-                        // The number of members in the group
+                        // Sort key: The number of members in the group
                         {"numMembers", new AttributeValue { N = Request.Form["numMembers"]} },
 
                         // The date the group was created
