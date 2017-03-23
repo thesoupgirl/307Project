@@ -60,6 +60,7 @@ namespace RoostApp.Controllers
         [HttpPost("{id}/createactivity")]
         public async Task<HttpResponseMessage> CreateActivity(string id)
         {
+
             try
             {
             // Add the activity to the database table
@@ -79,6 +80,11 @@ namespace RoostApp.Controllers
                         // The categories the activity will be listed under
                         {"categories", new AttributeValue {SS = Request.Form["categories"].ToList<string>() } },
 
+                        // The latitude and longitude for the activity's location.
+                        {"latitude", new AttributeValue {S = Request.Form["latitude"] } },
+
+                        {"longitude", new AttributeValue {S = Request.Form["longitude"] } },
+
                         // The name of the group
                         {"name", new AttributeValue { S = Request.Form["name"] } },
 
@@ -95,26 +101,32 @@ namespace RoostApp.Controllers
                         {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"]} },
 
                         // The userId of the person who created the group
-                        {"groupLeader", new AttributeValue{ S = "n"} }
+                        {"groupLeader", new AttributeValue{ S = Request.Form["groupLeader"]} }
                     }
                 );
+
+                // This list will store the userIds of all members in the activity
+                List<string> users = new List<string>();
+
+                // Add the activity's creator to the list
+                users.Add(Request.Form["groupLeader"]);
 
                 // Attach a chat to the activity
                 await db.client.PutItemAsync(
                     tableName: "RoostChats",
                     item: new Dictionary<string, AttributeValue>
                     {
-                        // The unique id for the chat
+                        // Primary key: The unique id for the chat
                         {"chatId", new AttributeValue{S = id} },
 
-                        // The ID of the activity associated with the chat 
+                        // Sort key: The ID of the activity associated with the chat 
                         {"groupId", new AttributeValue{S = id} },
 
                         // Indicate whether there is a poll in progress
                         {"isPollActive", new AttributeValue{BOOL = false} },
 
                         // The list of users in the chat
-                        //{"useridSent", new AttributeValue{SS = new List<string>()} },
+                        {"useridSent", new AttributeValue{SS = users} },
 
                         // The messages that have been sent
                         //{"messagesSent", new AttributeValue{SS = new List<string>()} },
