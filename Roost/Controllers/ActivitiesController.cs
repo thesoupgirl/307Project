@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using Microsoft.Extensions.Primitives;
 
 namespace RoostApp.Controllers
 {
@@ -63,8 +64,19 @@ namespace RoostApp.Controllers
 
             try
             {
-            // Add the activity to the database table
-            await db.client.PutItemAsync(
+                string base64Image = null;
+
+                // Take the uploaded avatar and convert it to a base64 string.
+                // This is how the images will be stored in the table.
+                if (!String.IsNullOrEmpty(Request.Form["avatar"]))
+                {
+                    byte[] imageArray = System.IO.File.ReadAllBytes(Request.Form["avatar"]);
+                    base64Image = Convert.ToBase64String(imageArray);
+                }
+
+
+                // Add the activity to the database table
+                await db.client.PutItemAsync(
                     tableName: "RoostActivities",
                     item: new Dictionary<String, AttributeValue>
                     {
@@ -84,6 +96,9 @@ namespace RoostApp.Controllers
                         {"latitude", new AttributeValue {S = Request.Form["latitude"] } },
 
                         {"longitude", new AttributeValue {S = Request.Form["longitude"] } },
+
+                        // The image for the activity, stored as a base64 string
+                        {"avatar", new AttributeValue {S = base64Image} },
 
                         // The name of the group
                         {"name", new AttributeValue { S = Request.Form["name"] } },
