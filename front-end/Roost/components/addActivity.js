@@ -11,10 +11,11 @@ import {
   Navigator,
   Image,
   TextInput,
-  ScrollView
+  ScrollView,
+  PixelRatio
 } from 'react-native';
 import TextField from 'react-native-md-textinput';
-import CameraRollPicker from 'react-native-camera-roll-picker';
+var ImagePicker = require('react-native-image-picker');
 
 var pic = require('./img/water.png')
 
@@ -22,7 +23,6 @@ var pic = require('./img/water.png')
 /*  
     
 */
-
 
 export default class AddActivity extends Component {
   constructor(props) {
@@ -32,22 +32,72 @@ export default class AddActivity extends Component {
             category: 'None',
             activity: '',
             description: '',
+            groupSize: '0',
             num: 0,
-            selected: []
+            latitude: null,
+            longitude: null,
+            error: null,
+            selected: [],
+            avatarSource: null
         }
        this.submit = this.submit.bind(this)
-       this.getSelectedImages = this.getSelectedImages.bind(this)
        this.renderPage = this.renderPage.bind(this)
+       this.selectPhotoTapped = this.selectPhotoTapped.bind(this)
+      
     }
 
-    getSelectedImages(images, current) {
-      var num = images.length;
+    selectPhotoTapped() {
+      const options = {
+        quality: 1.0,
+        maxWidth: 500,
+        maxHeight: 500,
+        storageOptions: {
+          skipBackup: true
+        }
+      };
 
-      this.setState({
-        num: num,
-        selected: images,
+      ImagePicker.showImagePicker(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          console.log('User cancelled photo picker');
+        }
+        else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        }
+        else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        }
+        else {
+          let source = { uri: response.uri };
+
+          // You can also display the image using data:
+          // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+          this.setState({
+            avatarSource: source
+          });
+        }
       });
     }
+
+    componentDidMount() {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+          });
+        },
+        (error) => this.setState({ error: error.message }),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+      );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
 
     submit () {
       
@@ -80,6 +130,13 @@ export default class AddActivity extends Component {
                    onChangeText={(text) => {
                    this.state.description = text}} />
       </ScrollView>
+      <ScrollView>
+        <TextField label={'Group Size'} highlightColor={'#00BCD4'}
+                   keyboardType={'numeric'}
+                   onChangeText={(text) => {
+                   this.state.groupSize = text}} />
+      </ScrollView>
+
       <Text>choose category:</Text>
         <Picker
             iosHeader="Select one"
@@ -92,7 +149,14 @@ export default class AddActivity extends Component {
             <Item label="Adventures" value="Adventures" />
             <Item label="Study Groups" value="Study Groups" />
         </Picker>
-       
+        <Text/>
+        <Button onPress={this.selectPhotoTapped.bind(this)}><Text>Choose Image</Text></Button>
+        <Text/>
+        <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+          { this.state.avatarSource === null ? null :
+            <Image style={styles.avatar} source={this.state.avatarSource} />
+          }
+          </View>
         <Text/>
         <Button block  success onPress={this.submit()}><Text>Submit Activity</Text></Button>
       </Content>
@@ -145,5 +209,16 @@ const styles = {
   },
   info: {
     fontSize: 12,
+  },
+  avatarContainer: {
+    borderColor: '#9B9B9B',
+    borderWidth: 1 / PixelRatio.get(),
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  avatar: {
+    //borderRadius: 75,
+    width: 90,
+    height: 90
   }
 };
