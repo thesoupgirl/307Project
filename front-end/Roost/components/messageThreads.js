@@ -26,8 +26,8 @@ var threads = [{title: 'baseball'},
 
 
 export default class MessageThreads extends Component {
-  constructor(props) {
-        super(props)
+  constructor(hideNav, showNav) {
+        super()
         this.state = {
             threads: true,
             id: 0
@@ -65,7 +65,7 @@ export default class MessageThreads extends Component {
                         </Body>
                         
                         <Right>
-                            <Button transparent onPress={() => this.setState({threads: false})}>
+                            <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false})}}>
                                 <Text>chat</Text>
                             </Button>
                         </Right>
@@ -79,7 +79,9 @@ export default class MessageThreads extends Component {
       else {
         return (
           <Chat threadsHandler={this.threadsHandler}
-                chatID={this.state.id}/>
+                chatID={this.state.id}
+                hideNav={this.props.hideNav}
+                showNav={this.props.showNav}/>
         )
       }
     }

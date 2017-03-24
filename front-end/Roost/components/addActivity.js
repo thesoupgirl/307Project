@@ -116,10 +116,7 @@ export default class AddActivity extends Component {
             <Right/>
         </Header>
            <Content>
-             <Text/>
-             <View style={styles.center}>
-             <H1 style={styles.title}>Add Activity</H1>
-             </View>
+             
           <ScrollView>
         <TextField label={'Activity'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {

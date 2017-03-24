@@ -9,9 +9,9 @@ import {
   Navigator,
   Image,
   TouchableHighlight,
+  Dimensions
 } from 'react-native';
-var GiftedMessenger = require('react-native-gifted-messenger');
-var {Dimensions} = React;
+import {GiftedChat} from 'react-native-gifted-chat'
 
 /*  
     
@@ -27,11 +27,14 @@ var threads = [{title: 'baseball', description: 'come play!'},
 
 
 export default class Chat extends Component {
-  constructor(threadsHandler, id) {
+  constructor(threadsHandler, id, hideNav, showNav) {
         super()
         this.state = {
             page: 'chat',
-            messages: []
+            messages: [
+       
+            ],
+            updated: false
         }
      this.onSend = this.onSend.bind(this)
      this.renderPage = this.renderPage.bind(this) 
@@ -41,17 +44,18 @@ export default class Chat extends Component {
         this.setState((previousState) => {
         return {
             messages: GiftedChat.append(previousState.messages, messages),
+            
         };
-        });
+    });        
     }
-
     renderPage() {
         if (this.state.page === 'chat') {
             return (
+                
                 <Container>
         <Header>
             <Left>
-                <Button transparent onPress={() => this.props.threadsHandler()}>
+                <Button transparent onPress={() => {this.props.showNav(), this.props.threadsHandler()}}>
                     <Icon name='arrow-back' />
                 </Button>
             </Left>
@@ -64,10 +68,18 @@ export default class Chat extends Component {
                 </Button>
             </Right>
         </Header>
-        <Content>
-          
-        </Content>
-      </Container>
+       
+          <GiftedChat
+           
+            messages={this.state.messages}
+            onSend={this.onSend}
+            user={{
+            _id: 1,
+            }}
+            />
+         
+            </Container>
+
       )
         }
         
@@ -76,7 +88,7 @@ export default class Chat extends Component {
                 <Container>
         <Header>
             <Left>
-                <Button transparent onPress={() => this.setState({page: 'chat'})}>
+                <Button transparent onPress={() => {this.setState({page: 'chat'})}}>
                     <Icon name='arrow-back' />
                 </Button>
             </Left>
@@ -97,8 +109,18 @@ export default class Chat extends Component {
     componentWillMount() {
     this.setState({
       messages: [
+          {
+          _id: 2,
+          text: 'Please work',
+          createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
+          user: {
+            _id: 3,
+            name: 'React Native',
+            avatar: 'https://facebook.github.io/react/img/logo_og.png',
+          },
+        },
         {
-          _id: 1,
+          _id: 3,
           text: 'Hello developer',
           createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
           user: {
@@ -111,11 +133,12 @@ export default class Chat extends Component {
     });
   }
 
+    
   render() {
     return (
-      <Container>
+      <View style={{flex: 1}}>
         {this.renderPage()}
-      </Container>
+      </View>
     );
   }
 }
