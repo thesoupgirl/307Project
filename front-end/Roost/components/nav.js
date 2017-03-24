@@ -34,6 +34,7 @@ export default class Nav extends Component {
         this.selectedPage = this.selectedPage.bind(this)
         this.renderNav = this.renderNav.bind(this)
         this.hideNav = this.hideNav.bind(this)
+        this.showNav = this.showNav.bind(this)
        
     }
 
@@ -44,6 +45,10 @@ export default class Nav extends Component {
 
     hideNav () {
         this.setState({show: false})
+    }
+
+    showNav () {
+        this.setState({show: true})
     }
 
     renderNav() {
@@ -86,13 +91,19 @@ export default class Nav extends Component {
 
     selectedPage() {
         if (this.state.page === 'explore')
-            return <SwipeActivities handler = {this.props.handler}/>
+            return <SwipeActivities handler = {this.props.handler}
+                                    user = {this.props.user}/>
         else if (this.state.page === 'categories')
-            return <Categories handler = {this.props.handler}/>
+            return <Categories handler = {this.props.handler}
+                                user = {this.props.user}/>
         else if (this.state.page === 'add')
-            return <AddActivity handler = {this.props.handler}/>
+            return <AddActivity handler = {this.props.handler}
+                                user = {this.props.user}/>
         else if (this.state.page === 'messages')
-            return <MessageThreads handler = {this.props.handler}/>
+            return <MessageThreads handler = {this.props.handler}
+                                   user = {this.props.user}
+                                   hideNav = {this.hideNav}
+                                   showNav = {this.showNav}/>
         else if (this.state.page === 'profile')
             return <Profile handler = {this.props.handler}
                             hideNav = {this.hideNav}
