@@ -4,10 +4,12 @@
   <dict>
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>Roost</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
-    <string>org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)</string>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -18,17 +20,6 @@
     <string>1.0</string>
     <key>CFBundleSignature</key>
     <string>????</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>com.googleusercontent.apps.635918596013-u193rc7grdk2lfhkj85bvrrtb44dipkp</string>
-        </array>
-      </dict>
-    </array>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSRequiresIPhoneOS</key>
@@ -46,8 +37,22 @@
     </dict>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string/>
+    <key>NSCameraUsageDescription</key>
+    <string/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string/>
     <key>UIAppFonts</key>
     <array>
+      <string>Entypo.ttf</string>
+      <string>EvilIcons.ttf</string>
+      <string>FontAwesome.ttf</string>
+      <string>Foundation.ttf</string>
+      <string>Ionicons.ttf</string>
+      <string>MaterialCommunityIcons.ttf</string>
+      <string>MaterialIcons.ttf</string>
+      <string>Octicons.ttf</string>
+      <string>SimpleLineIcons.ttf</string>
+      <string>Zocial.ttf</string>
       <string>Andale Mono.ttf</string>
       <string>Arial Black.ttf</string>
       <string>Arial.ttf</string>

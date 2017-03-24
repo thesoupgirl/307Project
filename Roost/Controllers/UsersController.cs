@@ -152,55 +152,34 @@ namespace Roost.Controllers
             }
         }
 
-        // PUT: /api/users/{id}/update
+        // POST: /api/users/update/{id}
         // Update user info
-        [HttpPut("{id}/update")]
+        [HttpPost("update/{id}")]
         public async void UpdateUser(string id)
         {
-            string usern = Request.Form["username"];
-            string passw = Request.Form["password"];
-            if(usern != "no" && passw != "no") { 
-                try
-                {
-                    PutItemResponse stuff = await db.client.PutItemAsync(
-                        tableName: "User",
-                        item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                        {
-                            {"userId", new AttributeValue {S = usern} },
-                            {"displayName", new AttributeValue {S = usern} },
-                            {"password", new AttributeValue {S = passw} }
-                        }
-                    );
-                    Console.WriteLine("killme" + usern);
-                    Console.WriteLine(passw);
-                }
-                catch(Exception) {
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+            Console.WriteLine("\nrawr\n");
+            Console.WriteLine(username);
+            Console.WriteLine(password);
+            Console.WriteLine("\nawks\n");
 
-                }
-            }
-            else if(usern != "no" && passw == "no") {
-                try {
-                PutItemResponse stuff = await db.client.PutItemAsync(
+            try
+            {
+                await db.client.UpdateItemAsync(
                     tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
-                        {"userId", new AttributeValue {S = usern} },
-                        {"displayName", new AttributeValue {S = usern} }
-                    }
-                );
-                }
-                catch (Exception) {
+                        // Find the user based on their id and display name
+                        {"userId", new AttributeValue {S = id} },
+                        {"displayName", new AttributeValue {S = id} }
+                    },
 
-                }
-
-            }
-            try {
-                PutItemResponse stuff = await db.client.PutItemAsync(
-                    tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"userId", new AttributeValue {S = usern} },
-                        {"displayName", new AttributeValue {S = usern} }
+                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
+                            {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
+                            {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
                     }
                 );
             }

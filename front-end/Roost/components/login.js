@@ -86,7 +86,7 @@ export default class Login extends Component {
 
     createAccountPressed() {
 
-      var username = this.state.username
+            var username = this.state.username
             var password = md5(this.state.password)
 
             let ws = `http://localhost:5000/api/users/login/${username}/${password}`
@@ -108,7 +108,7 @@ export default class Login extends Component {
               xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
               xhr.onload = () => {
               if (xhr.status===200) {
-                  this.props.handler(this.state.username, this.state.password, true)
+                  this.props.handler(this.state, true)
               } else {
                 Alert.alert(
                         'Sign-Up Failed',      
