@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Roost;
-using Microsoft.Extensions.Primitives;
 
 namespace RoostApp.Controllers
 {
@@ -76,18 +75,18 @@ namespace RoostApp.Controllers
 
 
                 // Add the activity to the database table
-                await db.client.PutItemAsync(
+                await db.client.UpdateItemAsync(
                     tableName: "RoostActivities",
-                    item: new Dictionary<String, AttributeValue>
+                    key: new Dictionary<String, AttributeValue>
                     {
-                        // Primary key: The unique activity id
-                        {"ActivityId", new AttributeValue { S = id} }, 
+                        // Primary key: The unique activity id, an atomic number concatenated w/userId
+                        {"ActivityId", new AttributeValue { N = "0"} }, 
 
                         // Sort key: The number of members in the group
-                        {"numMembers", new AttributeValue { N = Request.Form["numMembers"]} },
+                        {"numMembers", new AttributeValue { N = Request.Form["numMembers"] } },
 
                         // The date the group was created
-                        {"createdDate", new AttributeValue { S = System.DateTime.Today.ToString()}  },
+                        {"createdDate", new AttributeValue { S = DateTime.Today.ToString() } },
 
                         // The categories the activity will be listed under
                         {"categories", new AttributeValue {SS = Request.Form["categories"].ToList<string>() } },
@@ -110,32 +109,38 @@ namespace RoostApp.Controllers
                         {"chatId", new AttributeValue { S = id } },
 
                         // The identifier of whether the chat is public (open) or private (closed)
-                        {"status", new AttributeValue { S = Request.Form["status"]} },
+                        {"status", new AttributeValue { S = Request.Form["status"] } },
 
                         // The maximum amount of people who can join the group
-                        {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"]} },
+                        {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"] } },
 
                         // The userId of the person who created the group
-                        {"groupLeader", new AttributeValue{ S = Request.Form["groupLeader"]} }
+                        {"groupLeader", new AttributeValue{ S = Request.Form["groupLeader"] } }
+                    },
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>()
+                    {
+                        { "ActivityId", new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "1" } } }
                     }
                 );
 
                 // This list will store the userIds of all members in the activity
-                List<string> users = new List<string>();
-
                 // Add the activity's creator to the list
-                users.Add(Request.Form["groupLeader"]);
+                List<string> users = new List<string>
+                {
+                    id
+                };
 
                 // Attach a chat to the activity
-                await db.client.PutItemAsync(
+                // Must use UpdateItemAsync in order to use atomic counter
+                await db.client.UpdateItemAsync(
                     tableName: "RoostChats",
-                    item: new Dictionary<string, AttributeValue>
+                    key: new Dictionary<string, AttributeValue>
                     {
                         // Primary key: The unique id for the chat
-                        {"chatId", new AttributeValue{S = id} },
+                        {"chatId", new AttributeValue{N = "0"} },
 
                         // Sort key: The ID of the activity associated with the chat 
-                        {"groupId", new AttributeValue{S = id} },
+                        {"activityId", new AttributeValue{S = id} },
 
                         // Indicate whether there is a poll in progress
                         {"isPollActive", new AttributeValue{BOOL = false} },
@@ -155,6 +160,10 @@ namespace RoostApp.Controllers
                         // The current number of messages in the chat (200 max)
                         {"numMessages", new AttributeValue{N = "0"} }
 
+                    },
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                    {
+                        { "chatId", new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "1" } } }
                     }
                 );
 
