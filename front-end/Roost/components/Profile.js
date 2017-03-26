@@ -45,18 +45,19 @@ export default class Profile extends Component {
        this.userUpdate = this.userUpdate.bind(this)
   }
   userUpdate () {
-    console.warn(this.state.username)
-    console.warn(this.state.password)
-    
+      console.warn(this.state.username)
+      console.warn(this.state.password)
       var username = this.state.username
       var password = md5(this.state.password)
-      let ws = `http://localhost:5000/api/users/${this.state.id}/update`
+      let ws = `http://localhost:5000/api/users/update/${this.state.id}`
       let xhr = new XMLHttpRequest();
-      xhr.open('PUT', ws, true);
+      xhr.open('POST', ws, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onload = () => {
       if (xhr.status===200) {
           //this.props.handler(this.state, true)
+          this.setState({logout: true},
+          this.props.hideNav())
           Alert.alert(
                 'Account updated! Please log back in!',      
         )
@@ -87,12 +88,14 @@ export default class Profile extends Component {
           <ScrollView>
         <TextField label={'username'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {
-                    this.state.password = text;}} />
+                    this.state.username = text;}}
+                    value={this.state.username} />
       </ScrollView>
       <ScrollView>
         <TextField label={'password'} highlightColor={'#00BCD4'}
                    onChangeText={(text) => {
-                   this.state.username = text;}} />
+                   this.state.password = text;}}
+                   value={this.state.password} />
       </ScrollView>
       <Text>push notifications</Text>
       <Switch
@@ -112,8 +115,7 @@ export default class Profile extends Component {
                    </Picker>
                
                  <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings},
-             this.userUpdate(), this.setState({logout: true},
-             this.props.hideNav()))}>
+             this.userUpdate())}>
                    <Text>Confirm Changes</Text></Button>
                  </Content>
         
