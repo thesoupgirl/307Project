@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
 using System.Net.Http;
-using Microsoft.AspNetCore.Http;
 using Roost.Interfaces;
-using Roost.Models;
-using System.IO;
-using System.Text;
 
 namespace Roost.Controllers
 {
@@ -113,8 +108,6 @@ namespace Roost.Controllers
         {
             //this takes request parameters only from the query string
             //Workaround - copy original Stream
-
-
             try
             {
                 string username = Request.Form["username"];
@@ -123,7 +116,7 @@ namespace Roost.Controllers
                 Console.WriteLine(password);
                 PutItemResponse stuff = await db.client.PutItemAsync(
                     tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    item: new Dictionary<string, AttributeValue>
                     {
                         {"userId", new AttributeValue {S = username} },
                         {"displayName", new AttributeValue {S = username} },
