@@ -71,12 +71,12 @@ namespace RoostApp.Controllers
             {
                 // Take the uploaded avatar and convert it to a base64 string.
                 // This is how the images will be stored in the table.
-                /*string base64Image = null;
+                string base64Image = null;
                 if (!String.IsNullOrEmpty(Request.Form["avatar"]))
                 {
                     byte[] imageArray = System.IO.File.ReadAllBytes(Request.Form["avatar"]);
                     base64Image = Convert.ToBase64String(imageArray);
-                }*/
+                }
 
                 // Add the activity to the database table
                 await db.client.PutItemAsync(
@@ -102,12 +102,12 @@ namespace RoostApp.Controllers
                         {"category", new AttributeValue {S = Request.Form["category"] } },
 
                         // The latitude and longitude for the activity's location.
-                        //{"latitude", new AttributeValue {S = Request.Form["latitude"] } },
+                        {"latitude", new AttributeValue {S = Request.Form["latitude"] } },
 
-                        //{"longitude", new AttributeValue {S = Request.Form["longitude"] } },
+                        {"longitude", new AttributeValue {S = Request.Form["longitude"] } },
 
                         // The image for the activity, stored as a base64 string
-                        //{"avatar", new AttributeValue {S = base64Image} },
+                        {"avatar", new AttributeValue {S = base64Image} },
 
                         // The unique ID of the chat assiciated with this activity
                         {"chatId", new AttributeValue { S = chatID } },
