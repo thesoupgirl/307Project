@@ -177,7 +177,7 @@ namespace Roost.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
+                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.POST)},
                             {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
                             {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
                     }
@@ -186,33 +186,6 @@ namespace Roost.Controllers
             catch (Exception)
             {
 
-            }
-        }
-
-        // POST: /api/user/create
-        [HttpPost("create")]
-        [HttpGet("create")]
-        // Create a new user
-        public async Task<string> CreateUser()
-        {
-            string info = Response.Headers["userInfo"];
-            try
-            {
-                await db.client.PutItemAsync(
-                    tableName: "User",
-                    item: new Dictionary<string, AttributeValue>
-                    {
-                        {"userId", new AttributeValue {S = "777"} },
-                        {"displayName", new AttributeValue {S = "joe"} },
-                        {"password", new AttributeValue {S = "blah"} }
-                    }
-                );
-
-                return "User created successfully";
-            }
-            catch (Exception)
-            {
-                return "User not found.";
             }
         }
 
