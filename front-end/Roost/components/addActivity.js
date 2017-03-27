@@ -69,7 +69,7 @@ export default class AddActivity extends Component {
           console.log('User tapped custom button: ', response.customButton);
         }
         else {
-          let source = { uri: response.uri };
+          let source = { uri: 'data:image/jpeg;base64,' + response.data };
 
           // You can also display the image using data:
           // let source = { uri: 'data:image/jpeg;base64,' + response.data };
@@ -100,7 +100,7 @@ export default class AddActivity extends Component {
   }
 
     submit () {
-      
+        //POST to db 
     }
 
     renderPage () {
@@ -116,7 +116,7 @@ export default class AddActivity extends Component {
             <Right/>
         </Header>
            <Content>
-             
+             <View style={{padding: 20}}>
           <ScrollView>
         <TextField label={'Activity'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {
@@ -155,7 +155,8 @@ export default class AddActivity extends Component {
           }
           </View>
         <Text/>
-        <Button block  success onPress={this.submit()}><Text>Submit Activity</Text></Button>
+        <Button block success onPress={this.submit()}><Text>Submit Activity</Text></Button>
+        </View>
       </Content>
       </Content>
     );
@@ -215,7 +216,7 @@ const styles = {
   },
   avatar: {
     //borderRadius: 75,
-    width: 90,
-    height: 90
+    width: 100,
+    height: 100
   }
 };

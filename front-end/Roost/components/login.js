@@ -80,8 +80,7 @@ export default class Login extends Component {
           //
             }
             }; xhr.send()
-            this.renderBody
-          
+            this.renderBody 
         }
 
     createAccountPressed() {

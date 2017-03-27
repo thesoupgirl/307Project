@@ -99,7 +99,24 @@ export default class Chat extends Component {
             </Right>
         </Header>
         <Content>
-          
+        <Text/>
+        <View style={{padding: 20}}>
+          <Button block>
+            <Text>Leave Activity</Text>
+          </Button >
+          <Text/>
+          <Button block>
+            <Text>Close Activity</Text>
+          </Button>
+          <Text/>
+          <Button block>
+            <Text>Re-open Activity</Text>
+          </Button>
+          <Text/>
+          <Button danger block>
+            <Text>Delete Activity</Text>
+          </Button>
+          </View>
         </Content>
       </Container>
             )
