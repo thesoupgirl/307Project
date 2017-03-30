@@ -175,9 +175,29 @@ namespace RoostApp.Controllers
         // POST: /api/activities/{id}/deleteactivity
         // Deletes an activity
         [HttpPost("{id}/deleteactivity")]
-        public IActionResult DeleteActivity(string id)
+        public async Task<HttpResponseMessage> DeleteActivity(string id)
         {
-            return View();
+            try
+            {
+                await db.client.GetItemAsync(
+                    tableName: "RoostActivities",
+                    key: new Dictionary<string, AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue {} }
+                    }
+                );
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+
+            } catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            
         }
     }
 }
