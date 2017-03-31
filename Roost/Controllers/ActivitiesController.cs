@@ -76,6 +76,9 @@ namespace RoostApp.Controllers
                 {
                     byte[] imageArray = System.IO.File.ReadAllBytes(Request.Form["avatar"]);
                     base64Image = Convert.ToBase64String(imageArray);
+                } else
+                {
+                    base64Image = "none";
                 }
 
                 // Add the activity to the database table
