@@ -1,0 +1,20 @@
+--- NOTES ---
+
+03/19/17
+- Unsure about how to test legalRights.js since both legalRights and Profile render Profile. Need to use '.simulate('click')' on 'Register' button scenario, but for some reason it isn't working the way I expect it to (yet!).
+
+3/22/17
+- Tested Launch rendering sucessfully. Need to confirm if there is anything useful I can implement specific to index.android.js and index.ios.js, since both do nothing but render Launch upon start (aside from Import checking and possibly some way to test registerComponent). For now I have only done snapchat tests of Launch but want to learn about potential options for testing platform-specific loading.
+
+3/27/17
+- I have a few mock tests that test the render() onChange values when various settings are updated and state changes occur.
+
+--- TODO ---
+
+- Port over Prop tests from my local testing react project and configure babelrc / package.json to build properly (had so many problems with, this but finally resolved I believe)
+
+- Research how to implement user permissions for chatrooms. (I already know how to do this, but need to review Enzyme API for syntax & determine every state variables to track)
+
+- Port over all my onClick simulation tests and other event tests for various things such as Register's legalRights popup and what happens if they accept / reject it. (Refer to notes above)
+
+- 

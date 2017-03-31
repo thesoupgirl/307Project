@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "cleanup": "rm -r ./__tests__/__snapshots__/"
+    "cleanup": "rm -r ./__tests__/__snapshots__/",
+    "mocktest": "mocha --require react-native-mock/mock.js —-compilers js:babel-core/register --recursive __test/*.js"
   },
   "dependencies": {
     "native-base": "^2.0.6",
