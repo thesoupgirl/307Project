@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
+using Amazon.Runtime;
 using Roost.Interfaces;
 using Roost.Models;
 using System.IO;
@@ -166,18 +169,36 @@ namespace Roost.Controllers
 
             try
             {
-                await db.client.PutItemAsync(
-                    tableName: "User",
-                    item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                    {
-                        {"userId", new AttributeValue {S = id} },
-                        {"username", new AttributeValue {S = username}},
-                        {"password", new AttributeValue {S = password}}
-                        });
+                //DynamoDBContext context = new DynamoDBContext(db.client);
+                Console.WriteLine("trying...");
+                var table = Table.LoadTable(db.client, "User");
+                Console.WriteLine("found the table...");
+                var item = await table.GetItemAsync(id, id);
+                Console.WriteLine("\ngot the item");
+    if (item == null)
+    {
+        // row not exists -> insert & return 1
+        Console.WriteLine("\nCouldn't find user in Dynamo");
+        return;
+    }
+    // row exists -> increment counter & update
+    //var counter = item["Counter"].AsInt();
+    item["password"] = password;
+    await table.UpdateItemAsync(item);
+    Console.WriteLine("\nupdated it?  hopefully...");
+    return;
+               // await db.client.PutItemAsync(
+                //    tableName: "User",
+                 //   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                  //  {
+                   //     {"userId", new AttributeValue {S = id} },
+                    //    {"username", new AttributeValue {S = username}},
+                     //   {"password", new AttributeValue {S = password}}
+                      //  });
             }
             catch (Exception)
             {
-
+                Console.WriteLine("\nexception...");
             }
         }
 
