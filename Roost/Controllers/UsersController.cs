@@ -166,7 +166,6 @@ namespace Roost.Controllers
             string distance = Request.Form["distance"];
             Console.WriteLine("\nNotifications: ");
             Console.WriteLine(pushNote);
-            bool pushNots = Convert.ToBoolean(pushNote);
             int pushNot = Convert.ToInt32(pushNots);
             Console.WriteLine("\nrawr\n");
             Console.WriteLine(username);
