@@ -7,6 +7,7 @@ import Categories from './categories.js';
 import AddActivity from './addActivity.js';
 import MessageThreads from './messageThreads.js';
 import Profile from './Profile.js';
+import TinderCards from './tindercards.js';
 
 
 //import getTheme from './native-base-theme';
@@ -91,7 +92,7 @@ export default class Nav extends Component {
 
     selectedPage() {
         if (this.state.page === 'explore')
-            return <SwipeActivities handler = {this.props.handler}
+            return <TinderCards handler = {this.props.handler}
                                     user = {this.props.user}/>
         else if (this.state.page === 'categories')
             return <Categories handler = {this.props.handler}
