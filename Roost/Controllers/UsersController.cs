@@ -184,6 +184,7 @@ namespace Roost.Controllers
     // row exists -> increment counter & update
     //var counter = item["Counter"].AsInt();
     item["password"] = password;
+    item["username"] = username;
     await table.UpdateItemAsync(item);
     Console.WriteLine("\nupdated it?  hopefully...");
     return;
