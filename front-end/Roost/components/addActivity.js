@@ -12,7 +12,8 @@ import {
   Image,
   TextInput,
   ScrollView,
-  PixelRatio
+  PixelRatio,
+  Alert
 } from 'react-native';
 import TextField from 'react-native-md-textinput';
 var ImagePicker = require('react-native-image-picker');
@@ -40,11 +41,36 @@ export default class AddActivity extends Component {
             selected: [],
             avatarSource: null
         }
-       this.submit = this.submit.bind(this)
+       
        this.renderPage = this.renderPage.bind(this)
        this.selectPhotoTapped = this.selectPhotoTapped.bind(this)
+       this.submit = this.submit.bind(this)
       
     }
+
+    submit () {
+       if (this.state.activity === '' || this.state.description === '' 
+          || this.state.groupSize === 0 || this.state.category === 'None') {
+              Alert.alert(
+              'Make sure none of the fields are empty and you have chosen a category.',      
+            )
+          }
+       else {
+          let ws = `http://localhost:5000/api/` //TODO: finish route
+          let xhr = new XMLHttpRequest();
+          xhr.open('POST', ws);
+          xhr.onload = () => {
+          if (xhr.status===200) {
+              
+          } else {
+              Alert.alert(
+              'Failed to create activity',      
+              )
+          }
+          }; xhr.send()
+          this.renderBody 
+       }
+        }
 
     selectPhotoTapped() {
       const options = {
@@ -99,9 +125,7 @@ export default class AddActivity extends Component {
     navigator.geolocation.clearWatch(this.watchId);
   }
 
-    submit () {
-        //POST to db 
-    }
+    
 
     renderPage () {
       if (this.state.page === 'add') {
@@ -147,7 +171,7 @@ export default class AddActivity extends Component {
             <Item label="Study Groups" value="Study Groups" />
         </Picker>
         <Text/>
-        <Button onPress={this.selectPhotoTapped.bind(this)}><Text>Choose Image</Text></Button>
+        <Button onPress={this.selectPhotoTapped.bind(this)}><Text>Group Avatar</Text></Button>
         <Text/>
         <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
           { this.state.avatarSource === null ? null :
@@ -155,7 +179,7 @@ export default class AddActivity extends Component {
           }
           </View>
         <Text/>
-        <Button block success onPress={this.submit()}><Text>Submit Activity</Text></Button>
+        <Button block success onPress={() => this.submit()}><Text>Submit Activity</Text></Button>
         </View>
       </Content>
       </Content>
