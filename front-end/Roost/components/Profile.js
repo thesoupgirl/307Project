@@ -80,7 +80,6 @@ export default class Profile extends Component {
   componentDidMount() {
 
   }
-  componentHasMounted
   info () {
     if (this.state.updateSetttings)
       return (
@@ -139,12 +138,14 @@ export default class Profile extends Component {
             <Right/>
         </Header>
         <Text></Text>
+        <Content style={{padding: 20}}>
          <Button primary block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings})
          }><Text>Update Profile</Text></Button>
             {this.info()}
         <Text></Text>
           <Button danger block style={styles.center} onPress={() => this.setState({logout: true},
              this.props.hideNav())}><Text>Logout</Text></Button>
+      </Content>
       </Container>
       )}
     }

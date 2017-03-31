@@ -16,23 +16,23 @@ import {
 
 const cards = [
     {
-        text: 'Card One',
-        name: 'One',
+        name: 'Baseball',
+        description: 'Come join us for a game of baseball',
         image: require('./img/water.png')
     },
     {
-        text: 'Card One',
-        name: 'Two',
+        name: 'Soccer',
+        description: 'Come join us for a game of soccer',
         image: require('./img/water.png')
     },
     {
-        text: 'Card One',
-        name: 'Three',
+        name: 'Hockey',
+        description: 'Come join us for a game of hockey',
         image: require('./img/water.png')
     },
     {
-        text: 'Card One',
-        name: 'Four',
+        name: 'Study',
+        description: 'Come join us to study for CS307',
         image: require('./img/water.png')
     }
 ];
@@ -44,10 +44,18 @@ export default class SwipeActivities extends Component {
         this.state = {
             
         }
-       
+       this.right = this.right.bind(this)
+       this.left = this.left.bind(this)
     }
 
-
+    right () {
+        console.warn('right')
+        //add user to group with ajax call
+    }
+    left () {
+        console.warn('left')
+        //get next card
+    }
   render() {
     return (
       <Container>
@@ -61,36 +69,37 @@ export default class SwipeActivities extends Component {
         </Header>
         <View padder >
              <DeckSwiper
-                        dataSource={cards}
-                        renderItem={item =>
-                            <Card style={{ elevation: 3 }}>
-                                <CardItem>
-                                    <Left>
-                                        <Thumbnail source={item.image} />
-                                    </Left>
-                                    <Body>
-                                        <Text>{item.text}</Text>
-                                        <Text note>NativeBase</Text>
-                                    </Body>
-                                </CardItem>
-                                <CardItem cardBody>
-                                    <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
-                                </CardItem>
-                                <CardItem>
-                                    <Left>
-                                    <Button danger><Text> Skip </Text></Button>
-                                    </Left>
-                                   
-                                    <Text>{item.name}</Text>
-                                    
-                                    <Right>
-                                    <Button success><Text> Join </Text></Button>
-                                    </Right>
-                                </CardItem>
-                                
-                            </Card>
-                        }
-                    />
+                onSwipeRight={() => this.right()}
+                onSwipeLeft={() => this.left()}
+                dataSource={cards}
+                renderItem={item =>
+                    <Card style={{ elevation: 3 }}>
+                        <CardItem>
+                            <Left>
+                                <Thumbnail source={item.image} />
+                            </Left>
+                            <Body>
+                                <Text>{item.name}</Text>
+                                <Text note>{item.description}</Text>
+                            </Body>
+                        </CardItem>
+                        <CardItem cardBody>
+                            <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
+                        </CardItem>
+                        <CardItem>
+                            <Left>
+                            <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
+                            </Left>
+                            
+                            <Text>{item.name}</Text>
+                            
+                            <Right>
+                            <Button success onPress={() => this.right()}><Text> Join </Text></Button>
+                            </Right>
+                        </CardItem>
+                    </Card>
+                }
+            />
                                 
         </View>
       </Container>
