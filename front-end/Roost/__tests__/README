@@ -17,4 +17,4 @@
 
 - Port over all my onClick simulation tests and other event tests for various things such as Register's legalRights popup and what happens if they accept / reject it. (Refer to notes above)
 
-- 
+- Snapshot tests for JSON data returned from the server
