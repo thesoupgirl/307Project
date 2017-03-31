@@ -63,12 +63,13 @@ namespace Roost.Controllers
             //this takes request parameters only from the query string
             try
             {
-                Console.WriteLine("meow " + id);
-                //Console.WriteLine("meow" + qsList.size());
-                //System.Diagnostics.Debug.WriteLine("arf");
-                //string[] array = new string[queryStrings.Count];
+		//Console.WriteLine("meow " + id);
+		//Console.WriteLine("meow" + qsList.size());
+		//System.Diagnostics.Debug.WriteLine("arf");
+		//string[] array = new string[queryStrings.Count];
+		
+		//queryStrings.CopyTo(array, 0);
 
-                //queryStrings.CopyTo(array, 0);
 
                 GetItemResponse stuff = await db.client.GetItemAsync(
                     tableName: "User",
@@ -148,27 +149,35 @@ namespace Roost.Controllers
             }
         }
 
-        // PUT: /api/user/{id}/updateuser
+        // POST: /api/users/update/{id}
         // Update user info
-        [HttpPut("{id}/update")]
+        [HttpPost("update/{id}")]
         public async void UpdateUser(string id)
         {
-            string updatedInfo = Response.Headers["updatedInfo"];
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+            Console.WriteLine("\nrawr\n");
+            Console.WriteLine(username);
+            Console.WriteLine(password);
+            Console.WriteLine("\nawks\n");
+
 
             try
             {
                 await db.client.UpdateItemAsync(
                     tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
                     {
                         // Find the user based on their id and display name
                         {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "Hello world"} }
+                        {"displayName", new AttributeValue {S = id} }
                     },
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"info", new AttributeValueUpdate(new AttributeValue {S = updatedInfo}, AttributeAction.PUT)}
+                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
+                            {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
+                            {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
                     }
                 );
 

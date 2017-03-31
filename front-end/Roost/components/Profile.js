@@ -8,10 +8,17 @@ import {
   AppRegistry,
   StyleSheet,
   Navigator,
-  Image
+  Image,
+  TextInput,
+  Switch,
+  Alert,
+  ScrollView
 } from 'react-native';
 import Login from './login.js'
 import Launch from './launch.js'
+var md5 = require('md5');
+import TextField from 'react-native-md-textinput';
+
 
 
 /*  
@@ -20,9 +27,11 @@ import Launch from './launch.js'
 
 
 export default class Profile extends Component {
-  constructor({handler}) {
+  constructor({hideNav, user}) {
+
         super()
         this.state = {
+            id: '',
             username:'',
             password:'',
             dist: '5',
@@ -36,33 +45,62 @@ export default class Profile extends Component {
        this.userUpdate = this.userUpdate.bind(this)
   }
   userUpdate () {
-    //send change to database
-  }
+      console.warn(this.state.username)
+      console.warn(this.state.password)
+      var username = this.state.username
+      var password = md5(this.state.password)
+      let ws = `http://localhost:5000/api/users/update/${this.state.id}`
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', ws, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.onload = () => {
+      if (xhr.status===200) {
+          //this.props.handler(this.state, true)
+          this.setState({logout: true},
+          this.props.hideNav())
+          Alert.alert(
+                'Account updated! Please log back in!',      
+        )
+      } else {
+        Alert.alert(
+                'Updating information failed',      
+        )
+      }
+    }; xhr.send(`username=${username}&password=${password}`)
+    }
 
   componentWillMount() {
     //CALL TO GET USER INFORMATION
+    this.setState({id: this.props.user.username})
+    this.setState({push: !this.state.push})
+    this.setState({username: this.props.user.username, 
+                   password: this.props.user.password,
+                   push: this.props.user.push})
   }
+  componentDidMount() {
+
+  }
+  componentHasMounted
   info () {
     if (this.state.updateSetttings)
       return (
         <Content>
-          <Form>
-              <Item stackedLabel>
-                  <Label>Username</Label>
-                  <Input />
-              </Item>
-              <Item stackedLabel last>
-                  <Label>Password</Label>
-                  <Input />
-              </Item>
-          </Form>
-          <Content>
-            <ListItem>
-                        <CheckBox onPress={() => this.setState({push: !this.state.push})} checked={this.state.push} />
-                        <Body>
-                            <Text>Push notificaitons</Text>
-                        </Body>
-                    </ListItem>
+          <ScrollView>
+        <TextField label={'username'} highlightColor={'#00BCD4'} 
+                    onChangeText={(text) => {
+                    this.state.username = text;}}
+                    value={this.state.username} />
+      </ScrollView>
+      <ScrollView>
+        <TextField label={'password'} highlightColor={'#00BCD4'}
+                   onChangeText={(text) => {
+                   this.state.password = text;}}
+                   value={this.state.password} />
+      </ScrollView>
+      <Text>push notifications</Text>
+      <Switch
+          onValueChange={(value) => this.setState({push: value})}
+          value={this.state.push} />
             <Text>choose distance:</Text>
                     <Picker
                         iosHeader="Select one"
@@ -75,7 +113,7 @@ export default class Profile extends Component {
                         <Item label="30 miles" value="30" />
                         <Item label="40 miles" value="50" />
                    </Picker>
-                </Content>
+               
                  <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings},
              this.userUpdate())}>
                    <Text>Confirm Changes</Text></Button>
@@ -101,11 +139,11 @@ export default class Profile extends Component {
             <Right/>
         </Header>
         <Text></Text>
-         <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings})
+         <Button primary block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings})
          }><Text>Update Profile</Text></Button>
             {this.info()}
         <Text></Text>
-          <Button light block style={styles.center} onPress={() => this.setState({logout: true},
+          <Button danger block style={styles.center} onPress={() => this.setState({logout: true},
              this.props.hideNav())}><Text>Logout</Text></Button>
       </Container>
       )}

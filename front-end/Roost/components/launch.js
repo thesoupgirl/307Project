@@ -23,30 +23,28 @@ export default class Launch extends Component {
         this.state = {
             isLoggedIn: false,
             username: '',
-            password: ''
+            password: '',
         }
         this.display = this.display.bind(this);
         this.handler = this.handler.bind(this);
         //this.callbackParent = this.callbackParent.bind(this);      
     }
 
-    handler(user, pass, status) {
+    handler(user, status) {
+      this.setState({username: user.username});
+      this.setState({password: user.password});
       this.setState({isLoggedIn: status});
-      this.setState({username: user});
-      this.setState({password: pass});
       this.display()
+      //console.warn(this.state.username)
 
     }
 
-    handler(status) {
-      this.setState({isLoggedIn: status});
-      //call to add user
-    
-    }
 
   display () {
     if (this.state.isLoggedIn) {
-      return (<Nav handler = {this.handler}/>)
+      return (<Nav handler = {this.handler}
+                  user = {this.state}/>)
+
     }
     return (<Login handler = {this.handler}/>)
   }
