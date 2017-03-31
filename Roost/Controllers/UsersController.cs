@@ -150,8 +150,8 @@ namespace Roost.Controllers
             catch (Exception)
             {
                 Response.StatusCode = 400;
-        HttpResponseMessage response = new HttpResponseMessage();
-        return response;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
         }
 
@@ -162,6 +162,7 @@ namespace Roost.Controllers
         {
             string username = Request.Form["username"];
             string password = Request.Form["password"];
+            bool pushNot = Request.Form["notifications"];
             Console.WriteLine("\nrawr\n");
             Console.WriteLine(username);
             Console.WriteLine(password);
@@ -175,18 +176,19 @@ namespace Roost.Controllers
                 Console.WriteLine("found the table...");
                 var item = await table.GetItemAsync(id, id);
                 Console.WriteLine("\ngot the item");
-    if (item == null)
-    {
-        // row not exists -> insert & return 1
-        Console.WriteLine("\nCouldn't find user in Dynamo");
-        return;
-    }
-    // row exists -> increment counter & update
-    //var counter = item["Counter"].AsInt();
-    item["password"] = password;
-    await table.UpdateItemAsync(item);
-    Console.WriteLine("\nupdated it?  hopefully...");
-    return;
+                if (item == null)
+                {
+                    // row not exists -> insert & return 1
+                    Console.WriteLine("\nCouldn't find user in Dynamo");
+                    return;
+                }
+                // row exists -> increment counter & update
+                //var counter = item["Counter"].AsInt();
+                item["password"] = password;
+                item["notifications"] = pushNot;
+                await table.UpdateItemAsync(item);
+                Console.WriteLine("\nupdated it?  hopefully...");
+                return;
                // await db.client.PutItemAsync(
                 //    tableName: "User",
                  //   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
