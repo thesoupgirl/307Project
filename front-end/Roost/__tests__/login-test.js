@@ -1,6 +1,7 @@
+import 'react-native'
 import React from 'react';
 import {shallow} from 'enzyme';
-import Login from '../components/Navigation';
+import Login from '../components/login.js';
 import renderer from 'react-test-renderer'
 
 // Note: test renderer must be required after react-native.

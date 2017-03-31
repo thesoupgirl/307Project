@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "cleanup": "rm -r ./__tests__/__snapshots__/"
   },
   "dependencies": {
     "native-base": "^2.0.6",
@@ -30,6 +31,10 @@
     "react-test-renderer": "15.4.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/?!(react-icons)"
+    ]
   }
+
 }

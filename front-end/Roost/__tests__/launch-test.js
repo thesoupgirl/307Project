@@ -1,12 +1,14 @@
+// __tests__/Intro-test.js
 import 'react-native';
 import React from 'react';
-import Index from '../index.ios.js';
+import Launch from '../components/launch.js';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
 
-it('renders iOS Index correctly', () => {
+test('renders Launch correctly', () => {
   const tree = renderer.create(
-    <Index />
-  );
+    <Launch />
+  ).toJSON();
+  expect(tree).toMatchSnapshot();
 });
