@@ -164,7 +164,8 @@ namespace Roost.Controllers
             string password = Request.Form["password"];
             string pushNote = Request.Form["notifications"];
             string distance = Request.Form["distance"];
-            bool pushNot = Convert.ToBoolean(pushNote);
+            bool pushNots = Convert.ToBoolean(pushNote);
+            int pushNot = Convert.ToInt32(pushNots);
             Console.WriteLine("\nrawr\n");
             Console.WriteLine(username);
             Console.WriteLine(password);
