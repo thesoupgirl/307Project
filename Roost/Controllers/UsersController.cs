@@ -184,7 +184,6 @@ namespace Roost.Controllers
     // row exists -> increment counter & update
     //var counter = item["Counter"].AsInt();
     item["password"] = password;
-    item["username"] = username;
     await table.UpdateItemAsync(item);
     Console.WriteLine("\nupdated it?  hopefully...");
     return;
@@ -201,41 +200,6 @@ namespace Roost.Controllers
             {
                 Console.WriteLine("\nexception...");
             }
-        }
-
-        // POST: /api/user/{id}
-        [HttpPost("{id}")]
-        [HttpGet("{id}")]
-        // Saves user settings in DB
-        public async Task<string> SaveSettings(string id)
-        {
-            // The settings will be stored as JSON in the response header.
-            string settings = Response.Headers["settings"];
-
-            try
-            {
-                await db.client.UpdateItemAsync(
-                    tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
-                    {
-                        {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "Hello world"} }
-                    },
-
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                        {
-                            "settings", new AttributeValueUpdate(new AttributeValue {S = settings}, AttributeAction.PUT)
-                        }
-                    }
-                );
-                return settings;
-            }
-            catch (Exception)
-            {
-                return "Error: something went wrong.";
-            }
-
         }
 
     }
