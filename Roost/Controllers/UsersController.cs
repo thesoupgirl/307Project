@@ -163,6 +163,7 @@ namespace Roost.Controllers
             string username = Request.Form["username"];
             string password = Request.Form["password"];
             string pushNote = Request.Form["notifications"];
+            string distance = Request.Form["distance"];
             bool pushNot = Convert.ToBoolean(pushNote);
             Console.WriteLine("\nrawr\n");
             Console.WriteLine(username);
@@ -187,6 +188,7 @@ namespace Roost.Controllers
                 //var counter = item["Counter"].AsInt();
                 item["password"] = password;
                 item["notifications"] = pushNot;
+                item["distance"] = distance;
                 await table.UpdateItemAsync(item);
                 Console.WriteLine("\nupdated it?  hopefully...");
                 return;
