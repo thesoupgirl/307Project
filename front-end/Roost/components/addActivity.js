@@ -56,7 +56,7 @@ export default class AddActivity extends Component {
             )
           }
        else {
-          let ws = `http://localhost:5000/api/` //TODO: finish route
+          let ws = `${path}/api/` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
