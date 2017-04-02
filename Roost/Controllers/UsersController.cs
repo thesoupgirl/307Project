@@ -89,6 +89,7 @@ namespace Roost.Controllers
 		if(stuff.Item["password"].S == passHash) {
 			Response.StatusCode = 200;
 			HttpResponseMessage response = new HttpResponseMessage();
+            response.Content = new StringContent("distance=" + stuff.Item["distance"].S);
 			return response;
 		}
 		else {
