@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2;
+using Roost.Interfaces;
+using Roost.Models;
+using System.IO;
+using System.Text;
 
 namespace RoostApp.Controllers
 {
@@ -39,6 +47,29 @@ namespace RoostApp.Controllers
         public IActionResult DeleteActivity(string id)
         {
             return View();
+        }
+        // POST: /api/activities/join/{id}
+        //Join activity and the chat associated with it
+        [HttpPost("join/{id}")]
+        public async Task<HttpResponseMessage> Join(string id)
+        {
+            string activityId = id;
+            string username = Request.Form["username"];
+            string password = Request.Form["password"];
+
+            Console.WriteLine(username);
+            Console.WriteLine(password);
+
+            if(activityId != null) {
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            else {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
         }
     }
 }
