@@ -31,6 +31,28 @@ namespace RoostApp.Controllers
             return View();
         }
 
+        // POST: /api/chat/{id}/join
+        // Add a user to the chat
+        [HttpPost("{id}/join")]
+        public async Task<HttpResponseMessage> JoinGroup(string id)
+        {
+            try
+            {
+                // Get the activity and it's chatId from the activities table.
+                // Increase member count
+                // Add userId to the list in chats table
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
+
         // POST: /api/chat/{id}/leave
         // Removes a user from the chat
         [HttpPost("{id}/leave")]
@@ -38,11 +60,25 @@ namespace RoostApp.Controllers
         {
             try
             {
+                string activityId = Request.Form["activityID"];
+
+                Dictionary<string, AttributeValue> activityTableKey =
+                    new Dictionary<string, AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue { S = activityId } }
+                    };
+
+                // Get the activity from its table along with the chat id
+                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
+
+                string chatId = activity.Item["chatId"].S;
+
+                // Get the chat from its table and remove the user.
                 Dictionary<string, AttributeValue> chatTableKey =
                     new Dictionary<string, AttributeValue>
                     {
-                        {"chatId", new AttributeValue{S = Request.Form["chatID"]} },
-                        {"activityId", new AttributeValue{S = Request.Form["activityID"] } }
+                        {"chatId", new AttributeValue{S = chatId} },
+                        {"activityId", new AttributeValue{S = activityId } }
                     };
 
                 // Query RoostChats for the list of users
@@ -50,16 +86,22 @@ namespace RoostApp.Controllers
 
                 // Remove the user's id from the list
                 List<string> updatedUserList = chatTable.Item["useridSent"].SS;
-                int memberCount = updatedUserList.Count();
 
                 updatedUserList.Remove(id);
 
-                Dictionary<string, AttributeValue> activityTableKey =
-                    new Dictionary<string, AttributeValue>
+                // Update the activity's member count
+                await db.client.UpdateItemAsync(
+                    tableName: "RoostActivities",
+                    key: activityTableKey,
+
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                        {"ActivityId", new AttributeValue { S = Request.Form["activityID"] } },
-                        {"numMembers", new AttributeValue { N =  memberCount.ToString() } }
-                    };
+                        {
+                            "numMembers",
+                            new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
+                        }
+                    }
+                );
 
                 // Put the updated list back in the table
                 await db.client.UpdateItemAsync(
@@ -75,22 +117,11 @@ namespace RoostApp.Controllers
                     }
                 );
 
-                // Since the member count is a sort key and cannot be updated with UpdateItemAsync, 
-                // the server will get the activity from the table, delete it, decrement the count, and then
-                // Add the updated value back to the table.
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
-
-                await db.client.DeleteItemAsync(tableName: "RoostActivities", key: activityTableKey);
-
-                memberCount--;
-                activity.Item["numMembers"].N = memberCount.ToString();
-                
-                await db.client.PutItemAsync(tableName: "RoostActivities", item: activity.Item);
-
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();

@@ -18,9 +18,20 @@ namespace RoostApp.Controllers
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
         [HttpGet("{id}/{dist}")]
-        public IActionResult FindActivities(string id, string dist)
+        public async Task<HttpResponseMessage> FindActivities(string id, string dist)
         {
-            return View();
+            try
+            {
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
         }
 
         // GET: /api/activities/category/{id}/{dist}
@@ -35,15 +46,14 @@ namespace RoostApp.Controllers
                     key: new Dictionary<string, AttributeValue>
                     {
                         // Primary key: The unique activity id
-                        {"ActivityId", new AttributeValue { S = id} }, 
-
-                        // Sort key: The number of members in the group
-                        {"numMembers", new AttributeValue { N = Request.Form["numMembers"]} },
+                        {"ActivityId", new AttributeValue { S = id} },
 
                         // The categories the activity will be listed under
-                        {"categories", new AttributeValue {S = Request.Form["category"] } }
+                        {"category", new AttributeValue {S = Request.Form["category"] } }
                     }
                 );
+
+                
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
@@ -89,7 +99,7 @@ namespace RoostApp.Controllers
                         // Primary key: The unique activity id, an atomic number concatenated w/userId
                         {"ActivityId", new AttributeValue { S = activityID } },
 
-                        // Sort key: The number of people in the group
+                        // The number of people in the group
                         {"numMembers", new AttributeValue { N = "1" } },
 
                         // The name of the group
@@ -175,6 +185,44 @@ namespace RoostApp.Controllers
             }
         }
 
+        // POST: {id}/open
+        // Makes a group public
+        [HttpPost("{id}/open")]
+        public async Task<HttpResponseMessage> OpenGroup(string id)
+        {
+            try
+            {
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
+
+        // POST: {id}/close
+        // Makes a group public
+        [HttpPost("{id}/close")]
+        public async Task<HttpResponseMessage> CloseGroup(string id)
+        {
+            try
+            {
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
+
         // POST: /api/activities/{id}/deleteactivity
         // Deletes an activity
         [HttpPost("{id}/deleteactivity")]
@@ -182,13 +230,21 @@ namespace RoostApp.Controllers
         {
             try
             {
-                await db.client.GetItemAsync(
-                    tableName: "RoostActivities",
-                    key: new Dictionary<string, AttributeValue>
+                Dictionary<string, AttributeValue> activityTableKey = 
+                    new Dictionary<string, AttributeValue>
                     {
-                        {"ActivityId", new AttributeValue {} }
-                    }
-                );
+                        {"ActivityId", new AttributeValue{ S = Request.Form["activityId"] } }
+                    };
+
+
+                // Get the activity from the table
+                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
+
+                // Only delete the activity if the id matches that of the group leader
+                if (activity.Item["groupLeader"].S.Equals(id))
+                {
+                    await db.client.DeleteItemAsync(tableName: "RoostActivities", key: activityTableKey);
+                }
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
