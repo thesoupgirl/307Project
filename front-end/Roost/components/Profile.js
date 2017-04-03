@@ -18,6 +18,7 @@ import Login from './login.js'
 import Launch from './launch.js'
 var md5 = require('md5');
 import TextField from 'react-native-md-textinput';
+import path from '../properties.js'
 
 
 
