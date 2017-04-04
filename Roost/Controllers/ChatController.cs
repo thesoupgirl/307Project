@@ -60,6 +60,7 @@ namespace RoostApp.Controllers
         {
             try
             {
+                // The activity id is all that's needed from the form.
                 string activityId = Request.Form["activityID"];
 
                 Dictionary<string, AttributeValue> activityTableKey =
@@ -90,9 +91,7 @@ namespace RoostApp.Controllers
                 updatedUserList.Remove(id);
 
                 // Update the activity's member count
-                await db.client.UpdateItemAsync(
-                    tableName: "RoostActivities",
-                    key: activityTableKey,
+                await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
@@ -104,9 +103,7 @@ namespace RoostApp.Controllers
                 );
 
                 // Put the updated list back in the table
-                await db.client.UpdateItemAsync(
-                    tableName: "RoostChats",
-                    key: chatTableKey,
+                await db.client.UpdateItemAsync(tableName: "RoostChats", key: chatTableKey,
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {

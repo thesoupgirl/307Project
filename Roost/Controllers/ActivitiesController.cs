@@ -18,42 +18,53 @@ namespace RoostApp.Controllers
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
         [HttpGet("{id}/{dist}")]
-        public async Task<HttpResponseMessage> FindActivities(string id, string dist)
+        public string FindActivities(string id, string dist)
         {
             try
             {
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                return ""; 
             }
             catch (Exception)
             {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                return "";
             }
         }
 
         // GET: /api/activities/category/{id}/{dist}
         // Gets list of activities within certain radius of user by category
+        // TODO: needs to return JSON string
         [HttpGet("{id}/{dist}")]
         public async Task<HttpResponseMessage> FindActivitiesByCategory(string id, string dist)
         {
             try
             {
-                var r = await db.client.GetItemAsync(
-                    tableName: "RoostActivities",
-                    key: new Dictionary<string, AttributeValue>
-                    {
-                        // Primary key: The unique activity id
-                        {"ActivityId", new AttributeValue { S = id} },
+                // Frontend will be sending user id, activity id (?), and category
 
-                        // The categories the activity will be listed under
+                // The key used to find the activities
+                Dictionary<string, AttributeValue> searchKey = 
+                    new Dictionary<string, AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue { S = id} },
                         {"category", new AttributeValue {S = Request.Form["category"] } }
+                    };
+
+                // BatchGetItemAsync needs a list of keys
+                List<Dictionary<string, AttributeValue>> keys = 
+                    new List<Dictionary<string, AttributeValue>>
+                    {
+                        searchKey
+                    };
+
+                var r = await db.client.BatchGetItemAsync(
+                    requestItems: new Dictionary<string, KeysAndAttributes>
+                    {
+                        { "RoostActivities", new KeysAndAttributes { Keys = keys } }
                     }
                 );
 
+                // Activity cannot be full or closed (hidden) and the user must not be in it.
                 
+
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
@@ -192,9 +203,40 @@ namespace RoostApp.Controllers
         {
             try
             {
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                Dictionary<string, AttributeValue> activityKey =
+                    new Dictionary<string, AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue { S = Request.Form["activityId"]} }
+                    };
+
+                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityKey);
+
+                string status = activity.Item["status"].S;
+
+                if (status.Equals("closed"))
+                {
+                    await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityKey,
+                        attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                        {
+                            {
+                                "status",
+                                new AttributeValueUpdate {Action = "PUT", Value = new AttributeValue { S = "open" } }
+                            }
+                        }
+                    );
+
+                    Response.StatusCode = 200;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                }
+                else
+                {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                }
+
+
             }
             catch (Exception)
             {
@@ -211,9 +253,39 @@ namespace RoostApp.Controllers
         {
             try
             {
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                Dictionary<string, AttributeValue> activityKey = 
+                    new Dictionary<string, AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue { S = Request.Form["activityId"]} }
+                    };
+
+                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityKey);
+
+                string status = activity.Item["status"].S;
+
+                if (status.Equals("open"))
+                {
+                    await db.client.UpdateItemAsync( tableName:"RoostActivities", key: activityKey,
+                        attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                        {
+                            {
+                                "status",
+                                new AttributeValueUpdate {Action = "PUT", Value = new AttributeValue { S = "closed" } }
+                            }
+                        }
+                    );
+
+                    Response.StatusCode = 200;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                } else
+                {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                }
+
+                
             }
             catch (Exception)
             {
@@ -242,9 +314,7 @@ namespace RoostApp.Controllers
 
                 // Only delete the activity if the id matches that of the group leader
                 if (activity.Item["groupLeader"].S.Equals(id))
-                {
                     await db.client.DeleteItemAsync(tableName: "RoostActivities", key: activityTableKey);
-                }
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
