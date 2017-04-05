@@ -43,7 +43,22 @@ export default class Categories extends Component {
 
     componentWillMount() {
       //set activities array
+        let ws = `ROUTE`
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            var json = JSON.parse(xhr.responseText);
+            json = json.data
+            this.searchResults(json)
+            console.warn('successful')
+        } else {
+            console.warn('error getting activites')
+        }
+        }; xhr.send()
+        //console.log(search)
     }
+    
     click (page) {
       this.state.page = page
     }
