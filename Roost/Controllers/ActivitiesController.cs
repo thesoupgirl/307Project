@@ -12,11 +12,12 @@ using Roost.Models;
 using System.IO;
 using System.Text;
 
-namespace RoostApp.Controllers
+namespace Roost.Controllers
 {
     [Route("api/activities")]
     public class ActivitiesController : Controller
     {
+        DBHelper db = new DBHelper();
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
         [HttpGet("{id}/{dist}")]
@@ -61,9 +62,48 @@ namespace RoostApp.Controllers
             Console.WriteLine(password);
 
             if(activityId != null) {
+                try {
+                    GetItemResponse stuff = await db.client.GetItemAsync(
+                        tableName: "RoostActivities",
+                        key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                        {
+                            {"ActivityId", new AttributeValue {S = id} }
+                        }
+                    );
+
+                    Console.WriteLine(stuff.Item["members"].SS);
+                    List<string> membersList = stuff.Item["members"].SS;
+                    if(membersList.Contains(username)) {
+                        Console.WriteLine("User already added to activity");
+                        Response.StatusCode = 400;
+                        HttpResponseMessage responsey = new HttpResponseMessage();
+                        return responsey;
+                    }
+                    membersList.Add(username);
+
+                    await db.client.UpdateItemAsync(
+                    tableName: "RoostActivities",
+                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    {
+                        {"ActivityId", new AttributeValue {S = id} }
+                    },
+
+                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                    {
+                            {"members", new AttributeValueUpdate(new AttributeValue {SS = membersList}, AttributeAction.PUT)}
+                    }
+                );
+
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
+                }
+                catch(Exception) {
+                    Console.WriteLine("caught exception exception");
+                    Response.StatusCode = 400;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
+                }
             }
             else {
                 Response.StatusCode = 400;
