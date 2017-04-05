@@ -15,6 +15,8 @@ namespace RoostApp.Controllers
 
         DBHelper db = new DBHelper();
 
+        List<string> activityIdList = new List<string>();
+
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user
         [HttpGet("{id}/{dist}")]
@@ -39,7 +41,7 @@ namespace RoostApp.Controllers
             try
             {
                 // Frontend will be sending user id, activity id (?), and category
-
+                // save every activity id in a list and use it to search the table.
                 // The key used to find the activities
                 Dictionary<string, AttributeValue> searchKey = 
                     new Dictionary<string, AttributeValue>
@@ -100,10 +102,7 @@ namespace RoostApp.Controllers
                     base64Image = "none";
                 }
 
-                List<string> members = new List<string>
-                {
-                    id
-                };
+                List<string> members = new List<string> { id };
 
                 // Add the activity to the database table
                 await db.client.PutItemAsync(
@@ -155,7 +154,7 @@ namespace RoostApp.Controllers
 
                 // This list will store the userIds of all members in the activity
                 // Add the activity's creator to the list
-                List<string> users = new List<string> { id };
+                //List<string> users = new List<string> { id };
 
                 // Attach a chat to the activity
                 // Must use UpdateItemAsync in order to use atomic counter
@@ -173,7 +172,7 @@ namespace RoostApp.Controllers
                         {"isPollActive", new AttributeValue{BOOL = false} },
 
                         // The list of users in the chat
-                        {"useridSent", new AttributeValue{SS = users} },
+                        //{"useridSent", new AttributeValue{SS = users} },
 
                         // The messages that have been sent
                         //{"messagesSent", new AttributeValue{SS = new List<string>()} },
@@ -189,6 +188,8 @@ namespace RoostApp.Controllers
 
                     }
                 );
+
+                activityIdList.Add(activityID);
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();

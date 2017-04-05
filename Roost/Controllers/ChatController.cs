@@ -72,25 +72,12 @@ namespace RoostApp.Controllers
                 // Get the activity from its table along with the chat id
                 var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
 
-                string chatId = activity.Item["chatId"].S;
-
-                // Get the chat from its table and remove the user.
-                Dictionary<string, AttributeValue> chatTableKey =
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"chatId", new AttributeValue{S = chatId} },
-                        {"activityId", new AttributeValue{S = activityId } }
-                    };
-
-                // Query RoostChats for the list of users
-                var chatTable = await db.client.GetItemAsync(tableName: "RoostChats", key: chatTableKey);
-
                 // Remove the user's id from the list
-                List<string> updatedUserList = chatTable.Item["useridSent"].SS;
+                List<string> updatedUserList = activity.Item["members"].SS;
 
                 updatedUserList.Remove(id);
 
-                // Update the activity's member count
+                // Update the activity's member count and Put the updated list back in the table
                 await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
@@ -98,20 +85,13 @@ namespace RoostApp.Controllers
                         {
                             "numMembers",
                             new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
-                        }
-                    }
-                );
-
-                // Put the updated list back in the table
-                await db.client.UpdateItemAsync(tableName: "RoostChats", key: chatTableKey,
-
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
+                        },
                         {
-                            "useridSent",
-                            new AttributeValueUpdate {Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
+                            "members",
+                            new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
                         }
                     }
+                    
                 );
 
                 Response.StatusCode = 200;
