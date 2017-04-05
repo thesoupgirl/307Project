@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace RoostApp.Controllers
 {
@@ -13,8 +14,11 @@ namespace RoostApp.Controllers
     public class ActivitiesController : Controller
     {
 
-        DBHelper db = new DBHelper();
+        static DBHelper db = new DBHelper();
 
+        Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
+
+        // A list of all the activity ids that will be used in searching
         List<string> activityIdList = new List<string>();
 
         // GET: /api/activities/{id}/{dist}
@@ -40,23 +44,31 @@ namespace RoostApp.Controllers
         {
             try
             {
-                // Frontend will be sending user id, activity id (?), and category
-                // save every activity id in a list and use it to search the table.
+                // Frontend will be sending user id and category
+                string category = Request.Form["category"];
+
+                // Activity cannot be full or closed (hidden) and the user must not be in it.
+
                 // The key used to find the activities
                 Dictionary<string, AttributeValue> searchKey = 
                     new Dictionary<string, AttributeValue>
                     {
-                        {"ActivityId", new AttributeValue { S = id} },
-                        {"category", new AttributeValue {S = Request.Form["category"] } },
-                        {"status", new AttributeValue { S = "open"} }
+                        {"ActivityId", new AttributeValue { S = id } },
+                        {"category", new AttributeValue { S = category } },
+                        {"status", new AttributeValue { S = "open" } }
                     };
 
-                // BatchGetItemAsync needs a list of keys
-                List<Dictionary<string, AttributeValue>> keys = 
+                // Create a new list to store the keys
+                List<Dictionary<string, AttributeValue>> keys =
                     new List<Dictionary<string, AttributeValue>>
                     {
                         searchKey
                     };
+
+                // Create a new key for every activity id
+
+                // Then run BatchGetItemAsync
+
 
                 var resp = await db.client.BatchGetItemAsync(
                     requestItems: new Dictionary<string, KeysAndAttributes>
@@ -65,7 +77,7 @@ namespace RoostApp.Controllers
                     }
                 );
 
-                // Activity cannot be full or closed (hidden) and the user must not be in it.
+                
                 
                 var result = resp.Responses["RoostActivities"];
                 return result.ToString();
@@ -210,27 +222,16 @@ namespace RoostApp.Controllers
         {
             try
             {
-                Dictionary<string, AttributeValue> activityKey =
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue { S = Request.Form["activityId"]} }
-                    };
+                string activityId = Request.Form["activityId"];
 
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityKey);
+                // Get an item from the table.
+                var item = await activitiesTable.GetItemAsync(activityId);
 
-                string status = activity.Item["status"].S;
-
-                if (status.Equals("closed"))
+                if (item["status"] == "closed")
                 {
-                    await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityKey,
-                        attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                        {
-                            {
-                                "status",
-                                new AttributeValueUpdate {Action = "PUT", Value = new AttributeValue { S = "open" } }
-                            }
-                        }
-                    );
+                    // Set status to open and update.
+                    item["status"] = "open";
+                    await activitiesTable.UpdateItemAsync(item);
 
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
@@ -243,7 +244,6 @@ namespace RoostApp.Controllers
                     return response;
                 }
 
-
             }
             catch (Exception)
             {
@@ -254,33 +254,20 @@ namespace RoostApp.Controllers
         }
 
         // POST: {id}/close
-        // Makes a group public
+        // Makes a group private
         [HttpPost("{id}/close")]
         public async Task<HttpResponseMessage> CloseGroup(string id)
         {
             try
             {
-                Dictionary<string, AttributeValue> activityKey = 
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue { S = Request.Form["activityId"]} }
-                    };
+                string activityId = Request.Form["activityId"];
+                var item = await activitiesTable.GetItemAsync(activityId);
 
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityKey);
-
-                string status = activity.Item["status"].S;
-
-                if (status.Equals("open"))
+                // Don't try to close a group that already is closed.
+                if (item["status"] == "open")
                 {
-                    await db.client.UpdateItemAsync( tableName:"RoostActivities", key: activityKey,
-                        attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                        {
-                            {
-                                "status",
-                                new AttributeValueUpdate {Action = "PUT", Value = new AttributeValue { S = "closed" } }
-                            }
-                        }
-                    );
+                    item["status"] = "closed";
+                    await activitiesTable.UpdateItemAsync(item);
 
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
@@ -291,7 +278,6 @@ namespace RoostApp.Controllers
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
                 }
-
                 
             }
             catch (Exception)
@@ -320,7 +306,7 @@ namespace RoostApp.Controllers
                 var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
 
                 // Only delete the activity if the id matches that of the group leader
-                if (activity.Item["groupLeader"].S.Equals(id))
+                if (activity.Item["groupLeader"].S == id)
                     await db.client.DeleteItemAsync(tableName: "RoostActivities", key: activityTableKey);
 
                 Response.StatusCode = 200;
