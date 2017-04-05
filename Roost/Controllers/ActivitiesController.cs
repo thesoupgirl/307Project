@@ -34,7 +34,7 @@ namespace RoostApp.Controllers
         // Gets list of activities within certain radius of user by category
         // TODO: needs to return JSON string
         [HttpGet("{id}/{dist}")]
-        public async Task<HttpResponseMessage> FindActivitiesByCategory(string id, string dist)
+        public async Task<string> FindActivitiesByCategory(string id, string dist)
         {
             try
             {
@@ -45,7 +45,8 @@ namespace RoostApp.Controllers
                     new Dictionary<string, AttributeValue>
                     {
                         {"ActivityId", new AttributeValue { S = id} },
-                        {"category", new AttributeValue {S = Request.Form["category"] } }
+                        {"category", new AttributeValue {S = Request.Form["category"] } },
+                        {"status", new AttributeValue { S = "open"} }
                     };
 
                 // BatchGetItemAsync needs a list of keys
@@ -55,7 +56,7 @@ namespace RoostApp.Controllers
                         searchKey
                     };
 
-                var r = await db.client.BatchGetItemAsync(
+                var resp = await db.client.BatchGetItemAsync(
                     requestItems: new Dictionary<string, KeysAndAttributes>
                     {
                         { "RoostActivities", new KeysAndAttributes { Keys = keys } }
@@ -64,15 +65,12 @@ namespace RoostApp.Controllers
 
                 // Activity cannot be full or closed (hidden) and the user must not be in it.
                 
-
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                var result = resp.Responses["RoostActivities"];
+                return result.ToString();
+               
             } catch (Exception)
             {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                return "No items found.";
             }
         }
 
@@ -101,6 +99,11 @@ namespace RoostApp.Controllers
                 {
                     base64Image = "none";
                 }
+
+                List<string> members = new List<string>
+                {
+                    id
+                };
 
                 // Add the activity to the database table
                 await db.client.PutItemAsync(
@@ -141,6 +144,9 @@ namespace RoostApp.Controllers
 
                         // The maximum amount of people who can join the group
                         {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"] } },
+
+                        // A complete list of everyone in the group.
+                        {"members", new AttributeValue{SS = members} },
 
                         // The userId of the person who created the group
                         {"groupLeader", new AttributeValue{ S = id } }
