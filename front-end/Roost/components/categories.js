@@ -7,9 +7,12 @@ import {
   AppRegistry,
   StyleSheet,
   Navigator,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import Login from './login'
+import path from '../properties.js'
+
 
 
 /*  
@@ -46,7 +49,27 @@ export default class Categories extends Component {
     }
 
     join () {
-      //add a user toa group chat
+        //add user to group with ajax call
+        //call to authenticate
+    
+        //console.warn(md5(this.state.password));
+        var id = this.props.user.username
+        //console.warn(id)
+        let ws = `${path}/api/activities/join/${id}`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity joined')
+            
+        } else {
+                Alert.alert(
+                'Error joining activity',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
     }
 
     renderData () {
@@ -63,7 +86,7 @@ export default class Categories extends Component {
                           <Text note>{data.description}</Text>
                       </Body>
                       <Right>
-                          <Button transparent>
+                          <Button transparent onPress={() => this.join()}>
                               <Text>Join</Text>
                           </Button>
                       </Right>
