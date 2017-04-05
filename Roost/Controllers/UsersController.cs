@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
+using Amazon.Runtime;
 using Roost.Interfaces;
 using Roost.Models;
 using System.IO;
@@ -86,6 +89,7 @@ namespace Roost.Controllers
 		if(stuff.Item["password"].S == passHash) {
 			Response.StatusCode = 200;
 			HttpResponseMessage response = new HttpResponseMessage();
+            response.Content = new StringContent("distance=" + stuff.Item["distance"].S);
 			return response;
 		}
 		else {
@@ -147,8 +151,8 @@ namespace Roost.Controllers
             catch (Exception)
             {
                 Response.StatusCode = 400;
-        HttpResponseMessage response = new HttpResponseMessage();
-        return response;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
             }
         }
 
@@ -159,6 +163,11 @@ namespace Roost.Controllers
         {
             string username = Request.Form["username"];
             string password = Request.Form["password"];
+            string pushNote = Request.Form["notifications"];
+            string distance = Request.Form["distance"];
+            Console.WriteLine("\nNotifications: ");
+            Console.WriteLine(pushNote);
+            int pushNot = Convert.ToInt32(pushNote);
             Console.WriteLine("\nrawr\n");
             Console.WriteLine(username);
             Console.WriteLine(password);
@@ -166,89 +175,39 @@ namespace Roost.Controllers
 
             try
             {
-                await db.client.UpdateItemAsync(
-                    tableName: "User",
-                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-                    {
-                        // Find the user based on their id and display name
-                        {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = id} }
-                    },
-
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                            {"password", new AttributeValueUpdate(new AttributeValue {S = password}, AttributeAction.PUT)},
-                            {"userId", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)},
-                            {"displayName", new AttributeValueUpdate(new AttributeValue {S = username}, AttributeAction.PUT)}
-                    }
-                );
+                //DynamoDBContext context = new DynamoDBContext(db.client);
+                Console.WriteLine("trying...");
+                var table = Table.LoadTable(db.client, "User");
+                Console.WriteLine("found the table...");
+                var item = await table.GetItemAsync(id, id);
+                Console.WriteLine("\ngot the item");
+                if (item == null)
+                {
+                    // row not exists -> insert & return 1
+                    Console.WriteLine("\nCouldn't find user in Dynamo");
+                    return;
+                }
+                // row exists -> increment counter & update
+                //var counter = item["Counter"].AsInt();
+                item["password"] = password;
+                item["notifications"] = pushNot;
+                item["distance"] = distance;
+                await table.UpdateItemAsync(item);
+                Console.WriteLine("\nupdated it?  hopefully...");
+                return;
+               // await db.client.PutItemAsync(
+                //    tableName: "User",
+                 //   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                  //  {
+                   //     {"userId", new AttributeValue {S = id} },
+                    //    {"username", new AttributeValue {S = username}},
+                     //   {"password", new AttributeValue {S = password}}
+                      //  });
             }
             catch (Exception)
             {
-
+                Console.WriteLine("\nexception...");
             }
-        }
-
-        // POST: /api/user/create
-        [HttpPost("create")]
-        [HttpGet("create")]
-        // Create a new user
-        public async Task<string> CreateUser()
-        {
-            string info = Response.Headers["userInfo"];
-            try
-            {
-                await db.client.PutItemAsync(
-                    tableName: "User",
-                    item: new Dictionary<string, AttributeValue>
-                    {
-                        {"userId", new AttributeValue {S = "777"} },
-                        {"displayName", new AttributeValue {S = "joe"} },
-                        {"password", new AttributeValue {S = "blah"} }
-                    }
-                );
-
-                return "User created successfully";
-            }
-            catch (Exception)
-            {
-                return "User not found.";
-            }
-        }
-
-        // POST: /api/user/{id}
-        [HttpPost("{id}")]
-        [HttpGet("{id}")]
-        // Saves user settings in DB
-        public async Task<string> SaveSettings(string id)
-        {
-            // The settings will be stored as JSON in the response header.
-            string settings = Response.Headers["settings"];
-
-            try
-            {
-                await db.client.UpdateItemAsync(
-                    tableName: "User",
-                    key: new Dictionary<string, AttributeValue>
-                    {
-                        {"userId", new AttributeValue {S = id} },
-                        {"displayName", new AttributeValue {S = "Hello world"} }
-                    },
-
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                        {
-                            "settings", new AttributeValueUpdate(new AttributeValue {S = settings}, AttributeAction.PUT)
-                        }
-                    }
-                );
-                return settings;
-            }
-            catch (Exception)
-            {
-                return "Error: something went wrong.";
-            }
-
         }
 
     }
