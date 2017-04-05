@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Footer, 
 Icon, FooterTab, Header, View, Left, Body, Title,
-Right, DeckSwiper, Card, CardItem, Thumbnail, H1} from 'native-base';
+Right, DeckSwiper, Card, CardItem, Thumbnail, H1, H3} from 'native-base';
 var styles = require('./styles'); 
 import {
   AppRegistry,
   StyleSheet,
   Navigator,
-  Image
+  Image,
+  Alert
 } from 'react-native';
+import path from '../properties.js'
+
 
 /*  
     
 */
+
+
 
 const cards = [
     {
@@ -39,8 +44,8 @@ const cards = [
 
 
 export default class SwipeActivities extends Component {
-  constructor(props) {
-        super(props)
+  constructor(user) {
+        super()
         this.state = {
             
         }
@@ -51,6 +56,26 @@ export default class SwipeActivities extends Component {
     right () {
         console.warn('right')
         //add user to group with ajax call
+         //call to authenticate
+    
+        //console.warn(md5(this.state.password));
+        var id = this.props.user.username
+        //console.warn(id)
+        let ws = `${path}/api/activities/join/${id}`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity joined')
+            
+        } else {
+                Alert.alert(
+                'Error joining activity',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody       
     }
     left () {
         console.warn('left')
@@ -75,9 +100,12 @@ export default class SwipeActivities extends Component {
                 renderItem={item =>
                     <Card style={{ elevation: 3 }}>
                         <CardItem>
-                            <Left>
-                                <Thumbnail source={item.image} />
-                            </Left>
+                            {
+                            //<Left>
+                            //<Thumbnail source={item.image} />
+                            //</Left>
+                            }
+                            
                             <Body>
                                 <Text>{item.name}</Text>
                                 <Text note>{item.description}</Text>
@@ -87,20 +115,22 @@ export default class SwipeActivities extends Component {
                             <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
                         </CardItem>
                         <CardItem>
-                            <Left>
-                            <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
-                            </Left>
-                            
-                            <Text>{item.name}</Text>
-                            
-                            <Right>
-                            <Button success onPress={() => this.right()}><Text> Join </Text></Button>
-                            </Right>
+                            {//
+                            //<Left>
+                            //<Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
+                            //</Left>
+                            }
+                           
+                            <H3>{item.name}</H3>
+                            {
+                            //<Right>
+                            //<Button success onPress={() => this.right()}><Text> Join </Text></Button>
+                            //</Right>
+                            }
                         </CardItem>
                     </Card>
                 }
-            />
-                                
+            />            
         </View>
       </Container>
     );

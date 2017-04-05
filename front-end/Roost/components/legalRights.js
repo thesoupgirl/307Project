@@ -18,7 +18,7 @@ import {
 */
 
 
-export default class Profile extends Component {
+export default class LegalRights extends Component {
   constructor() {
         super()
         this.state = {

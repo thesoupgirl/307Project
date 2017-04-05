@@ -18,6 +18,7 @@ import Login from './login.js'
 import Launch from './launch.js'
 var md5 = require('md5');
 import TextField from 'react-native-md-textinput';
+import path from '../properties.js'
 
 
 
@@ -35,7 +36,7 @@ export default class Profile extends Component {
             username:'',
             password:'',
             dist: '5',
-            push: true,
+            push: false,
             logout: false,
             updateSetttings: false
         }
@@ -49,7 +50,12 @@ export default class Profile extends Component {
       console.warn(this.state.password)
       var username = this.state.username
       var password = md5(this.state.password)
-      let ws = `http://localhost:5000/api/users/update/${this.state.id}`
+      var notifications;
+      if (this.state.push)
+        notifications = 1;
+      else notifications = 0;
+      var distance = this.state.dist
+      let ws = `${path}/api/users/update/${this.state.id}`
       let xhr = new XMLHttpRequest();
       xhr.open('POST', ws, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -66,7 +72,7 @@ export default class Profile extends Component {
                 'Updating information failed',      
         )
       }
-    }; xhr.send(`username=${username}&password=${password}`)
+    }; xhr.send(`username=${username}&password=${password}&notifications=${notifications}&distance${distance}`)
     }
 
   componentWillMount() {
@@ -84,12 +90,6 @@ export default class Profile extends Component {
     if (this.state.updateSetttings)
       return (
         <Content>
-          <ScrollView>
-        <TextField label={'username'} highlightColor={'#00BCD4'} 
-                    onChangeText={(text) => {
-                    this.state.username = text;}}
-                    value={this.state.username} />
-      </ScrollView>
       <ScrollView>
         <TextField label={'password'} highlightColor={'#00BCD4'}
                    onChangeText={(text) => {
@@ -110,15 +110,13 @@ export default class Profile extends Component {
                         <Item label="10 miles" value="10" />
                         <Item label="20 miles" value="20" />
                         <Item label="30 miles" value="30" />
-                        <Item label="40 miles" value="50" />
+                        <Item label="50 miles" value="50" />
                    </Picker>
                
                  <Button light block style={styles.center} onPress={() => this.setState({updateSetttings: !this.state.updateSetttings},
              this.userUpdate())}>
                    <Text>Confirm Changes</Text></Button>
                  </Content>
-        
-       
       )
     
   }

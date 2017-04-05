@@ -19,9 +19,10 @@ import {
   Alert,
   
 } from 'react-native';
-import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right} from 'native-base';
+import { Container, Button, Content, Header, H1, Title, Body, Left, Icon, Right, Spinner} from 'native-base';
 import LegalRights from './legalRights.js'
 var md5 = require('md5');
+import path from '../properties.js'
 
 /*  
   LOGIN: SOPHIA
@@ -47,6 +48,8 @@ export default class Login extends Component {
         login: false,
         username: '',
         password: '',
+        push: 0,
+        dist: '5',
         isLoggedIn: false,
         page: 'login'
         }
@@ -55,15 +58,14 @@ export default class Login extends Component {
     this.renderPage = this.renderPage.bind(this)
     }
 
-    loginPressed() {
-        
+    loginPressed() {        
         //call to authenticate
         
             //console.warn(md5(this.state.password));
             var username = this.state.username
             var password = md5(this.state.password)
 
-            let ws = `http://localhost:5000/api/users/login/${username}/${password}`
+            let ws = `${path}/api/users/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
@@ -88,7 +90,7 @@ export default class Login extends Component {
             var username = this.state.username
             var password = md5(this.state.password)
 
-            let ws = `http://localhost:5000/api/users/login/${username}/${password}`
+            let ws = `${path}/api/users/login/${username}/${password}`
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
@@ -101,7 +103,7 @@ export default class Login extends Component {
 
               var username = this.state.username
               var password = md5(this.state.password)
-              let ws = `http://localhost:5000/api/users/login`
+              let ws = `${path}/api/users/login`
               let xhr = new XMLHttpRequest();
               xhr.open('POST', ws, true);
               xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -193,7 +195,6 @@ export default class Login extends Component {
             </Right>
             </Header>
       <Content>
-        
         <LegalRights/>
         <Text></Text>
         <Button onPress={() => this.setState({page: "create"})} block success><Text> Accept </Text></Button>

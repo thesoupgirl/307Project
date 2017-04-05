@@ -56,7 +56,7 @@ export default class AddActivity extends Component {
             )
           }
        else {
-          let ws = `http://localhost:5000/api/` //TODO: finish route
+          let ws = `${path}/api/` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
@@ -171,7 +171,7 @@ export default class AddActivity extends Component {
             <Item label="Study Groups" value="Study Groups" />
         </Picker>
         <Text/>
-        <Button onPress={this.selectPhotoTapped.bind(this)}><Text>Group Avatar</Text></Button>
+        <Button rounded onPress={this.selectPhotoTapped.bind(this)}><Text>Group Avatar</Text></Button>
         <Text/>
         <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
           { this.state.avatarSource === null ? null :
