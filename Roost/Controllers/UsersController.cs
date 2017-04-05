@@ -63,9 +63,9 @@ namespace Roost.Controllers
 
 			return "rawr";
 		}
-		// GET: /api/users/login
-		// Sign-in the user
-		[HttpGet("login/{id}/{passHash}")]
+        // GET: /api/users/login/{id}/{passHash}
+        // Sign-in the user
+        [HttpGet("login/{id}/{passHash}")]
 		public async Task<HttpResponseMessage> Login(String id, String passHash)
 		{
 			//this takes request parameters only from the query string
@@ -84,7 +84,6 @@ namespace Roost.Controllers
 					{
 						{"userId", new AttributeValue {S = id} },
 						{"displayName", new AttributeValue {S = id} },
-						//{"password", new AttributeValue {S = "202cb962ac59075b964b07152b234b70"} }
 					}
 				);
 				if (stuff.Item["password"].S == passHash)
@@ -111,7 +110,7 @@ namespace Roost.Controllers
 			}
 		}
 
-		// GET: /api/users/login
+		// POST: /api/users/login
 		// Creates a new user
 		[HttpPost("login")]
 		public async Task<HttpResponseMessage> Login()
@@ -138,18 +137,6 @@ namespace Roost.Controllers
 				Response.StatusCode = 200;
 				HttpResponseMessage response = new HttpResponseMessage();
 				return response;
-				//if(stuff.Item["password"].S == passHash) {
-				//    Response.StatusCode = 200;
-				//    HttpResponseMessage response = new HttpResponseMessage();
-				//    return response;
-				//}
-				//else {
-				//    Response.StatusCode = 400; 
-				//    HttpResponseMessage response = new HttpResponseMessage();
-				//    return response;
-
-				//}       
-				//return "meow";
 			}
 			catch (Exception)
 			{
