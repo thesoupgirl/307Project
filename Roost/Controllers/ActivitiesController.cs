@@ -72,6 +72,7 @@ namespace Roost.Controllers
                     );
 
                     Console.WriteLine(stuff.Item["members"].SS);
+                    Console.WriteLine(stuff.Item["numMembers"].N);
                     List<string> membersList = stuff.Item["members"].SS;
                     if(membersList.Contains(username)) {
                         Console.WriteLine("User already added to activity");
@@ -80,6 +81,10 @@ namespace Roost.Controllers
                         return responsey;
                     }
                     membersList.Add(username);
+                    Console.WriteLine(stuff.Item["numMembers"].N);
+                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
+                    numberOfPeeps++;
+                    string peopleNum = numberOfPeeps.ToString();
 
                     await db.client.UpdateItemAsync(
                     tableName: "RoostActivities",
@@ -90,7 +95,8 @@ namespace Roost.Controllers
 
                     attributeUpdates: new Dictionary<string, AttributeValueUpdate>
                     {
-                            {"members", new AttributeValueUpdate(new AttributeValue {SS = membersList}, AttributeAction.PUT)}
+                            {"members", new AttributeValueUpdate(new AttributeValue {SS = membersList}, AttributeAction.PUT)},
+                            {"numMembers", new AttributeValueUpdate(new AttributeValue {N = peopleNum}, AttributeAction.PUT)}
                     }
                 );
 
