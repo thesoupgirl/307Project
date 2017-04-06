@@ -60,13 +60,13 @@ namespace RoostApp.Controllers
         {
             try
             {
-                // The activity id is all that's needed from the form.
-                string activityId = Request.Form["activityID"];
+                // Activity id comes from route.
+                string user = Request.Form["userID"];
 
                 Dictionary<string, AttributeValue> activityTableKey =
                     new Dictionary<string, AttributeValue>
                     {
-                        {"ActivityId", new AttributeValue { S = activityId } }
+                        {"ActivityId", new AttributeValue { S = id } }
                     };
 
                 // Get the activity from its table along with the chat id
@@ -75,7 +75,7 @@ namespace RoostApp.Controllers
                 // Remove the user's id from the list
                 List<string> updatedUserList = activity.Item["members"].SS;
 
-                updatedUserList.Remove(id);
+                updatedUserList.Remove(user);
 
                 // Update the activity's member count and Put the updated list back in the table
                 await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,

@@ -42,8 +42,6 @@ namespace RoostApp.Controllers
                 List<Document> docList = new List<Document>();
 
                 // TODO: if user in in group, remove from list.
-                // TODO: append all items in ToJsonPretty form as one string and return.
-
                 string results = "";
                 do
                 {
@@ -97,7 +95,6 @@ namespace RoostApp.Controllers
                 List<Document> docList = new List<Document>();
 
                 // TODO: calculate distance from user.
-                // TODO: append all items in ToJsonPretty form as one string and return.
                 string results = "";
                 do
                 {
@@ -155,6 +152,14 @@ namespace RoostApp.Controllers
 
                 List<string> members = new List<string> { id };
 
+                // Don't let them create the activity just for themselves.
+                if (Request.Form["maxSize"] == 1)
+                {
+                    //Response.StatusCode = 400;
+                    //HttpResponseMessage response = new HttpResponseMessage();
+                    //return response;
+                }
+
                 // Add the activity to the database table
                 await db.client.PutItemAsync(
                     tableName: "RoostActivities",
@@ -164,7 +169,7 @@ namespace RoostApp.Controllers
                         {"ActivityId", new AttributeValue { S = activityID } },
 
                         // The number of people in the group
-                        {"numMembers", new AttributeValue { N = "1" } },
+                        {"numMembers", new AttributeValue { N = members.Count().ToString() } },
 
                         // The name of the group
                         {"name", new AttributeValue { S = Request.Form["name"] } },
@@ -261,12 +266,12 @@ namespace RoostApp.Controllers
         {
             try
             {
-                string activityId = Request.Form["activityId"];
+                string user = Request.Form["userId"];
 
                 // Get an item from the table.
-                var item = await activitiesTable.GetItemAsync(activityId);
+                var item = await activitiesTable.GetItemAsync(id);
 
-                if (item["status"] == "closed")
+                if (item["status"] == "closed" && item["groupLeader"] == user)
                 {
                     // Set status to open and update.
                     item["status"] = "open";
@@ -299,11 +304,11 @@ namespace RoostApp.Controllers
         {
             try
             {
-                string activityId = Request.Form["activityId"];
-                var item = await activitiesTable.GetItemAsync(activityId);
+                string user = Request.Form["userId"];
+                var item = await activitiesTable.GetItemAsync(id);
 
                 // Don't try to close a group that already is closed.
-                if (item["status"] == "open")
+                if (item["status"] == "open" && item["groupLeader"] == user)
                 {
                     item["status"] = "closed";
                     await activitiesTable.UpdateItemAsync(item);
@@ -334,18 +339,19 @@ namespace RoostApp.Controllers
         {
             try
             {
-                string activityId = Request.Form["activityId"];
+                // id in endpoint is activity id.
+                string user = Request.Form["userId"];
 
                 // Get the activity from the table
-                var activity = await activitiesTable.GetItemAsync(activityId);
+                var activity = await activitiesTable.GetItemAsync(id);
 
                 string chatId = activity["chatId"];
 
-                // Only delete the activity if the id matches that of the group leader
-                if (activity["groupLeader"] == id)
+                // Only the group leader can delete an activity.
+                if (activity["groupLeader"] == user)
                 {
-                    await chatTable.DeleteItemAsync(chatId, activityId);
-                    await activitiesTable.DeleteItemAsync(activityId);
+                    await chatTable.DeleteItemAsync(chatId, id);
+                    await activitiesTable.DeleteItemAsync(id);
                 }
                     
                 Response.StatusCode = 200;
