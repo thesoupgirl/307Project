@@ -21,21 +21,45 @@ namespace Roost.Services
 
         public bool DoesItemExist(string id)
         {
+	    //check id if valid
+	    if(id == null || id.Length <= 0)
+	    {
+		//invalid id
+		return false;
+	    }
             return _users.Any(item => item.ID == id);
         }
 
         public UserItem Find(string id)
         {
+	    //validate id
+            if(id == null || id.Length <= 0)
+	    {
+		//invalid input, returning null
+		return null;
+	    }
             return _users.FirstOrDefault(item => item.ID == id);
         }
 
         public void Insert(UserItem item)
         {
+	    //validate item
+	    if(item == null)
+	    {
+	    	//null item, returning
+		return;
+	    }
             _users.Add(item);
         }
 
         public void Update(UserItem item)
         {
+	    //validate item
+	    if(item == null)
+	    {
+		//null item, returning
+		return;
+	    }
             var userItem = this.Find(item.ID);
             var index = _users.IndexOf(item);
             _users.RemoveAt(index);
@@ -44,6 +68,12 @@ namespace Roost.Services
 
         public void Delete(string id)
         {
+	    //validate id
+	    if(id == null || id.Length <= 0)
+	    {
+		//invalid input, returning
+		return;
+	    }
             _users.Remove(this.Find(id));
         }
 
