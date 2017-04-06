@@ -31,6 +31,7 @@ namespace RoostApp.Controllers
         {
             try
             {
+                // Pull the top 25 most popular
                 ScanFilter scanFilter = new ScanFilter();
                 scanFilter.AddCondition("status", ScanOperator.Equal, "open");
 
@@ -43,13 +44,32 @@ namespace RoostApp.Controllers
                 // TODO: if user in in group, remove from list.
                 // TODO: append all items in ToJsonPretty form as one string and return.
 
-                docList = await search.GetNextSetAsync();
+                string results = "";
+                do
+                {
+                    docList = await search.GetNextSetAsync();
 
-                return "";
+                    foreach (Document d in docList)
+                    {
+                        // Get the list and number of members and max size.
+                        List<string> members = d["members"].AsListOfString();
+                        int numMembers = d["numMembers"].AsInt();
+                        int max = d["maxGroupSize"].AsInt();
+
+                        // Return the activity if it's not full and the user isn't in it.
+                        if ((numMembers < max) && !members.Contains(id))
+                        {   // append all items in ToJsonPretty form as one string
+                            results += d.ToJsonPretty();
+                            results += ",";
+                        }
+                    }
+                } while (!search.IsDone);
+
+                return results;
             }
             catch (Exception)
             {
-                return "";
+                return "No items found.";
             }
         }
 
@@ -77,12 +97,29 @@ namespace RoostApp.Controllers
                 List<Document> docList = new List<Document>();
 
                 // TODO: calculate distance from user.
-                // TODO: if user in group or group is full, remove from list.
                 // TODO: append all items in ToJsonPretty form as one string and return.
+                string results = "";
+                do
+                {
+                    docList = await search.GetNextSetAsync();
 
-                docList = await search.GetNextSetAsync();
-                Document d = docList[0];
-                return d.ToJsonPretty();
+                    foreach (Document d in docList)
+                    {
+                        // Get the list and number of members and max size.
+                        List<string> members = d["members"].AsListOfString();
+                        int numMembers = d["numMembers"].AsInt();
+                        int max = d["maxGroupSize"].AsInt();
+
+                        // Return the activity if it's not full and the user isn't in it.
+                        if ((numMembers < max) && !members.Contains(id))
+                        {   // append all items in ToJsonPretty form as one string
+                            results += d.ToJsonPretty();
+                            results += ",";
+                        }   
+                    }
+                } while (!search.IsDone);
+
+                return results;
 
             } catch (Exception)
             {
