@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http;
+using System.Net;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
@@ -14,6 +15,8 @@ using Roost.Interfaces;
 using Roost.Models;
 using System.IO;
 using System.Text;
+using System.Net.Http;
+using System.Collections.Generic;
 
 namespace Roost.Controllers
 {
@@ -89,9 +92,12 @@ namespace Roost.Controllers
 				if (stuff.Item["password"].S == passHash)
 				{
 					Response.StatusCode = 200;
-					HttpResponseMessage response = new HttpResponseMessage();
-					response.Content = new StringContent("distance=" + stuff.Item["distance"].S);
-					return response;
+                    HttpResponseMessage responset = new HttpResponseMessage();
+                    //HttpResponseMessage responset = Request.CreateResponse<string>(HttpStatusCode.OK, "meow");
+					//return Request.CreateResponse<HttpResponseMessage>(HttpStatusCode.OK, (HttpResponseMessage)Convert.ChangeType("meow", typeof(HttpResponseMessage)));
+                    //HttpResponseMessage responset = new HttpResponseMessage( HttpStatusCode.OK, new StringContent( "Your message here" ) );
+                    //response.Content = new StringContent("distance=" + stuff.Item["distance"].S);
+					return responset;
 				}
 				else
 				{
@@ -130,7 +136,8 @@ namespace Roost.Controllers
 						{"userId", new AttributeValue {S = username} },
 						{"displayName", new AttributeValue {S = username} },
 						{"password", new AttributeValue {S = password} },
-						{"distance", new AttributeValue {S = "5"} }
+						{"distance", new AttributeValue {S = "5"} },
+                        {"notificatons", new AttributeValue {N = "0"} }
 					}
 				);
 
@@ -140,7 +147,8 @@ namespace Roost.Controllers
 			}
 			catch (Exception)
 			{
-				Response.StatusCode = 400;
+				Console.WriteLine("exception caught");
+                Response.StatusCode = 400;
 				HttpResponseMessage response = new HttpResponseMessage();
 				return response;
 			}
@@ -149,7 +157,7 @@ namespace Roost.Controllers
 		// POST: /api/users/update/{id}
 		// Update user info
 		[HttpPost("update/{id}")]
-		public async void UpdateUser(string id)
+		public async Task<HttpResponseMessage> UpdateUser(string id)
 		{
 			string username = Request.Form["username"];
 			string password = Request.Form["password"];
@@ -175,7 +183,10 @@ namespace Roost.Controllers
 				{
 					// row not exists -> insert & return 1
 					Console.WriteLine("\nCouldn't find user in Dynamo");
-					return;
+
+                    Response.StatusCode = 400;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
 				}
 				// row exists -> increment counter & update
 				//var counter = item["Counter"].AsInt();
@@ -184,7 +195,10 @@ namespace Roost.Controllers
 				item["distance"] = distance;
 				await table.UpdateItemAsync(item);
 				Console.WriteLine("\nupdated it?  hopefully...");
-				return;
+
+				Response.StatusCode = 200;
+                HttpResponseMessage responsey = new HttpResponseMessage();
+                return responsey;
 				// await db.client.PutItemAsync(
 				//    tableName: "User",
 				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
@@ -196,6 +210,9 @@ namespace Roost.Controllers
 			}
 			catch (Exception)
 			{
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
 				Console.WriteLine("\nexception...");
 			}
 		}
