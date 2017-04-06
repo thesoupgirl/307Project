@@ -23,7 +23,7 @@ var a = [{category: 'Sports', title: 'baseball', description: 'come play!'},
             {category: 'Sports', title: 'soccer', description: 'come play!'},
             {category: 'Sports', title: 'tennis', description: 'come play!'},
             {category: 'Sports', title: 'hockey', description: 'come play!'},
-            {category: 'Eat', title: 'breakfast', description: 'come get breakfast!'},
+            {category: 'Food', title: 'breakfast', description: 'come get breakfast!'},
             {category: 'Adventures', title: 'Hiking', description: 'come Hiking!'},
             {category: 'Study Groups', title: 'CS307', description: 'Looking for a group!'}]
 
@@ -43,6 +43,7 @@ export default class Categories extends Component {
 
     componentWillMount() {
       //set activities array
+      /*
         let ws = `ROUTE`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
@@ -57,20 +58,24 @@ export default class Categories extends Component {
         }
         }; xhr.send()
         //console.log(search)
+        */
     }
     
     click (page) {
       this.state.page = page
     }
 
-    join () {
+    join (id) {
         //add user to group with ajax call
         //call to authenticate
     
         //console.warn(md5(this.state.password));
-        var id = this.props.user.username
+        var username = this.props.user.username
+        var password = this.props.user.password
+        var HARDCODED = 33284
+        console.warn(id)
         //console.warn(id)
-        let ws = `${path}/api/activities/join/${id}`
+        let ws = `${path}/api/activities/join/${HARD}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
@@ -83,7 +88,7 @@ export default class Categories extends Component {
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`username=${username}&password=${password}`)
         this.renderBody
     }
 
@@ -101,7 +106,7 @@ export default class Categories extends Component {
                           <Text note>{data.description}</Text>
                       </Body>
                       <Right>
-                          <Button transparent onPress={() => this.join()}>
+                          <Button transparent onPress={() => this.join(data.title)}>
                               <Text>Join</Text>
                           </Button>
                       </Right>
@@ -131,8 +136,8 @@ export default class Categories extends Component {
           <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'Eat' })}}>
-                <Text>Eat</Text>
+            <ListItem button onPress={() => {this.setState({ page: 'Food' })}}>
+                <Text>Food</Text>
             </ListItem>
             <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
                 <Text>Adventures</Text>

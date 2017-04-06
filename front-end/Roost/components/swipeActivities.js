@@ -55,6 +55,7 @@ export default class SwipeActivities extends Component {
 
     componentWillMount() {
       //set activities array
+      /*
         let ws = `ROUTE`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
@@ -69,6 +70,7 @@ export default class SwipeActivities extends Component {
         }
         }; xhr.send()
         //console.log(search)
+        */
     }
 
     right () {
