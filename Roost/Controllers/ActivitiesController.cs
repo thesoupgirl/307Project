@@ -16,7 +16,9 @@ namespace RoostApp.Controllers
 
         static DBHelper db = new DBHelper();
 
+        // Initialize the tables as Table objects
         Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
+        Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
         // A list of all the activity ids that will be used in searching
         List<string> activityIdList = new List<string>();
@@ -295,20 +297,20 @@ namespace RoostApp.Controllers
         {
             try
             {
-                Dictionary<string, AttributeValue> activityTableKey = 
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue{ S = Request.Form["activityId"] } }
-                    };
-
+                string activityId = Request.Form["activityId"];
 
                 // Get the activity from the table
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
+                var activity = await activitiesTable.GetItemAsync(activityId);
+
+                string chatId = activity["chatId"];
 
                 // Only delete the activity if the id matches that of the group leader
-                if (activity.Item["groupLeader"].S == id)
-                    await db.client.DeleteItemAsync(tableName: "RoostActivities", key: activityTableKey);
-
+                if (activity["groupLeader"] == id)
+                {
+                    await chatTable.DeleteItemAsync(chatId, activityId);
+                    await activitiesTable.DeleteItemAsync(activityId);
+                }
+                    
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
