@@ -164,7 +164,6 @@ namespace Roost.Controllers
 
 			try
 			{
-				//DynamoDBContext context = new DynamoDBContext(db.client);
 				Console.WriteLine("trying...");
 				var table = Table.LoadTable(db.client, "User");
 				Console.WriteLine("found the table...");
@@ -184,14 +183,6 @@ namespace Roost.Controllers
 				await table.UpdateItemAsync(item);
 				Console.WriteLine("\nupdated it?  hopefully...");
 				return;
-				// await db.client.PutItemAsync(
-				//    tableName: "User",
-				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-				//  {
-				//     {"userId", new AttributeValue {S = id} },
-				//    {"username", new AttributeValue {S = username}},
-				//   {"password", new AttributeValue {S = password}}
-				//  });
 			}
 			catch (Exception)
 			{

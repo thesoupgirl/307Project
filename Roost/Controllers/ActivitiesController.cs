@@ -21,16 +21,31 @@ namespace RoostApp.Controllers
         Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
         // A list of all the activity ids that will be used in searching
-        List<string> activityIdList = new List<string>();
+        //List<string> activityIdList = new List<string>();
 
         // GET: /api/activities/{id}/{dist}
-        // Gets list of activities within certain radius of user
+        // Gets list of activities within certain radius of user based on popularity
+        // TODO: determine the criteria for popularity.
         [HttpGet("{id}/{dist}")]
-        public string FindActivities(string id, string dist)
+        public async Task<string> FindActivities(string id, string dist)
         {
             try
             {
-                return ""; 
+                ScanFilter scanFilter = new ScanFilter();
+                scanFilter.AddCondition("status", ScanOperator.Equal, "open");
+
+                // Start the search
+                Search search = activitiesTable.Scan(scanFilter);
+
+                // Put all results into a list.
+                List<Document> docList = new List<Document>();
+
+                // TODO: if user in in group, remove from list.
+                // TODO: append all items in ToJsonPretty form as one string and return.
+
+                docList = await search.GetNextSetAsync();
+
+                return "";
             }
             catch (Exception)
             {
@@ -61,14 +76,13 @@ namespace RoostApp.Controllers
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
 
-                // TODO: append all items in toJsonPretty form as one string and return.
+                // TODO: calculate distance from user.
+                // TODO: if user in group or group is full, remove from list.
+                // TODO: append all items in ToJsonPretty form as one string and return.
 
-                //do
-                //{
-                    docList = await search.GetNextSetAsync();
-            Document d = docList[0];
-            return d.ToJsonPretty();
-                //} while (!search.IsDone);
+                docList = await search.GetNextSetAsync();
+                Document d = docList[0];
+                return d.ToJsonPretty();
 
             } catch (Exception)
             {
@@ -147,7 +161,7 @@ namespace RoostApp.Controllers
                         // A complete list of everyone in the group.
                         {"members", new AttributeValue{SS = members} },
 
-                        // The userId of the person who created the group
+                        // The user who created the group
                         {"groupLeader", new AttributeValue{ S = id } }
                     }
                 );
@@ -189,7 +203,7 @@ namespace RoostApp.Controllers
                     }
                 );
 
-                activityIdList.Add(activityID);
+                //activityIdList.Add(activityID);
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
