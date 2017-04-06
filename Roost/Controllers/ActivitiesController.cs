@@ -38,10 +38,9 @@ namespace RoostApp.Controllers
             }
         }
 
-        // GET: /api/activities/category/{id}/{dist}
+        // POST: /api/activities/{id}/{dist}/search
         // Gets list of activities within certain radius of user by category
-        // TODO: needs to return JSON string
-        [HttpGet("{id}/{dist}")]
+        [HttpPost("{id}/{dist}/search")]
         public async Task<string> FindActivitiesByCategory(string id, string dist)
         {
             try
@@ -49,41 +48,28 @@ namespace RoostApp.Controllers
                 // Frontend will be sending user id and category
                 string category = Request.Form["category"];
 
-                // Activity cannot be full or closed (hidden) and the user must not be in it.
+                // Scan the table for activities based on the following conditions
+                ScanFilter scanFilter = new ScanFilter();
 
-                // The key used to find the activities
-                Dictionary<string, AttributeValue> searchKey = 
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue { S = id } },
-                        {"category", new AttributeValue { S = category } },
-                        {"status", new AttributeValue { S = "open" } }
-                    };
+                // The category must match and the group cannot be hidden.
+                scanFilter.AddCondition("category", ScanOperator.Equal, category);
+                scanFilter.AddCondition("status", ScanOperator.Equal, "open");
 
-                // Create a new list to store the keys
-                List<Dictionary<string, AttributeValue>> keys =
-                    new List<Dictionary<string, AttributeValue>>
-                    {
-                        searchKey
-                    };
+                // Start the search
+                Search search = activitiesTable.Scan(scanFilter);
 
-                // Create a new key for every activity id
+                // Put all results into a list.
+                List<Document> docList = new List<Document>();
 
-                // Then run BatchGetItemAsync
+                // TODO: append all items in toJsonPretty form as one string and return.
 
+                //do
+                //{
+                    docList = await search.GetNextSetAsync();
+            Document d = docList[0];
+            return d.ToJsonPretty();
+                //} while (!search.IsDone);
 
-                var resp = await db.client.BatchGetItemAsync(
-                    requestItems: new Dictionary<string, KeysAndAttributes>
-                    {
-                        { "RoostActivities", new KeysAndAttributes { Keys = keys } }
-                    }
-                );
-
-                
-                
-                var result = resp.Responses["RoostActivities"];
-                return result.ToString();
-               
             } catch (Exception)
             {
                 return "No items found.";

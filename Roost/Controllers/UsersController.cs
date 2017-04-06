@@ -59,6 +59,7 @@ namespace Roost.Controllers
 
             // return "rawr";
         }
+
 		// GET: /api/users/login/{id}/{passHash}
         // Sign-in the user
 		[HttpGet("login/{id}/{passHash}")]
