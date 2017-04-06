@@ -72,10 +72,10 @@ export default class Categories extends Component {
         //console.warn(md5(this.state.password));
         var username = this.props.user.username
         var password = this.props.user.password
-        var HARDCODED = 33284
+        //var HARDCODED = 33284
         console.warn(id)
         //console.warn(id)
-        let ws = `${path}/api/activities/join/${HARD}`
+        let ws = `${path}/api/activities/join/${id}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
