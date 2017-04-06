@@ -69,9 +69,12 @@ export default class Login extends Component {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
+             
             if (xhr.status===200) {
                 this.props.handler(this.state, true)
                 //console.warn(this.state.username)
+                var json = JSON.parse(xhr.responseText);
+                //console.warn(json.infooooo)
                
             } else {
                  Alert.alert(
@@ -94,20 +97,19 @@ export default class Login extends Component {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
+               
             if (xhr.status===200) {
                   Alert.alert(
                   'User exists'     
           )
                
             } else {
-
-              var username = this.state.username
-              var password = md5(this.state.password)
               let ws = `${path}/api/users/login`
               let xhr = new XMLHttpRequest();
               xhr.open('POST', ws, true);
               xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
               xhr.onload = () => {
+                console.warn(xhr.status)
               if (xhr.status===200) {
                   this.props.handler(this.state, true)
               } else {

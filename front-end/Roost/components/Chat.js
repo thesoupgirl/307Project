@@ -41,7 +41,67 @@ export default class Chat extends Component {
      this.onSend = this.onSend.bind(this)
      this.renderPage = this.renderPage.bind(this) 
      this.leave = this.leave.bind(this)
+     this.close = this.close.bind(this)
+     this.open = this.open.bind(this)
+     this.delete = this.delete.bind(this)
     
+    }
+    close () {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/close`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity closed')
+            
+        } else {
+                Alert.alert(
+                'Error closing activity You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
+    }
+    open() {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/open`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity opened')
+            
+        } else {
+                Alert.alert(
+                'Error re-opening activity. You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
+    }
+    delete () {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/deleteactivity`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity deleted')
+            
+        } else {
+                Alert.alert(
+                'Error deleting activity. You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
     }
     leave () {
       //call

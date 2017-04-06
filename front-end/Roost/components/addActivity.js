@@ -110,6 +110,9 @@ export default class AddActivity extends Component {
     componentDidMount() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.warn('lat: ' +position.coords.latitude )
+          console.warn('long: ' +position.coords.longitude )
+
           this.setState({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
