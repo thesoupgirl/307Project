@@ -66,22 +66,21 @@ export default class SwipeActivities extends Component {
 
     componentWillMount() {
       //set activities array
-      /*
-        let ws = `ROUTE`
+        var dist = this.props.user.dist
+        var id = this.props.user.id
+        let ws = `${path}/api/activities/${id}/${dist}/search`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
+            console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
-            json = json.data
-            this.searchResults(json)
-            console.warn('successful')
+            console.warn('successful getting activites')
         } else {
             console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
-        */
     }
 
     right (id) {
