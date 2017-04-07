@@ -71,14 +71,30 @@ export default class AddActivity extends Component {
           xhr.open('POST', ws);
           xhr.onload = () => {
           if (xhr.status===200) {
-              
+              Alert.alert(
+              'Created!!',      
+              )
+
+              this.setState({
+                page: 'add',
+                category: 'None',
+                activity: '',
+                description: '',
+                groupSize: '0',
+                num: 0,
+                latitude: null,
+                longitude: null,
+                error: null,
+                selected: [],
+                avatarSource: null
+              })
+
           } else {
               Alert.alert(
               'Failed to create activity',      
               )
           }
-        }; xhr.send(`maxSize=${groupSize}&name=${activity}&description=${description}&
-                    latitude=${latitude}&longitude=${longitude}&status=${status}&category=${category}`)
+        }; xhr.send(`maxSize=${groupSize}&name=${activity}&description=${description}&latitude=${latitude}&longitude=${longitude}&status=${status}&category=${category}`)
           this.renderBody 
        }
         }
