@@ -69,7 +69,7 @@ namespace Roost.Controllers
         // GET: /api/users/login/{id}/{passHash}
         // Sign-in the user
         [HttpGet("login/{id}/{passHash}")]
-		public async Task<HttpResponseMessage> Login(String id, String passHash)
+		public async Task<ContentResult> Login(String id, String passHash)
 		{
 			//this takes request parameters only from the query string
 			try
@@ -92,19 +92,28 @@ namespace Roost.Controllers
 				if (stuff.Item["password"].S == passHash)
 				{
 					Response.StatusCode = 200;
-                    HttpResponseMessage responset = new HttpResponseMessage();
+                    HttpResponseMessage response = new HttpResponseMessage();
                     //HttpResponseMessage responset = Request.CreateResponse<string>(HttpStatusCode.OK, "meow");
 					//return Request.CreateResponse<HttpResponseMessage>(HttpStatusCode.OK, (HttpResponseMessage)Convert.ChangeType("meow", typeof(HttpResponseMessage)));
                     //HttpResponseMessage responset = new HttpResponseMessage( HttpStatusCode.OK, new StringContent( "Your message here" ) );
-                    //response.Content = new StringContent("distance=" + stuff.Item["distance"].S);
-					return responset;
+                    //response.Content = new StringContent("distance: ");
+                        //+ stuff.Item["distance"].S);
+					Console.WriteLine(stuff.Item["distance"].S);
+                    Console.WriteLine(stuff.Item["notificatons"].N);
+                    //return Content("meowo");
+                    return Content("{ data : [ { distance : " + stuff.Item["distance"].S + ", notificatons : " + stuff.Item["notificatons"].N + " } ] }");
+                    //eturn Content("meow");
+                    //response.RequestMessage.set("distance");
+                    //return Request.CreateResponse(HttpStatusCode.OK,"File was processed.");
+                    //return response;
 				}
 				else
 				{
 					Response.StatusCode = 400;
-					HttpResponseMessage response = new HttpResponseMessage();
-					return response;
-
+					
+                    HttpResponseMessage response = new HttpResponseMessage();
+					//return response;
+                    return null;
 				}
 				//return "meow";
 			}
@@ -112,7 +121,8 @@ namespace Roost.Controllers
 			{
 				Response.StatusCode = 400;
 				HttpResponseMessage response = new HttpResponseMessage();
-				return response;
+				//return response;
+                return null;
 			}
 		}
 
