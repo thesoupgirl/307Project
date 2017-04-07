@@ -72,6 +72,15 @@ namespace Roost.Controllers
 			//this takes request parameters only from the query string
 			try
 			{
+				//validate user id and passHash
+				/*
+				if(id == null || passHash == null || id.Length <= 0)
+				{
+					Response.StatusCode = 400;
+					HttpResponseMessage response = new HttpResponseMessage();
+					return response;
+				}
+				*/
 				//Console.WriteLine("meow " + id);
 				//Console.WriteLine("meow" + qsList.size());
 				//System.Diagnostics.Debug.WriteLine("arf");
@@ -136,6 +145,13 @@ namespace Roost.Controllers
 			{
 				string username = Request.Form["username"];
 				string password = Request.Form["password"];
+				//validate if username and password are of a minimum length, if not return 400
+				if(username == null || password == null || username.Length <= 0)
+				{
+					Response.StatusCode = 400;
+					HttpResponseMessage respond = new HttpResponseMessage();
+					return respond;
+				}
 				Console.WriteLine(username);
 				Console.WriteLine(password);
 				PutItemResponse stuff = await db.client.PutItemAsync(
@@ -172,6 +188,13 @@ namespace Roost.Controllers
 			string password = Request.Form["password"];
 			string pushNote = Request.Form["notifications"];
 			string distance = Request.Form["distance"];
+			//validate that all values are usable
+			if(username == null || password == null || pushNote == null || distance == null || username.Length <= 0)
+			{
+				Response.StatusCode = 400;
+				HttpResponseMessage response = new HttpResponseMessage();
+				return response;
+			}
 			Console.WriteLine("\nNotifications: ");
 			Console.WriteLine(pushNote);
 			int pushNot = Convert.ToInt32(pushNote);
