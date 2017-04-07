@@ -107,7 +107,7 @@ namespace Roost.Controllers
                         List<string> members = d["members"].AsListOfString();
 
                         if (members.Contains(id))
-                            data = data + d.ToJson() + " , ";
+                            data = data + d.ToJson().ToString() + " , ";
                     }
                 } while (!search.IsDone);
 
