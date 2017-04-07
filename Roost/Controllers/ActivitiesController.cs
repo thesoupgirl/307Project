@@ -392,31 +392,42 @@ namespace Roost.Controllers
                 {
                     GetItemResponse stuff = await db.client.GetItemAsync(
                         tableName: "RoostActivities",
-                        key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                        key: new Dictionary<string, AttributeValue>
                         {
                             {"ActivityId", new AttributeValue {S = id} }
                         }
                     );
 
+                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
+                    int capacity = Convert.ToInt32(stuff.Item["maxGroupSize"].N);
+
                     Console.WriteLine(stuff.Item["members"].SS);
-                    Console.WriteLine(stuff.Item["numMembers"].N);
+                    Console.WriteLine(numberOfPeeps);
                     List<string> membersList = stuff.Item["members"].SS;
+
                     if (membersList.Contains(username))
                     {
                         Console.WriteLine("User already added to activity");
                         Response.StatusCode = 400;
                         HttpResponseMessage responsey = new HttpResponseMessage();
                         return responsey;
+                    } else if (numberOfPeeps == capacity)
+                    {
+                        Console.WriteLine("The activity is full");
+                        Response.StatusCode = 400;
+                        HttpResponseMessage responsey = new HttpResponseMessage();
+                        return responsey;
                     }
+
                     membersList.Add(username);
                     Console.WriteLine(stuff.Item["numMembers"].N);
-                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
+
                     numberOfPeeps++;
                     string peopleNum = numberOfPeeps.ToString();
 
                     await db.client.UpdateItemAsync(
                     tableName: "RoostActivities",
-                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    key: new Dictionary<string, AttributeValue>
                     {
                         {"ActivityId", new AttributeValue {S = id} }
                     },
