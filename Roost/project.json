@@ -16,13 +16,14 @@
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.1",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
     "AWSSDK.DynamoDBv2": "3.3.3",
     "AWSSDK.Extensions.NETCore.Setup": "3.3.0.3",
-    "AWSSDK.Core": "3.3.8"
+    "AWSSDK.Core": "3.3.8",
+    "Microsoft.AspNetCore.TestHost": "1.1.1"
   },
 
   "tools": {
