@@ -51,13 +51,16 @@ export default class SwipeActivities extends Component {
   constructor(user) {
         super()
         this.state = {
-            
+            activityID: ''
         }
        this.right = this.right.bind(this)
        this.left = this.left.bind(this)
-       this.swipe = this.swipe.bind(this)
+       this.setI = this.setI.bind(this)
     }
-    swipe () {
+
+    setI (item) {
+        //i = item.data
+        console.warn(item)
 
     }
 
@@ -81,13 +84,14 @@ export default class SwipeActivities extends Component {
         */
     }
 
-    right () {
-        console.warn('right')
+    right (id) {
+        console.warn(this.state.activityID)
         //add user to group with ajax call
          //call to authenticate
     
         //console.warn(md5(this.state.password));
-        var id = this.props.user.username
+        var username = this.props.user.username
+        var password = this.props.user.password
         //console.warn(id)
         let ws = `${path}/api/activities/join/${id}`
         let xhr = new XMLHttpRequest();
@@ -102,11 +106,11 @@ export default class SwipeActivities extends Component {
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`username=${username}&password=${password}`)
         this.renderBody       
     }
     left () {
-        console.warn('left')
+        //console.warn('left')
         //get next card
     }
   render() {
@@ -125,15 +129,16 @@ export default class SwipeActivities extends Component {
                 onSwipeRight={() => this.right()}
                 onSwipeLeft={() => this.left()}
                 dataSource={cards}
-                renderItem={item =>
-                <Card style={{ elevation: 3 }}>
+                renderItem={item =>  
+                <Card style={{ elevation: 1 }}>
                     <CardItem>
                         {
                         //<Left>
                         //<Thumbnail source={item.image} />
                         //</Left>
                         }
-                        
+                        {(item) => this.setState({activityID: item.num}) }
+                    
                         <Body>
                             <Text>{item.name}</Text>
                             <Text note>{item.description}</Text>
@@ -148,11 +153,10 @@ export default class SwipeActivities extends Component {
                         <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
                         </Left>
                         }
-                        
                         <Text>{item.name}</Text>
                         {
                         <Right>
-                        <Button success onPress={() => this.right()}><Text> Join </Text></Button>
+                        <Button success onPress={() => this.right(item.name)}><Text> Join </Text></Button>
                         </Right>
                         }
                     </CardItem>
