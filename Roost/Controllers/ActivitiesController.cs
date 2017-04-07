@@ -233,10 +233,12 @@ namespace Roost.Controllers
 
                 // Get an item from the table.
                 var item = await activitiesTable.GetItemAsync(id);
-
+                Console.WriteLine("yay");
+                Console.WriteLine(user);
                 if (item["status"] == "closed" && item["groupLeader"] == user)
                 {
                     // Set status to open and update.
+                    Console.WriteLine("in if");
                     item["status"] = "open";
                     await activitiesTable.UpdateItemAsync(item);
                     Console.WriteLine("Bitches");
@@ -254,6 +256,7 @@ namespace Roost.Controllers
             }
             catch (Exception)
             {
+                Console.WriteLine("in ex");
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
