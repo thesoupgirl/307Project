@@ -73,12 +73,14 @@ namespace Roost.Controllers
 			try
 			{
 				//validate user id and passHash
+				/*
 				if(id == null || passHash == null || id.Length <= 0)
 				{
 					Response.StatusCode = 400;
 					HttpResponseMessage response = new HttpResponseMessage();
 					return response;
 				}
+				*/
 				//Console.WriteLine("meow " + id);
 				//Console.WriteLine("meow" + qsList.size());
 				//System.Diagnostics.Debug.WriteLine("arf");
@@ -189,8 +191,9 @@ namespace Roost.Controllers
 			//validate that all values are usable
 			if(username == null || password == null || pushNote == null || distance == null || username.Length <= 0)
 			{
-				Console.WriteLine("\nInvalid input\n");
-				return;
+				Response.StatusCode = 400;
+				HttpResponseMessage response = new HttpResponseMessage();
+				return response;
 			}
 			Console.WriteLine("\nNotifications: ");
 			Console.WriteLine(pushNote);
