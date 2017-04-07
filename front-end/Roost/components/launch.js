@@ -21,7 +21,7 @@ export default class Launch extends Component {
   constructor(props) {
         super(props)
         this.state = {
-            isLoggedIn: false,
+            isLoggedIn: true,
             username: '',
             password: '',
             push: false,
