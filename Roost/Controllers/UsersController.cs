@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using System.Net.Http;
 using System.Net;
 using Amazon.DynamoDBv2.Model;
+using System.Net.Http;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2;
@@ -15,8 +14,6 @@ using Roost.Interfaces;
 using Roost.Models;
 using System.IO;
 using System.Text;
-using System.Net.Http;
-using System.Collections.Generic;
 
 namespace Roost.Controllers
 {
@@ -64,9 +61,10 @@ namespace Roost.Controllers
 				return "Error: Incorrect username or password";
 			}
 
-			return "rawr";
-		}
-        // GET: /api/users/login/{id}/{passHash}
+            // return "rawr";
+        }
+
+		// GET: /api/users/login/{id}/{passHash}
         // Sign-in the user
         [HttpGet("login/{id}/{passHash}")]
 		public async Task<ContentResult> Login(String id, String passHash)
@@ -86,7 +84,7 @@ namespace Roost.Controllers
 					key: new Dictionary<string, AttributeValue>
 					{
 						{"userId", new AttributeValue {S = id} },
-						{"displayName", new AttributeValue {S = id} },
+						{"displayName", new AttributeValue {S = id} }
 					}
 				);
 				if (stuff.Item["password"].S == passHash)
@@ -164,7 +162,7 @@ namespace Roost.Controllers
 				return response;
 			}
 		}
-
+    
 		// POST: /api/users/update/{id}
 		// Update user info
 		[HttpPost("update/{id}")]
@@ -211,6 +209,7 @@ namespace Roost.Controllers
 				Response.StatusCode = 200;
                 HttpResponseMessage responsey = new HttpResponseMessage();
                 return responsey;
+
 				// await db.client.PutItemAsync(
 				//    tableName: "User",
 				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
@@ -219,6 +218,7 @@ namespace Roost.Controllers
 				//    {"username", new AttributeValue {S = username}},
 				//   {"password", new AttributeValue {S = password}}
 				//  });
+
 			}
 			catch (Exception)
 			{
@@ -229,6 +229,5 @@ namespace Roost.Controllers
 				Console.WriteLine("\nexception...");
 			}
 		}
-
 	}
 }

@@ -22,15 +22,7 @@ namespace Roost
         public DBHelper()
         {
             var config = new ConfigurationBuilder()
-           // .AddUserSecrets()
             .Build();
-
-            // You may have to add these values to your secrets.json file first.
-            // secrets.json is located in C:\User\AppData\Roaming\, not the project folder
-            var accessKey = config["AWSAccessKey"];
-            var secretKey = config["AWSSecretKey"];
-
-            var credentials = new BasicAWSCredentials(accessKey, secretKey);
 
             var dbConfig = new AmazonDynamoDBConfig
             {
