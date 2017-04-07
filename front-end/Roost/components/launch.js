@@ -24,6 +24,8 @@ export default class Launch extends Component {
             isLoggedIn: false,
             username: '',
             password: '',
+            push: false,
+            dist: 5
         }
         this.display = this.display.bind(this);
         this.handler = this.handler.bind(this);
@@ -33,6 +35,8 @@ export default class Launch extends Component {
     handler(user, status) {
       this.setState({username: user.username});
       this.setState({password: user.password});
+      this.setState({dist: user.dist});
+      this.setState({push: user.push});
       this.setState({isLoggedIn: status});
       this.display()
       //console.warn(this.state.username)

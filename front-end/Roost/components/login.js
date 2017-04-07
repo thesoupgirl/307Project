@@ -53,9 +53,9 @@ export default class Login extends Component {
         isLoggedIn: false,
         page: 'login'
         }
-     this.loginPressed = this.loginPressed.bind(this)
-     this.createAccountPressed = this.createAccountPressed.bind(this)
-    this.renderPage = this.renderPage.bind(this)
+      this.loginPressed = this.loginPressed.bind(this)
+      this.createAccountPressed = this.createAccountPressed.bind(this)
+      this.renderPage = this.renderPage.bind(this)
     }
 
     loginPressed() {        
@@ -69,9 +69,14 @@ export default class Login extends Component {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
+             
             if (xhr.status===200) {
-                this.props.handler(this.state, true)
                 //console.warn(this.state.username)
+                var userInfo = JSON.parse(xhr.responseText)
+                this.setState({dist: userInfo.data[0].distance})
+                this.setState({push: userInfo.data[0].notificatons})
+                this.props.handler(this.state, true)
+                //console.warn(userInfo.data[0].distance)
                
             } else {
                  Alert.alert(
@@ -94,20 +99,19 @@ export default class Login extends Component {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
+               
             if (xhr.status===200) {
                   Alert.alert(
                   'User exists'     
           )
                
             } else {
-
-              var username = this.state.username
-              var password = md5(this.state.password)
               let ws = `${path}/api/users/login`
               let xhr = new XMLHttpRequest();
               xhr.open('POST', ws, true);
               xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
               xhr.onload = () => {
+                console.warn(xhr.status)
               if (xhr.status===200) {
                   this.props.handler(this.state, true)
               } else {

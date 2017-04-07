@@ -114,9 +114,7 @@ export default class Nav extends Component {
        render() {
         return (
             <Container>
-                <Content>
                     {this.selectedPage()}
-                </Content>
                 {this.renderNav()}
             </Container>
         );
