@@ -110,7 +110,7 @@ namespace Roost.Controllers
 				else
 				{
 					Response.StatusCode = 400;
-					
+					Console.WriteLine("in else");
                     HttpResponseMessage response = new HttpResponseMessage();
 					//return response;
                     return null;
@@ -122,6 +122,7 @@ namespace Roost.Controllers
 				Response.StatusCode = 400;
 				HttpResponseMessage response = new HttpResponseMessage();
 				//return response;
+                Console.WriteLine("caught booty");
                 return null;
 			}
 		}
