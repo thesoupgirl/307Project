@@ -30,13 +30,22 @@ public class Testo
     {
         // Act
         var response = await _client.GetAsync("/");
-        response.EnsureSuccessStatusCode();
+        //response.StatusCode = 400;
 
         var responseString = await response.Content.ReadAsStringAsync();
 
         // Assert
-        Assert.Equal(null,
+        Assert.Equal("",
             responseString);
+    }
+
+    [Fact]
+    public async void IncorrectPassword() 
+    {
+	var response = await _client.GetAsync("/users/login/phone/killme");
+        Assert.False(response.IsSuccessStatusCode);
+
+
     }
 }
 }
