@@ -101,7 +101,7 @@ namespace Roost.Controllers
 					Console.WriteLine(stuff.Item["distance"].S);
                     Console.WriteLine(stuff.Item["notificatons"].N);
                     //return Content("meowo");
-                    return Content("{ data : [ { distance : " + stuff.Item["distance"].S + ", notificatons : " + stuff.Item["notificatons"].N + " } ] }");
+                    return Content("{ \"data\" : [ { \"distance\" : " + stuff.Item["distance"].S + ", \"notificatons\" : " + stuff.Item["notificatons"].N + " } ] }");
                     //eturn Content("meow");
                     //response.RequestMessage.set("distance");
                     //return Request.CreateResponse(HttpStatusCode.OK,"File was processed.");
