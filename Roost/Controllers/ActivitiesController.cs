@@ -238,7 +238,7 @@ namespace Roost.Controllers
                     // Set status to open and update.
                     item["status"] = "open";
                     await activitiesTable.UpdateItemAsync(item);
-
+                    Console.WriteLine("Bitches");
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
