@@ -55,7 +55,7 @@ export default class Profile extends Component {
         notifications = 1;
       else notifications = 0;
       var distance = this.state.dist
-      let ws = `${path}/api/users/update/${this.state.id}`
+      let ws = `${path}/api/users/update/${this.state.username}`
       let xhr = new XMLHttpRequest();
       xhr.open('POST', ws, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');

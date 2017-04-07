@@ -9,9 +9,11 @@ import {
   Navigator,
   Image,
   TouchableHighlight,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat'
+import path from '../properties.js'
 
 /*  
     
@@ -27,7 +29,7 @@ var threads = [{title: 'baseball', description: 'come play!'},
 
 
 export default class Chat extends Component {
-  constructor(threadsHandler, id, hideNav, showNav) {
+  constructor(threadsHandler, id, hideNav, showNav, userID) {
         super()
         this.state = {
             page: 'chat',
@@ -38,7 +40,89 @@ export default class Chat extends Component {
         }
      this.onSend = this.onSend.bind(this)
      this.renderPage = this.renderPage.bind(this) 
+     this.leave = this.leave.bind(this)
+     this.close = this.close.bind(this)
+     this.open = this.open.bind(this)
+     this.delete = this.delete.bind(this)
     
+    }
+    close () {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/close`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity closed')
+            
+        } else {
+                Alert.alert(
+                'Error closing activity You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
+    }
+    open() {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/open`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity opened')
+            
+        } else {
+                Alert.alert(
+                'Error re-opening activity. You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
+    }
+    delete () {
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/activities/${id}/deleteactivity`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity deleted')
+            
+        } else {
+                Alert.alert(
+                'Error deleting activity. You may not have this privilege',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
+    }
+    leave () {
+      //call
+        //console.warn(md5(this.state.password));
+        var id = this.props.userID
+        //console.warn(id)
+        let ws = `${path}/api/chat/${id}/leave`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity left')
+            
+        } else {
+                Alert.alert(
+                'Error leaving activity',      
+        )
+
+        }
+        }; xhr.send()
+        this.renderBody
     }
     onSend(messages = []) {
         this.setState((previousState) => {
@@ -101,7 +185,7 @@ export default class Chat extends Component {
         <Content>
         <Text/>
         <View style={{padding: 20}}>
-          <Button block>
+          <Button onPress={() => this.leave()} block>
             <Text>Leave Activity</Text>
           </Button >
           <Text/>

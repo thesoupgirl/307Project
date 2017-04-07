@@ -83,7 +83,6 @@ namespace Roost.Controllers
 						{"displayName", new AttributeValue {S = id} }
 					}
 				);
-
 				if (stuff.Item["password"].S == passHash)
 				{
 					Response.StatusCode = 200;
@@ -108,14 +107,13 @@ namespace Roost.Controllers
 			}
 		}
 
-        // POST: /api/users/login
-        // Creates a new user
-        [HttpPost("login")]
+		// POST: /api/users/login
+		// Creates a new user
+		[HttpPost("login")]
 		public async Task<HttpResponseMessage> Login()
 		{
 			//this takes request parameters only from the query string
 			//Workaround - copy original Stream
-
 			try
 			{
 				string username = Request.Form["username"];
@@ -129,8 +127,8 @@ namespace Roost.Controllers
 						{"userId", new AttributeValue {S = username} },
 						{"displayName", new AttributeValue {S = username} },
 						{"password", new AttributeValue {S = password} },
-                        {"distance", new AttributeValue {S = "5"} }
-                    }
+						{"distance", new AttributeValue {S = "5"} }
+					}
 				);
 
 				Response.StatusCode = 200;
@@ -144,7 +142,7 @@ namespace Roost.Controllers
 				return response;
 			}
 		}
-
+    
 		// POST: /api/users/update/{id}
 		// Update user info
 		[HttpPost("update/{id}")]
@@ -164,6 +162,7 @@ namespace Roost.Controllers
 
 			try
 			{
+				//DynamoDBContext context = new DynamoDBContext(db.client);
 				Console.WriteLine("trying...");
 				var table = Table.LoadTable(db.client, "User");
 				Console.WriteLine("found the table...");
@@ -183,13 +182,21 @@ namespace Roost.Controllers
 				await table.UpdateItemAsync(item);
 				Console.WriteLine("\nupdated it?  hopefully...");
 				return;
+
+				// await db.client.PutItemAsync(
+				//    tableName: "User",
+				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+				//  {
+				//     {"userId", new AttributeValue {S = id} },
+				//    {"username", new AttributeValue {S = username}},
+				//   {"password", new AttributeValue {S = password}}
+				//  });
+
 			}
 			catch (Exception)
 			{
 				Console.WriteLine("\nexception...");
 			}
 		}
-
 	}
-
 }
