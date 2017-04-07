@@ -51,20 +51,12 @@ namespace Roost.Controllers
 
                     foreach (Document d in docList)
                     {
-                        // Get the list and number of members and max size.
-                        /*List<string> members = d["members"].AsListOfString();
-                        int numMembers = d["numMembers"].AsInt();
-                        int max = d["maxGroupSize"].AsInt();*/
+                        // Only return activities the user is not in.
+                        List<string> members = d["members"].AsListOfString();
 
-                        // Remove the activity if it's full and has the user in it.
-                        //if ((numMembers < max) && !members.Contains(id))
-                        //{   // append all items in ToJsonPretty form as one string and return the result
-                        data = data + d.ToJson().ToString() + " , ";
-                        //Console.WriteLine("first time: " + fuckThis);
-                        //fuckThis.Replace("\\", "");
-                        //Console.WriteLine("Second time: " + fuckThis);
-                        //results.Add(fuckThis);
-                        //}
+                        if (!members.Contains(id))
+                            data = data + d.ToJson().ToString() + " , ";
+
                     }
                 } while (!search.IsDone);
 
