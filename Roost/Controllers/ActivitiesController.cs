@@ -40,10 +40,10 @@ namespace Roost.Controllers
                 // Start the search
                 Search search = activitiesTable.Scan(scanFilter);
 
+                string data = "{ \"data\": [ ";
+
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
-
-                string data = "{ \"data\": [ ";
 
                 do
                 {
@@ -85,10 +85,10 @@ namespace Roost.Controllers
                 // Start the search
                 Search search = activitiesTable.Scan(scanFilter);
 
+                string data = "{ \"data\": [ ";
+
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
-
-                string data = "{ \"data\": [ ";
 
                 do
                 {
