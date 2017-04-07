@@ -73,7 +73,7 @@ export default class Login extends Component {
             if (xhr.status===200) {
                 this.props.handler(this.state, true)
                 //console.warn(this.state.username)
-                var json = JSON.parse(xhr.responseText);
+                var userInfo = JSON.parse(xhr.responseText);
                 //console.warn(json.infooooo)
                
             } else {
