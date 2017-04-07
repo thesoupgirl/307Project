@@ -67,7 +67,7 @@ namespace Roost.Controllers
                         //{   // append all items in ToJsonPretty form as one string and return the result
 
                         //line.Replace(@"\", "");
-                        Console.WriteLine(d.ToJson().ToString());
+                        Console.WriteLine("{ \"data\": [ " + d.ToJson().ToString() + " ] }");
                         results.Add("{ \"data\": [ " + d.ToJson().ToString() + " ] }");
                         //}
                     }
