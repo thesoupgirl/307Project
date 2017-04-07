@@ -21,7 +21,7 @@ export default class Launch extends Component {
   constructor(props) {
         super(props)
         this.state = {
-            isLoggedIn: true,
+            isLoggedIn: false,
             username: '',
             password: '',
             push: false,
@@ -35,8 +35,8 @@ export default class Launch extends Component {
     handler(user, status) {
       this.setState({username: user.username});
       this.setState({password: user.password});
-      //this.setState({password: user.push});
-      //this.setState({password: user.not});
+      this.setState({dist: user.dist});
+      this.setState({push: user.push});
       this.setState({isLoggedIn: status});
       this.display()
       //console.warn(this.state.username)

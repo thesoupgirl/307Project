@@ -180,6 +180,7 @@ namespace Roost.Controllers
 			Console.WriteLine("\nrawr\n");
 			Console.WriteLine(username);
 			Console.WriteLine(password);
+			Console.WriteLine("fuck"+ distance);
 			Console.WriteLine("\nawks\n");
 
 			try

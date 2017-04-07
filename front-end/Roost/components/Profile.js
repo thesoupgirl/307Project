@@ -46,8 +46,8 @@ export default class Profile extends Component {
        this.userUpdate = this.userUpdate.bind(this)
   }
   userUpdate () {
-      console.warn(this.state.username)
-      console.warn(this.state.password)
+      //console.warn(this.state.username)
+      //console.warn(this.state.password)
       var username = this.state.username
       var password = md5(this.state.password)
       var notifications;
@@ -55,6 +55,7 @@ export default class Profile extends Component {
         notifications = 1;
       else notifications = 0;
       var distance = this.state.dist
+      //console.warn(distance)
       let ws = `${path}/api/users/update/${this.state.username}`
       let xhr = new XMLHttpRequest();
       xhr.open('POST', ws, true);
@@ -72,7 +73,7 @@ export default class Profile extends Component {
                 'Updating information failed',      
         )
       }
-    }; xhr.send(`username=${username}&password=${password}&notifications=${notifications}&distance${distance}`)
+    }; xhr.send(`username=${username}&password=${password}&notifications=${notifications}&distance=${distance}`)
     }
 
   componentWillMount() {
@@ -81,10 +82,11 @@ export default class Profile extends Component {
     this.setState({push: !this.state.push})
     this.setState({username: this.props.user.username, 
                    password: this.props.user.password,
-                   push: this.props.user.push})
+                   push: this.props.user.push,
+                   dist: this.props.user.dist.toString()})
   }
   componentDidMount() {
-
+    //console.warn('dist ' + this.props.user.dist)
   }
   info () {
     if (this.state.updateSetttings)
@@ -151,9 +153,9 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Content>
         {this.disp()}
-      </View>
+      </Content>
     );
   }
 }
