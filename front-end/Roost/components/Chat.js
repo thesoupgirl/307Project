@@ -48,8 +48,9 @@ export default class Chat extends Component {
     }
     close () {
         var id = this.props.userID
-        //console.warn(id)
-        let ws = `${path}/api/activities/${id}/close`
+        var gid = this.props.groupID
+        console.warn(gid)
+        let ws = `${path}/api/activities/${gid}/close`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
@@ -58,17 +59,18 @@ export default class Chat extends Component {
             
         } else {
                 Alert.alert(
-                'Error closing activity You may not have this privilege',      
+                'Error closing activity. You may not have this privilege',      
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`userId=${id}`)
         this.renderBody
     }
     open() {
         var id = this.props.userID
-        //console.warn(id)
-        let ws = `${path}/api/activities/${id}/open`
+        var gid = this.props.groupID
+        console.warn(gid)
+        let ws = `${path}/api/activities/${gid}/open`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
@@ -77,17 +79,18 @@ export default class Chat extends Component {
             
         } else {
                 Alert.alert(
-                'Error re-opening activity. You may not have this privilege',      
+                'Error opening activity. You may not have this privilege',      
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`userId=${id}`)
         this.renderBody
     }
     delete () {
         var id = this.props.userID
-        //console.warn(id)
-        let ws = `${path}/api/activities/${id}/deleteactivity`
+        var gid = this.props.groupID
+        console.warn(gid)
+        let ws = `${path}/api/activities/${gid}/deleteactivity`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
@@ -100,28 +103,28 @@ export default class Chat extends Component {
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`userId=${id}`)
         this.renderBody
     }
     leave () {
-      //call
-        //console.warn(md5(this.state.password));
         var id = this.props.userID
-        //console.warn(id)
-        let ws = `${path}/api/chat/${id}/leave`
+        var gid = this.props.groupID
+        console.warn(gid)
+        let ws = `${path}/api/chat/${gid}/leave`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
             console.warn('activity left')
+            this.setState({page: 'chat'})
             
         } else {
                 Alert.alert(
-                'Error leaving activity',      
+                'Error leaving activity.',      
         )
 
         }
-        }; xhr.send()
+        }; xhr.send(`userId=${id}`)
         this.renderBody
     }
     onSend(messages = []) {
@@ -144,7 +147,7 @@ export default class Chat extends Component {
                 </Button>
             </Left>
             <Body>
-                <Title>Chat_ID</Title>
+                <Title>{this.props.chatName}</Title>
             </Body>
             <Right>
                 <Button transparent onPress={() => this.setState({page: 'menu'})}>
@@ -189,15 +192,15 @@ export default class Chat extends Component {
             <Text>Leave Activity</Text>
           </Button >
           <Text/>
-          <Button block>
+          <Button onPress={() => this.close()} block>
             <Text>Close Activity</Text>
           </Button>
           <Text/>
-          <Button block>
+          <Button onPress={() => this.open()} block>
             <Text>Re-open Activity</Text>
           </Button>
           <Text/>
-          <Button danger block>
+          <Button danger onPress={() => this.delete()} block>
             <Text>Delete Activity</Text>
           </Button>
           </View>

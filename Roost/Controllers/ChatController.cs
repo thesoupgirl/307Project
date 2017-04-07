@@ -50,6 +50,13 @@ namespace RoostApp.Controllers
                 // Get the activity from its table along with the chat id
                 var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
 
+                if (id == activity.Item["groupLeader"].S)
+                {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage respons = new HttpResponseMessage();
+                    return respons;
+                }
+
                 // Remove the user's id from the list
                 List<string> updatedUserList = activity.Item["members"].SS;
 
