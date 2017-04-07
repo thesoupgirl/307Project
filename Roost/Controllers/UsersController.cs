@@ -223,6 +223,7 @@ namespace Roost.Controllers
 			{
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
+                Console.WriteLine("\nexception...");
                 return response;
 				Console.WriteLine("\nexception...");
 			}
