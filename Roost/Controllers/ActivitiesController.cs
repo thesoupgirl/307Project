@@ -163,9 +163,9 @@ namespace Roost.Controllers
                 // Don't let them create the activity just for themselves.
                 if (Request.Form["maxSize"] == 1)
                 {
-                    //Response.StatusCode = 400;
-                    //HttpResponseMessage response = new HttpResponseMessage();
-                    //return response;
+                    Response.StatusCode = 400;
+                    HttpResponseMessage respons = new HttpResponseMessage();
+                    return respons;
                 }
 
                 // Add the activity to the database table
