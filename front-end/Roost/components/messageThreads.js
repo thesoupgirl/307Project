@@ -30,6 +30,7 @@ export default class MessageThreads extends Component {
   constructor(hideNav, showNav, user) {
         super()
         this.state = {
+            group: '',
             threads: true,
             id: 0,
             data: [],
@@ -97,7 +98,8 @@ export default class MessageThreads extends Component {
                         </Body>
                         
                         <Right>
-                            <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false})}}>
+                            <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false}),
+                              this.setState({id: data.chatId}), this.setState({group: data.name})}}>
                                 <Text>chat</Text>
                             </Button>
                         </Right>
@@ -112,6 +114,7 @@ export default class MessageThreads extends Component {
         return (
           <Chat threadsHandler={this.threadsHandler}
                 chatID={this.state.id}
+                chatName = {this.state.group}
                 hideNav={this.props.hideNav}
                 showNav={this.props.showNav}
                 userID={this.props.user.username}/>

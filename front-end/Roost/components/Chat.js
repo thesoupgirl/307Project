@@ -144,7 +144,7 @@ export default class Chat extends Component {
                 </Button>
             </Left>
             <Body>
-                <Title>Chat_ID</Title>
+                <Title>{this.props.chatName}</Title>
             </Body>
             <Right>
                 <Button transparent onPress={() => this.setState({page: 'menu'})}>

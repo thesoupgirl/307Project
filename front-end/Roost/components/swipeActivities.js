@@ -67,7 +67,7 @@ export default class SwipeActivities extends Component {
        this.mountedData = this.mountedData.bind(this)
     }
     mountedData() {
-        if (this.state.mounted && this.state.data[0].name !='')
+        if (this.state.mounted && this.state.data != [])
         return (
         <Container>
           <Header>
@@ -138,8 +138,8 @@ export default class SwipeActivities extends Component {
     componentWillMount() {
       //set activities array
         var dist = this.props.user.dist
-        var id = this.props.user.id
-        let ws = `${path}/api/activities/${id}/${dist}/search`
+        var id = this.props.user.username
+        let ws = `${path}/api/activities/0/${dist}/search`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
         xhr.onload = () => {
@@ -159,6 +159,7 @@ export default class SwipeActivities extends Component {
     componentDidMount() {
         //console.warn(routeD)
         this.setState({mounted: true})
+        this.state.data
         this.state.data.sort(function(obj1, obj2) {
 	// Ascending: first age less than the previous
 	return obj2.num - obj1.num;

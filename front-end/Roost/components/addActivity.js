@@ -19,6 +19,7 @@ import TextField from 'react-native-md-textinput';
 var ImagePicker = require('react-native-image-picker');
 
 var pic = require('./img/water.png')
+import path from '../properties.js'
 
 
 /*  
@@ -56,7 +57,16 @@ export default class AddActivity extends Component {
             )
           }
        else {
-          let ws = `${path}/api/` //TODO: finish route
+         var id = this.props.user.username
+          var groupSize = this.state.groupSize
+          var activity = this.state.activity
+          var description = this.state.description
+          var latitude = this.state.latitude
+          var longitude = this.state.longitude
+          var category = this.state.category
+          var status = 'open'
+
+          let ws = `${path}/api/activities/${id}/createactivity` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
@@ -67,7 +77,8 @@ export default class AddActivity extends Component {
               'Failed to create activity',      
               )
           }
-          }; xhr.send()
+        }; xhr.send(`maxSize=${groupSize}&name=${activity}&description=${description}&
+                    latitude=${latitude}&longitude=${longitude}&status=${status}&category=${category}`)
           this.renderBody 
        }
         }
