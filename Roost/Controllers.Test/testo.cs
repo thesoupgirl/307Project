@@ -66,5 +66,12 @@ public class Testo
 	var response = await _client.GetAsync("/activities/55/getactivities");
         Assert.False(response.IsSuccessStatusCode);
     }
+    [Fact]
+    public async void BadCloseAct()
+    {
+	HttpContent contenty = new StringContent("meow");
+	var response = await _client.PostAsync("/activities/69/close", contenty);
+        Assert.False(response.IsSuccessStatusCode);
+    }
 }
 }
