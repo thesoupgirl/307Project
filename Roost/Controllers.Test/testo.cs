@@ -47,5 +47,24 @@ public class Testo
 
 
     }
+    [Fact]
+    public async void BadNewUser() 
+    {
+	var response = await _client.GetAsync("/users/login");
+        Assert.False(response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void BadNewAct() 
+    {
+	var response = await _client.GetAsync("/activities/55/50/search");
+        Assert.False(response.IsSuccessStatusCode);
+
+    }
+    [Fact]
+    public async void BadUserActs() 
+    {
+	var response = await _client.GetAsync("/activities/55/getactivities");
+        Assert.False(response.IsSuccessStatusCode);
+    }
 }
 }
