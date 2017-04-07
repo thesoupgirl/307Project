@@ -44,7 +44,7 @@ namespace Roost.Controllers
                 List<Document> docList = new List<Document>();
 
                 string data = "{ \"data\": [ ";
-                
+
                 do
                 {
                     docList = await search.GetNextSetAsync();
@@ -398,6 +398,7 @@ namespace Roost.Controllers
                         }
                     );
 
+                    // The number of people currently in the group and the size limit
                     int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
                     int capacity = Convert.ToInt32(stuff.Item["maxGroupSize"].N);
 
@@ -405,13 +406,15 @@ namespace Roost.Controllers
                     Console.WriteLine(numberOfPeeps);
                     List<string> membersList = stuff.Item["members"].SS;
 
+                    // don't join if the user is already joined or if it's full.
                     if (membersList.Contains(username))
                     {
                         Console.WriteLine("User already added to activity");
                         Response.StatusCode = 400;
                         HttpResponseMessage responsey = new HttpResponseMessage();
                         return responsey;
-                    } else if (numberOfPeeps == capacity)
+                    }
+                    else if (numberOfPeeps == capacity)
                     {
                         Console.WriteLine("The activity is full");
                         Response.StatusCode = 400;
@@ -419,6 +422,7 @@ namespace Roost.Controllers
                         return responsey;
                     }
 
+                    // Add the user to the list and update the entry in the table.
                     membersList.Add(username);
                     Console.WriteLine(stuff.Item["numMembers"].N);
 
