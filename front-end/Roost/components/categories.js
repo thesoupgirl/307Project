@@ -18,7 +18,6 @@ import path from '../properties.js'
 /*  
     
 */
-
 var a = [{category: 'Sports', title: 'baseball', description: 'come play!'},
             {category: 'Sports', title: 'soccer', description: 'come play!'},
             {category: 'Sports', title: 'tennis', description: 'come play!'},
@@ -33,32 +32,39 @@ export default class Categories extends Component {
         super(props)
         this.state = {
           page: 'search',
-          active: true
+          active: true,
+          data: []
         }
        this.click = this.click.bind(this)
        this.renderCategory = this.renderCategory.bind(this)
        this.renderData = this.renderData.bind(this)
        this.join = this.join.bind(this)
+       this.data = this.data.bind(this)
+     }
+    data (d) {
+        this.setState({data: d.data})
+        console.warn(d.data[0].name)
+        console.warn(a[0].title)
     }
-
     componentWillMount() {
       //set activities array
-      /*
-        let ws = `ROUTE`
+        var dist = this.props.user.dist
+        var id = this.props.user.id
+        let ws = `${path}/api/activities/${id}/${dist}/search`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
+            //console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
-            json = json.data
-            this.searchResults(json)
-            console.warn('successful')
+            //onsole.warn(json.data[1].name)
+            this.data(json)
+            //console.warn('successful getting activites')
         } else {
             console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
-        */
     }
     
     click (page) {
@@ -93,7 +99,9 @@ export default class Categories extends Component {
     }
 
     renderData () {
-      var filteredData = a.filter((item) => item.category === this.state.page);  
+      //console.warn('hi'+this.state.data)
+      //console.warn(a[0].title)
+      var filteredData = this.state.data.filter((item) => item.category === this.state.page);  
       return (
             <List dataArray={filteredData} renderRow={(data) =>
                 <ListItem thumbnail>
@@ -133,16 +141,16 @@ export default class Categories extends Component {
             </Body>
             <Right/>
         </Header>
-          <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
+          <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'Food' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'food' })}}>
                 <Text>Food</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'adventures' })}}>
                 <Text>Adventures</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'Study Groups' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'study groups' })}}>
                 <Text>Study Groups</Text>
             </ListItem>
             </View>

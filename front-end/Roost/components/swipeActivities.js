@@ -13,10 +13,8 @@ import {
 import path from '../properties.js'
 
 
-/*  
-    
-*/
-const cards = [
+var c
+var cards = [
     {
         num: 2,
         name: 'Baseball',
@@ -36,10 +34,10 @@ const cards = [
         image: require('./img/water.png')
     },
     {
-        num: 20,
-        name: 'Study',
-        description: 'Come join us to study for CS307',
-        image: require('./img/water.png')
+        "num": 20,
+        "name": 'Study',
+        "description": 'Come join us to study for CS307',
+        "image": require('./img/water.png')
     }
 ].sort(function(obj1, obj2) {
 	// Ascending: first age less than the previous
@@ -47,15 +45,86 @@ const cards = [
 
 });
 
+
+
 export default class SwipeActivities extends Component {
   constructor(user) {
         super()
         this.state = {
-            activityID: ''
+            mounted: false,
+            activityID: '',
+            data: [{
+                name: '',
+                description: '',
+                image: ''
+             } ]
         }
        this.right = this.right.bind(this)
        this.left = this.left.bind(this)
        this.setI = this.setI.bind(this)
+       this.data = this.data.bind(this)
+       this.mountedData = this.mountedData.bind(this)
+    }
+    mountedData() {
+        if (this.state.mounted && this.state.data[0].name !='')
+        return (
+        <Container>
+          <Header>
+            <Left>
+            </Left>
+            <Body>
+                <Title>Explore</Title>
+            </Body>
+            <Right/>
+        </Header>
+        <View padder >
+             <DeckSwiper
+                onSwipeRight={() => this.right()}
+                onSwipeLeft={() => this.left()}
+                dataSource={this.state.data}
+                renderItem={item =>  
+                <Card style={{ elevation: 3 }}>
+                    <CardItem>
+                        {
+                        //<Left>
+                        //<Thumbnail source={item.image} />
+                        //</Left>
+                        }
+                        {(item) => this.setState({activityID: item.num})}
+                        <Body>
+                            <Text>{item.name}</Text>
+                            <Text note>{item.description}</Text>
+                        </Body>
+                    </CardItem>
+                    <CardItem cardBody>
+                        {//<Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
+                        }
+                    </CardItem>
+                    <CardItem>
+                        {//
+                        <Left>
+                        <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
+                        </Left>
+                        }
+                        <Text>{item.name}</Text>
+                        {
+                        <Right>
+                        <Button success onPress={() => this.right(item.name)}><Text> Join </Text></Button>
+                        </Right>
+                        }
+                    </CardItem>
+                </Card>
+            }
+            />            
+        </View>
+      </Container>
+        )
+    }
+
+    data (d) {
+        this.setState({data: d.data})
+        console.warn(this.state.data[0].name)
+        console.warn(cards[0].name)
     }
 
     setI (item) {
@@ -73,15 +142,21 @@ export default class SwipeActivities extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn(xhr.responseText)
+            //console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
-            //console.warn(json.data)
-            console.warn('successful getting activites')
+            //onsole.warn(json.data[1].name)
+            this.data(json)
+            //console.warn('successful getting activites')
         } else {
             console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
+    }
+
+    componentDidMount() {
+        //console.warn(routeD)
+        this.setState({mounted: true})
     }
 
     right (id) {
@@ -115,56 +190,9 @@ export default class SwipeActivities extends Component {
     }
   render() {
     return (
-      <Container>
-          <Header>
-            <Left>
-            </Left>
-            <Body>
-                <Title>Explore</Title>
-            </Body>
-            <Right/>
-        </Header>
-        <View padder >
-             <DeckSwiper
-                onSwipeRight={() => this.right()}
-                onSwipeLeft={() => this.left()}
-                dataSource={cards}
-                renderItem={item =>  
-                <Card style={{ elevation: 1 }}>
-                    <CardItem>
-                        {
-                        //<Left>
-                        //<Thumbnail source={item.image} />
-                        //</Left>
-                        }
-                        {(item) => this.setState({activityID: item.num}) }
-                    
-                        <Body>
-                            <Text>{item.name}</Text>
-                            <Text note>{item.description}</Text>
-                        </Body>
-                    </CardItem>
-                    <CardItem cardBody>
-                        <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
-                    </CardItem>
-                    <CardItem>
-                        {//
-                        <Left>
-                        <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
-                        </Left>
-                        }
-                        <Text>{item.name}</Text>
-                        {
-                        <Right>
-                        <Button success onPress={() => this.right(item.name)}><Text> Join </Text></Button>
-                        </Right>
-                        }
-                    </CardItem>
-                </Card>
-            }
-            />            
-        </View>
-      </Container>
+      <Content>
+          {this.mountedData()}
+      </Content>
     );
   }
 }
