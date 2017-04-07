@@ -202,7 +202,7 @@ namespace Roost.Controllers
 				// row exists -> increment counter & update
 				//var counter = item["Counter"].AsInt();
 				item["password"] = password;
-				item["notifications"] = pushNot;
+				item["notificatons"] = pushNot;
 				item["distance"] = distance;
 				await table.UpdateItemAsync(item);
 				Console.WriteLine("\nupdated it?  hopefully...");
