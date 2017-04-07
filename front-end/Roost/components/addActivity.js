@@ -34,7 +34,7 @@ export default class AddActivity extends Component {
             category: 'None',
             activity: '',
             description: '',
-            groupSize: '0',
+            groupSize: '',
             num: 0,
             latitude: null,
             longitude: null,
@@ -172,17 +172,17 @@ export default class AddActivity extends Component {
            <Content>
              <View style={{padding: 20}}>
           <ScrollView>
-        <TextField label={'Activity'} highlightColor={'#00BCD4'} 
+        <TextField value={this.state.activity}label={'Activity'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {
                     this.state.activity = text}} />
       </ScrollView>
       <ScrollView>
-        <TextField label={'Description'} highlightColor={'#00BCD4'}
+        <TextField value={this.state.description} label={'Description'} highlightColor={'#00BCD4'}
                    onChangeText={(text) => {
                    this.state.description = text}} />
       </ScrollView>
       <ScrollView>
-        <TextField label={'Group Size'} highlightColor={'#00BCD4'}
+        <TextField value={this.state.groupSize}label={'Group Size'} highlightColor={'#00BCD4'}
                    keyboardType={'numeric'}
                    onChangeText={(text) => {
                    this.state.groupSize = text}} />

@@ -110,7 +110,7 @@ export default class Categories extends Component {
                           <Thumbnail square size={40} source={require('./img/water.png')} />
                       </Left>
                       <Body>
-                          <Text>{data.title}</Text>
+                          <Text>{data.name}</Text>
                           <Text note>{data.description}</Text>
                       </Body>
                       <Right>
