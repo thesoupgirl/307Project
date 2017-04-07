@@ -110,16 +110,17 @@ export default class Chat extends Component {
         var id = this.props.userID
         var gid = this.props.groupID
         console.warn(gid)
-        let ws = `${path}/api/activities/${gid}/leave`
+        let ws = `${path}/api/chat/${gid}/leave`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
             console.warn('activity left')
+            this.setState({page: 'chat'})
             
         } else {
                 Alert.alert(
-                'Error leaving activity. You may not have this privilege',      
+                'Error leaving activity.',      
         )
 
         }

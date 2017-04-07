@@ -43,19 +43,17 @@ export default class Categories extends Component {
      }
     data (d) {
         this.setState({data: d.data})
-        console.warn(d.data[0].name)
-        console.warn(a[0].title)
     }
     componentWillMount() {
       //set activities array
         var dist = this.props.user.dist
-        var id = this.props.user.id
+        var id = this.props.user.username
         let ws = `${path}/api/activities/${id}/${dist}/search`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            //console.warn(xhr.responseText)
+            console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)

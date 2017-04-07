@@ -51,13 +51,10 @@ export default class SwipeActivities extends Component {
   constructor(user) {
         super()
         this.state = {
+            index: 0,
             mounted: false,
             activityID: '',
             data: [{
-                name: '',
-                description: '',
-                image: '',
-                deckCount: 0
              } ]
         }
        this.right = this.right.bind(this)
@@ -144,7 +141,7 @@ export default class SwipeActivities extends Component {
       //set activities array
         var dist = this.props.user.dist
         var id = this.props.user.username
-        let ws = `${path}/api/activities/0/${dist}/search`
+        let ws = `${path}/api/activities/${id}/${dist}/search`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
         xhr.onload = () => {
@@ -174,6 +171,14 @@ export default class SwipeActivities extends Component {
     }
 
     right (id) {
+        if (this.state.index == this.state.data.length-1) {
+             Alert.alert(
+                'End of new activites',      
+        )
+            return;
+        }
+        else {
+        this.setState({index: this.state.index+1})
         console.warn(id)
         //add user to group with ajax call
          //call to authenticate
@@ -196,7 +201,8 @@ export default class SwipeActivities extends Component {
 
         }
         }; xhr.send(`username=${username}&password=${password}`)
-        this.renderBody       
+        this.renderBody  
+        }     
     }
     left () {
         //console.warn('left')
