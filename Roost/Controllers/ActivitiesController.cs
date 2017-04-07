@@ -65,7 +65,7 @@ namespace Roost.Controllers
                         // Remove the activity if it's full and has the user in it.
                         //if ((numMembers < max) && !members.Contains(id))
                         //{   // append all items in ToJsonPretty form as one string and return the result
-                        fuckThis = fuckThis + d.ToJson().ToString();
+                        fuckThis = fuckThis + d.ToJson().ToString() + " , ";
                         //Console.WriteLine("first time: " + fuckThis);
                         //fuckThis.Replace("\\", "");
                         //Console.WriteLine("Second time: " + fuckThis);
@@ -73,6 +73,7 @@ namespace Roost.Controllers
                         //}
                     }
                 } while (!search.IsDone);
+                        fuckThis = fuckThis.Remove(fuckThis.Length - 3);
                         fuckThis = fuckThis + " ] }";
                         fuckThis = fuckThis.Replace("\\", "");
                         Console.WriteLine("Second time: " + fuckThis);
@@ -232,10 +233,12 @@ namespace Roost.Controllers
 
                 // Get an item from the table.
                 var item = await activitiesTable.GetItemAsync(id);
-
+                Console.WriteLine("yay");
+                Console.WriteLine(user);
                 if (item["status"] == "closed" && item["groupLeader"] == user)
                 {
                     // Set status to open and update.
+                    Console.WriteLine("in if");
                     item["status"] = "open";
                     await activitiesTable.UpdateItemAsync(item);
                     Console.WriteLine("Bitches");
@@ -253,6 +256,7 @@ namespace Roost.Controllers
             }
             catch (Exception)
             {
+                Console.WriteLine("in ex");
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
