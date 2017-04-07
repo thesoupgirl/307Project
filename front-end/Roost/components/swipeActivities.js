@@ -75,6 +75,7 @@ export default class SwipeActivities extends Component {
         if (xhr.status===200) {
             console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
+            console.warn(json.data)
             console.warn('successful getting activites')
         } else {
             console.warn('error getting activites')
