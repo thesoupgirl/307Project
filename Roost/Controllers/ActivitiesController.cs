@@ -68,7 +68,7 @@ namespace Roost.Controllers
 
                         //line.Replace(@"\", "");
                         Console.WriteLine(d.ToJson().ToString());
-                        results.Add(d.ToJson().ToString());
+                        results.Add("{ \"data\": [ " + d.ToJson().ToString() + " ] }");
                         //}
                     }
                 } while (!search.IsDone);
