@@ -33,7 +33,7 @@ namespace Roost.Controllers
         // Gets list of activities within certain radius of user based on popularity
         // TODO: determine the criteria for popularity.
         [HttpGet("{id}/{dist}/search")]
-        public async Task<List<string>> FindActivities(string id, string dist)
+        public async Task<string> FindActivities(string id, string dist)
         {
             try
             {
@@ -49,8 +49,8 @@ namespace Roost.Controllers
 
                 // TODO: if user in in group, remove from list.
                 // TODO: sort by numMembers
-                List<string> results = new List<string>();
-
+                //List<string> results = new List<string>();
+                string fuckThis = "{ \"data\": [ ";
                 do
                 {
                     docList = await search.GetNextSetAsync();
@@ -65,15 +65,19 @@ namespace Roost.Controllers
                         // Remove the activity if it's full and has the user in it.
                         //if ((numMembers < max) && !members.Contains(id))
                         //{   // append all items in ToJsonPretty form as one string and return the result
-
-                        //line.Replace(@"\", "");
-                        Console.WriteLine("{ \"data\": [ " + d.ToJson().ToString() + " ] }");
-                        results.Add("{ \"data\": [ " + d.ToJson().ToString() + " ] }");
+                        fuckThis = fuckThis + d.ToJson().ToString();
+                        //Console.WriteLine("first time: " + fuckThis);
+                        //fuckThis.Replace("\\", "");
+                        //Console.WriteLine("Second time: " + fuckThis);
+                        //results.Add(fuckThis);
                         //}
                     }
                 } while (!search.IsDone);
-
-                return results;
+                        fuckThis = fuckThis + " ] }";
+                        fuckThis = fuckThis.Replace("\\", "");
+                        Console.WriteLine("Second time: " + fuckThis);
+                        //results.Add(fuckThis);
+                return fuckThis;
             }
             catch (Exception)
             {
@@ -234,7 +238,7 @@ namespace Roost.Controllers
                     // Set status to open and update.
                     item["status"] = "open";
                     await activitiesTable.UpdateItemAsync(item);
-
+                    Console.WriteLine("Bitches");
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
