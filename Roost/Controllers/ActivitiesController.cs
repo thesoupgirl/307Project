@@ -65,7 +65,7 @@ namespace Roost.Controllers
                         // Remove the activity if it's full and has the user in it.
                         //if ((numMembers < max) && !members.Contains(id))
                         //{   // append all items in ToJsonPretty form as one string and return the result
-                        fuckThis = fuckThis + d.ToJson().ToString();
+                        fuckThis = fuckThis + d.ToJson().ToString() + " , ";
                         //Console.WriteLine("first time: " + fuckThis);
                         //fuckThis.Replace("\\", "");
                         //Console.WriteLine("Second time: " + fuckThis);
@@ -73,6 +73,7 @@ namespace Roost.Controllers
                         //}
                     }
                 } while (!search.IsDone);
+                        fuckThis = fuckThis.Remove(fuckThis.Length - 3);
                         fuckThis = fuckThis + " ] }";
                         fuckThis = fuckThis.Replace("\\", "");
                         Console.WriteLine("Second time: " + fuckThis);
