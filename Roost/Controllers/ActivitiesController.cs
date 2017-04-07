@@ -152,6 +152,14 @@ namespace Roost.Controllers
 
                 List<string> members = new List<string> { id };
 
+                Console.WriteLine(Request.Form["name"]);
+                Console.WriteLine(Request.Form["description"]);
+                Console.WriteLine(Request.Form["category"]);
+                Console.WriteLine(Request.Form["latitude"]);
+                Console.WriteLine(Request.Form["longitude"]);
+                Console.WriteLine(Request.Form["status"]);
+                Console.WriteLine(Request.Form["maxSize"]);
+
                 // Don't let them create the activity just for themselves.
                 if (Request.Form["maxSize"] == 1)
                 {
