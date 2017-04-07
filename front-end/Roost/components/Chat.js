@@ -90,7 +90,7 @@ export default class Chat extends Component {
         var id = this.props.userID
         var gid = this.props.groupID
         console.warn(gid)
-        let ws = `${path}/api/activities/${gid}/delete`
+        let ws = `${path}/api/activities/${gid}/deleteactivity`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
