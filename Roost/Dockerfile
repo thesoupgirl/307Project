@@ -4,6 +4,6 @@ RUN adduser --disabled-password deployuser
 USER deployuser
 
 WORKDIR /Roost
-COPY . .
+COPY . /Roost
 
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet Roost.dll

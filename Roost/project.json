@@ -21,7 +21,8 @@
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
     "AWSSDK.DynamoDBv2": "3.3.3",
-    "AWSSDK.Extensions.NETCore.Setup": "3.3.0.3"
+    "AWSSDK.Extensions.NETCore.Setup": "3.3.0.3",
+    "AWSSDK.Core": "3.3.8"
   },
 
   "tools": {
@@ -52,7 +53,8 @@
   "publishOptions": {
     "include": [
       "wwwroot",
-      "web.config"
+      "web.config",
+      "Dockerfile"
     ]
   },
 
