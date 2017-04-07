@@ -41,6 +41,7 @@ namespace Roost.Controllers
                 Search search = activitiesTable.Scan(scanFilter);
 
                 string data = "{ \"data\": [ ";
+                int baseLen = data.Length;
 
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
@@ -61,7 +62,9 @@ namespace Roost.Controllers
                 } while (!search.IsDone);
 
                 // Clean up the string so the frontend can parse it.
-                data = data.Remove(data.Length - 3);
+                if (data.Length > baseLen)
+                    data = data.Remove(data.Length - 3);
+
                 data = data + " ] }";
                 data = data.Replace("\\", "");
                 Console.WriteLine("Second time: " + data);
@@ -86,6 +89,7 @@ namespace Roost.Controllers
                 Search search = activitiesTable.Scan(scanFilter);
 
                 string data = "{ \"data\": [ ";
+                int baseLen = data.Length;
 
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
@@ -104,7 +108,9 @@ namespace Roost.Controllers
                 } while (!search.IsDone);
 
                 // Clean up the string so the frontend can parse it.
-                data = data.Remove(data.Length - 3);
+                if (data.Length > baseLen)
+                    data = data.Remove(data.Length - 3);
+
                 data = data + " ] }";
                 data = data.Replace("\\", "");
                 Console.WriteLine("Second time: " + data);
