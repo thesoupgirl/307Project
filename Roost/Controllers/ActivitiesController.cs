@@ -353,6 +353,11 @@ namespace Roost.Controllers
             {
                 // id in endpoint is activity id.
                 string user = Request.Form["userId"];
+                if(user == null) {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage responsey = new HttpResponseMessage();
+                    return responsey;
+                }
 
                 // Get the activity from the table
                 var activity = await activitiesTable.GetItemAsync(id);
@@ -364,6 +369,11 @@ namespace Roost.Controllers
                 {
                     await chatTable.DeleteItemAsync(chatId, id);
                     await activitiesTable.DeleteItemAsync(id);
+                }
+                else {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage responset = new HttpResponseMessage();
+                    return responset;
                 }
 
                 Response.StatusCode = 200;
