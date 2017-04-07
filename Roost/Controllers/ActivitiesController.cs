@@ -26,9 +26,6 @@ namespace Roost.Controllers
         Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
         Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
-        // A list of all the activity ids that will be used in searching
-        //List<string> activityIdList = new List<string>();
-
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user based on popularity
         // TODO: determine the criteria for popularity.
@@ -37,48 +34,88 @@ namespace Roost.Controllers
         {
             try
             {
-                // Pull the top 25 most popular
                 ScanFilter scanFilter = new ScanFilter();
                 scanFilter.AddCondition("status", ScanOperator.Equal, "open");
 
                 // Start the search
                 Search search = activitiesTable.Scan(scanFilter);
 
+                string data = "{ \"data\": [ ";
+                int baseLen = data.Length;
+
                 // Put all results into a list.
                 List<Document> docList = new List<Document>();
 
-                // TODO: if user in in group, remove from list.
-                // TODO: sort by numMembers
-                //List<string> results = new List<string>();
-                string fuckThis = "{ \"data\": [ ";
                 do
                 {
                     docList = await search.GetNextSetAsync();
 
                     foreach (Document d in docList)
                     {
-                        // Get the list and number of members and max size.
-                        /*List<string> members = d["members"].AsListOfString();
-                        int numMembers = d["numMembers"].AsInt();
-                        int max = d["maxGroupSize"].AsInt();*/
+                        // Only return activities the user is not in.
+                        List<string> members = d["members"].AsListOfString();
 
-                        // Remove the activity if it's full and has the user in it.
-                        //if ((numMembers < max) && !members.Contains(id))
-                        //{   // append all items in ToJsonPretty form as one string and return the result
-                        fuckThis = fuckThis + d.ToJson().ToString() + " , ";
-                        //Console.WriteLine("first time: " + fuckThis);
-                        //fuckThis.Replace("\\", "");
-                        //Console.WriteLine("Second time: " + fuckThis);
-                        //results.Add(fuckThis);
-                        //}
+                        if (!members.Contains(id))
+                            data = data + d.ToJson().ToString() + " , ";
+
                     }
                 } while (!search.IsDone);
-                        fuckThis = fuckThis.Remove(fuckThis.Length - 3);
-                        fuckThis = fuckThis + " ] }";
-                        fuckThis = fuckThis.Replace("\\", "");
-                        Console.WriteLine("Second time: " + fuckThis);
-                        //results.Add(fuckThis);
-                return fuckThis;
+
+                // Clean up the string so the frontend can parse it.
+                if (data.Length > baseLen)
+                    data = data.Remove(data.Length - 3);
+
+                data = data + " ] }";
+                data = data.Replace("\\", "");
+                Console.WriteLine("Second time: " + data);
+                return data;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        // GET /api/activities/{id}/getactivities
+        // Get all the activities a user is in. UserId is parameter.
+        [HttpGet("{id}/getactivities")]
+        public async Task<string> GetActivities(string id)
+        {
+            try
+            {
+                ScanFilter scanFilter = new ScanFilter();
+
+                // Start the search
+                Search search = activitiesTable.Scan(scanFilter);
+
+                string data = "{ \"data\": [ ";
+                int baseLen = data.Length;
+
+                // Put all results into a list.
+                List<Document> docList = new List<Document>();
+
+                do
+                {
+                    docList = await search.GetNextSetAsync();
+
+                    foreach (Document d in docList)
+                    {   // Find all the groups a user belongs to and return them as JSON.
+                        List<string> members = d["members"].AsListOfString();
+
+                        if (members.Contains(id))
+                            data = data + d.ToJson().ToString() + " , ";
+                    }
+                } while (!search.IsDone);
+
+                // Clean up the string so the frontend can parse it.
+                if (data.Length > baseLen)
+                    data = data.Remove(data.Length - 3);
+
+                data = data + " ] }";
+                data = data.Replace("\\", "");
+                Console.WriteLine("Second time: " + data);
+                return data;
+
             }
             catch (Exception)
             {
@@ -114,6 +151,14 @@ namespace Roost.Controllers
                 }
 
                 List<string> members = new List<string> { id };
+
+                Console.WriteLine(Request.Form["name"]);
+                Console.WriteLine(Request.Form["description"]);
+                Console.WriteLine(Request.Form["category"]);
+                Console.WriteLine(Request.Form["latitude"]);
+                Console.WriteLine(Request.Form["longitude"]);
+                Console.WriteLine(Request.Form["status"]);
+                Console.WriteLine(Request.Form["maxSize"]);
 
                 // Don't let them create the activity just for themselves.
                 if (Request.Form["maxSize"] == 1)
@@ -233,10 +278,12 @@ namespace Roost.Controllers
 
                 // Get an item from the table.
                 var item = await activitiesTable.GetItemAsync(id);
-
+                Console.WriteLine("yay");
+                Console.WriteLine(user);
                 if (item["status"] == "closed" && item["groupLeader"] == user)
                 {
                     // Set status to open and update.
+                    Console.WriteLine("in if");
                     item["status"] = "open";
                     await activitiesTable.UpdateItemAsync(item);
                     Console.WriteLine("Bitches");
@@ -254,6 +301,7 @@ namespace Roost.Controllers
             }
             catch (Exception)
             {
+                Console.WriteLine("in ex");
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
@@ -331,6 +379,7 @@ namespace Roost.Controllers
             }
 
         }
+
         // POST: /api/activities/join/{id}
         //Join activity and the chat associated with it
         [HttpPost("join/{id}")]
@@ -343,34 +392,52 @@ namespace Roost.Controllers
             Console.WriteLine(username);
             Console.WriteLine(password);
 
-            if(activityId != null) {
-                try {
+            if (activityId != null)
+            {
+                try
+                {
                     GetItemResponse stuff = await db.client.GetItemAsync(
                         tableName: "RoostActivities",
-                        key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                        key: new Dictionary<string, AttributeValue>
                         {
                             {"ActivityId", new AttributeValue {S = id} }
                         }
                     );
 
+                    // The number of people currently in the group and the size limit
+                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
+                    int capacity = Convert.ToInt32(stuff.Item["maxGroupSize"].N);
+
                     Console.WriteLine(stuff.Item["members"].SS);
-                    Console.WriteLine(stuff.Item["numMembers"].N);
+                    Console.WriteLine(numberOfPeeps);
                     List<string> membersList = stuff.Item["members"].SS;
-                    if(membersList.Contains(username)) {
+
+                    // don't join if the user is already joined or if it's full.
+                    if (membersList.Contains(username))
+                    {
                         Console.WriteLine("User already added to activity");
                         Response.StatusCode = 400;
                         HttpResponseMessage responsey = new HttpResponseMessage();
                         return responsey;
                     }
+                    else if (numberOfPeeps == capacity)
+                    {
+                        Console.WriteLine("The activity is full");
+                        Response.StatusCode = 400;
+                        HttpResponseMessage responsey = new HttpResponseMessage();
+                        return responsey;
+                    }
+
+                    // Add the user to the list and update the entry in the table.
                     membersList.Add(username);
                     Console.WriteLine(stuff.Item["numMembers"].N);
-                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
+
                     numberOfPeeps++;
                     string peopleNum = numberOfPeeps.ToString();
 
                     await db.client.UpdateItemAsync(
                     tableName: "RoostActivities",
-                    key: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
+                    key: new Dictionary<string, AttributeValue>
                     {
                         {"ActivityId", new AttributeValue {S = id} }
                     },
@@ -382,18 +449,20 @@ namespace Roost.Controllers
                     }
                 );
 
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
+                    Response.StatusCode = 200;
+                    HttpResponseMessage response = new HttpResponseMessage();
+                    return response;
                 }
-                catch(Exception) {
+                catch (Exception)
+                {
                     Console.WriteLine("caught exception exception");
                     Response.StatusCode = 400;
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
                 }
             }
-            else {
+            else
+            {
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;

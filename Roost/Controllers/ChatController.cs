@@ -31,28 +31,6 @@ namespace RoostApp.Controllers
             return View();
         }
 
-        // POST: /api/chat/{id}/join
-        // Add a user to the chat
-        [HttpPost("{id}/join")]
-        public async Task<HttpResponseMessage> JoinGroup(string id)
-        {
-            try
-            {
-                // Get the activity and it's chatId from the activities table.
-                // Increase member count
-                // Add userId to the list in chats table
-                Response.StatusCode = 200;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
-            }
-            catch (Exception)
-            {
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                return response;
-            }
-        }
-
         // POST: /api/chat/{id}/leave
         // Removes a user from the chat
         [HttpPost("{id}/leave")]
