@@ -65,7 +65,10 @@ namespace Roost.Controllers
                         // Remove the activity if it's full and has the user in it.
                         //if ((numMembers < max) && !members.Contains(id))
                         //{   // append all items in ToJsonPretty form as one string and return the result
-                        results.Add(d.ToJson());
+
+                        //line.Replace(@"\", "");
+                        Console.WriteLine(d.ToJson().ToString());
+                        results.Add(d.ToJson().ToString());
                         //}
                     }
                 } while (!search.IsDone);
