@@ -26,8 +26,8 @@ namespace RoostApp.Controllers
         // GET: /api/activities/{id}/{dist}
         // Gets list of activities within certain radius of user based on popularity
         // TODO: determine the criteria for popularity.
-        [HttpGet("{id}/{dist}")]
-        public async Task<string> FindActivities(string id, string dist)
+        [HttpGet("{id}/{dist}/search")]
+        public async Task<List<string>> FindActivities(string id, string dist)
         {
             try
             {
@@ -42,7 +42,9 @@ namespace RoostApp.Controllers
                 List<Document> docList = new List<Document>();
 
                 // TODO: if user in in group, remove from list.
-                string results = "";
+                // TODO: sort by numMembers
+                List<string> results = new List<string>();
+
                 do
                 {
                     docList = await search.GetNextSetAsync();
@@ -50,16 +52,15 @@ namespace RoostApp.Controllers
                     foreach (Document d in docList)
                     {
                         // Get the list and number of members and max size.
-                        List<string> members = d["members"].AsListOfString();
+                        /*List<string> members = d["members"].AsListOfString();
                         int numMembers = d["numMembers"].AsInt();
-                        int max = d["maxGroupSize"].AsInt();
+                        int max = d["maxGroupSize"].AsInt();*/
 
-                        // Return the activity if it's not full and the user isn't in it.
-                        if ((numMembers < max) && !members.Contains(id))
-                        {   // append all items in ToJsonPretty form as one string
-                            results += d.ToJsonPretty();
-                            results += ",";
-                        }
+                        // Remove the activity if it's full and has the user in it.
+                        //if ((numMembers < max) && !members.Contains(id))
+                        //{   // append all items in ToJsonPretty form as one string and return the result
+                        results.Add(d.ToJson());
+                        //}
                     }
                 } while (!search.IsDone);
 
@@ -67,60 +68,7 @@ namespace RoostApp.Controllers
             }
             catch (Exception)
             {
-                return "No items found.";
-            }
-        }
-
-        // POST: /api/activities/{id}/{dist}/search
-        // Gets list of activities within certain radius of user by category
-        [HttpPost("{id}/{dist}/search")]
-        public async Task<string> FindActivitiesByCategory(string id, string dist)
-        {
-            try
-            {
-                // Frontend will be sending user id and category
-                string category = Request.Form["category"];
-
-                // Scan the table for activities based on the following conditions
-                ScanFilter scanFilter = new ScanFilter();
-
-                // The category must match and the group cannot be hidden.
-                scanFilter.AddCondition("category", ScanOperator.Equal, category);
-                scanFilter.AddCondition("status", ScanOperator.Equal, "open");
-
-                // Start the search
-                Search search = activitiesTable.Scan(scanFilter);
-
-                // Put all results into a list.
-                List<Document> docList = new List<Document>();
-
-                // TODO: calculate distance from user.
-                string results = "";
-                do
-                {
-                    docList = await search.GetNextSetAsync();
-
-                    foreach (Document d in docList)
-                    {
-                        // Get the list and number of members and max size.
-                        List<string> members = d["members"].AsListOfString();
-                        int numMembers = d["numMembers"].AsInt();
-                        int max = d["maxGroupSize"].AsInt();
-
-                        // Return the activity if it's not full and the user isn't in it.
-                        if ((numMembers < max) && !members.Contains(id))
-                        {   // append all items in ToJsonPretty form as one string
-                            results += d.ToJsonPretty();
-                            results += ",";
-                        }   
-                    }
-                } while (!search.IsDone);
-
-                return results;
-
-            } catch (Exception)
-            {
-                return "No items found.";
+                return null;
             }
         }
 
@@ -145,7 +93,8 @@ namespace RoostApp.Controllers
                 {
                     byte[] imageArray = System.IO.File.ReadAllBytes(Request.Form["avatar"]);
                     base64Image = Convert.ToBase64String(imageArray);
-                } else
+                }
+                else
                 {
                     base64Image = "none";
                 }
@@ -316,13 +265,14 @@ namespace RoostApp.Controllers
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
-                } else
+                }
+                else
                 {
                     Response.StatusCode = 400;
                     HttpResponseMessage response = new HttpResponseMessage();
                     return response;
                 }
-                
+
             }
             catch (Exception)
             {
@@ -353,18 +303,19 @@ namespace RoostApp.Controllers
                     await chatTable.DeleteItemAsync(chatId, id);
                     await activitiesTable.DeleteItemAsync(id);
                 }
-                    
+
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
 
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
             }
-            
+
         }
     }
 }
