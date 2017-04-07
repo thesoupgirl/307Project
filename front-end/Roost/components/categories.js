@@ -90,7 +90,7 @@ export default class Categories extends Component {
             
         } else {
                 Alert.alert(
-                'Error joining activity',      
+                'Error joining activity. You may already be joined',      
         )
 
         }
@@ -114,7 +114,7 @@ export default class Categories extends Component {
                           <Text note>{data.description}</Text>
                       </Body>
                       <Right>
-                          <Button transparent onPress={() => this.join(data.title)}>
+                          <Button transparent onPress={() => this.join(data.ActivityId)}>
                               <Text>Join</Text>
                           </Button>
                       </Right>

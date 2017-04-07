@@ -58,7 +58,7 @@ export default class Chat extends Component {
             
         } else {
                 Alert.alert(
-                'Error closing activity You may not have this privilege',      
+                'Error closing activity. You may not have this privilege',      
         )
 
         }

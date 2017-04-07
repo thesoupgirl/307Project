@@ -56,7 +56,8 @@ export default class SwipeActivities extends Component {
             data: [{
                 name: '',
                 description: '',
-                image: ''
+                image: '',
+                deckCount: 0
              } ]
         }
        this.right = this.right.bind(this)
@@ -83,22 +84,23 @@ export default class SwipeActivities extends Component {
                 onSwipeLeft={() => this.left()}
                 dataSource={this.state.data}
                 renderItem={item =>  
-                <Card style={{ elevation: 3 }}>
+                <Card style={{ elevation: 2 }}>
                     <CardItem>
                         {
                         //<Left>
                         //<Thumbnail source={item.image} />
                         //</Left>
                         }
-                        {(item) => this.setState({activityID: item.num})}
+                        {
+                            //(item) => this.setState({activityID: item.num})
+                        }
                         <Body>
                             <Text>{item.name}</Text>
                             <Text note>{item.description}</Text>
                         </Body>
                     </CardItem>
                     <CardItem cardBody>
-                        {//<Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
-                        }
+                        <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={cards[0].image} />
                     </CardItem>
                     <CardItem>
                         {//
@@ -109,7 +111,7 @@ export default class SwipeActivities extends Component {
                         <Text>{item.name}</Text>
                         {
                         <Right>
-                        <Button success onPress={() => this.right(item.name)}><Text> Join </Text></Button>
+                        <Button success onPress={() => {this.right(item.ActivityId)}}><Text> Join </Text></Button>
                         </Right>
                         }
                     </CardItem>
@@ -157,10 +159,15 @@ export default class SwipeActivities extends Component {
     componentDidMount() {
         //console.warn(routeD)
         this.setState({mounted: true})
+        this.state.data.sort(function(obj1, obj2) {
+	// Ascending: first age less than the previous
+	return obj2.num - obj1.num;
+
+});
     }
 
     right (id) {
-        console.warn(this.state.activityID)
+        console.warn(id)
         //add user to group with ajax call
          //call to authenticate
     
@@ -177,7 +184,7 @@ export default class SwipeActivities extends Component {
             
         } else {
                 Alert.alert(
-                'Error joining activity',      
+                'Error joining activity. You may already be joined',      
         )
 
         }
