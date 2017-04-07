@@ -144,7 +144,7 @@ export default class SwipeActivities extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            //console.warn(xhr.responseText)
+            console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)

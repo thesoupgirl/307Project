@@ -50,7 +50,7 @@ export default class MessageThreads extends Component {
       componentWillMount() {
       //set activities array
         var dist = this.props.user.dist
-        var id = this.props.user.id
+        var id = this.props.user.username
         let ws = `${path}/api/activities/${id}/getactivities`
         let xhr = new XMLHttpRequest();
         xhr.open('GET', ws);
