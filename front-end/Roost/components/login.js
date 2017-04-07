@@ -53,9 +53,9 @@ export default class Login extends Component {
         isLoggedIn: false,
         page: 'login'
         }
-     this.loginPressed = this.loginPressed.bind(this)
-     this.createAccountPressed = this.createAccountPressed.bind(this)
-    this.renderPage = this.renderPage.bind(this)
+      this.loginPressed = this.loginPressed.bind(this)
+      this.createAccountPressed = this.createAccountPressed.bind(this)
+      this.renderPage = this.renderPage.bind(this)
     }
 
     loginPressed() {        
@@ -71,10 +71,12 @@ export default class Login extends Component {
             xhr.onload = () => {
              
             if (xhr.status===200) {
-                this.props.handler(this.state, true)
                 //console.warn(this.state.username)
-                var userInfo = JSON.parse(xhr.responseText);
-                //console.warn(json.infooooo)
+                var userInfo = JSON.parse(xhr.responseText)
+                this.setState({dist: userInfo.data[0].distance})
+                this.setState({push: userInfo.data[0].notificatons})
+                this.props.handler(this.state, true)
+                //console.warn(userInfo.data[0].distance)
                
             } else {
                  Alert.alert(
