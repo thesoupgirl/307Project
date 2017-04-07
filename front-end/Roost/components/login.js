@@ -72,7 +72,7 @@ export default class Login extends Component {
              
             if (xhr.status===200) {
                 //console.warn(this.state.username)
-                //console.warn(xhr.responseText)
+                console.warn(xhr.responseText)
                 var userInfo = JSON.parse(xhr.responseText)
                 this.setState({dist: userInfo.data[0].distance})
                 this.setState({push: userInfo.data[0].notificatons})

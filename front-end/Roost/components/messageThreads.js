@@ -43,7 +43,6 @@ export default class MessageThreads extends Component {
       data (d) {
         this.setState({data: d.data})
         var filtered = this.state.data.filter((item) => item.status === 'open'); 
-        filtered = filtered.filter((item) => item.members.filter((i) => i === '2'))
         this.setState({filteredData: filtered})
     }
 
@@ -57,7 +56,7 @@ export default class MessageThreads extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            //console.warn(xhr.responseText)
+            console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)
