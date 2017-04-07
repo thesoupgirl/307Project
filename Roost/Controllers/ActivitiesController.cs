@@ -163,9 +163,9 @@ namespace Roost.Controllers
                 // Don't let them create the activity just for themselves.
                 if (Request.Form["maxSize"] == 1)
                 {
-                    //Response.StatusCode = 400;
-                    //HttpResponseMessage response = new HttpResponseMessage();
-                    //return response;
+                    Response.StatusCode = 400;
+                    HttpResponseMessage respons = new HttpResponseMessage();
+                    return respons;
                 }
 
                 // Add the activity to the database table
@@ -353,6 +353,11 @@ namespace Roost.Controllers
             {
                 // id in endpoint is activity id.
                 string user = Request.Form["userId"];
+                if(user == null) {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage responsey = new HttpResponseMessage();
+                    return responsey;
+                }
 
                 // Get the activity from the table
                 var activity = await activitiesTable.GetItemAsync(id);
@@ -364,6 +369,11 @@ namespace Roost.Controllers
                 {
                     await chatTable.DeleteItemAsync(chatId, id);
                     await activitiesTable.DeleteItemAsync(id);
+                }
+                else {
+                    Response.StatusCode = 400;
+                    HttpResponseMessage responset = new HttpResponseMessage();
+                    return responset;
                 }
 
                 Response.StatusCode = 200;
