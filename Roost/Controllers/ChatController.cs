@@ -22,10 +22,10 @@ namespace RoostApp.Controllers
 
         // GET: /api/chat/{id}/{chat}/messages
         // Gets messages for a thread
-        [HttpGet("{id}/{chat}/messages")]
-        public async Task<string> GetMessages(string id, string chat)
+        [HttpGet("{activityId}/{chat}/messages")]
+        public async Task<string> GetMessages(string activityId, string chat)
         {
-            var item = await chatTable.GetItemAsync(chat,id);
+            var item = await chatTable.GetItemAsync(chat,activityId);
 
             // The indices in all lists correspond to each other.
             List<string> messages = item["messagesSent"].AsListOfString();
@@ -60,11 +60,10 @@ namespace RoostApp.Controllers
 
         // GET: /api/chat/{id}/users
         // gets all users in a chat
-        [HttpGet("{id}/users")]
-        public async Task<List<string>> GetUsers(string id)
+        [HttpGet("{activityId}/users")]
+        public async Task<List<string>> GetUsers(string activityId)
         {
-            // The id from the route is the activityId.
-            var item = await activitiesTable.GetItemAsync(id);
+            var item = await activitiesTable.GetItemAsync(activityId);
             return item["members"].AsListOfString();
         }
 

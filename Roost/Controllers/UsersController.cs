@@ -166,7 +166,7 @@ namespace Roost.Controllers
 		// POST: /api/users/update/{id}
 		// Update user info
 		[HttpPost("update/{id}")]
-		public async Task<HttpResponseMessage> UpdateUser(string id)
+		public async Task<HttpResponseMessage> UpdateUser(string userId)
 		{
 			string username = Request.Form["username"];
 			string password = Request.Form["password"];
@@ -183,11 +183,10 @@ namespace Roost.Controllers
 
 			try
 			{
-				//DynamoDBContext context = new DynamoDBContext(db.client);
 				Console.WriteLine("trying...");
 				var table = Table.LoadTable(db.client, "User");
 				Console.WriteLine("found the table...");
-				var item = await table.GetItemAsync(id, id);
+				var item = await table.GetItemAsync(userId, userId);
 				Console.WriteLine("\ngot the item");
 				if (item == null)
 				{
@@ -210,15 +209,6 @@ namespace Roost.Controllers
 				HttpResponseMessage responsey = new HttpResponseMessage();
 				return responsey;
 
-				// await db.client.PutItemAsync(
-				//    tableName: "User",
-				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-				//  {
-				//     {"userId", new AttributeValue {S = id} },
-				//    {"username", new AttributeValue {S = username}},
-				//   {"password", new AttributeValue {S = password}}
-				//  });
-
 			}
 			catch (Exception)
 			{
@@ -226,7 +216,6 @@ namespace Roost.Controllers
 				HttpResponseMessage response = new HttpResponseMessage();
 				Console.WriteLine("\nexception...");
 				return response;
-				//Console.WriteLine("\nexception...");
 			}
 		}
 	}
