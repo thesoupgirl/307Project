@@ -34,7 +34,7 @@ export default class Contacts extends Component {
       <Header>
             <Text>Contacts</Text>
       </Header>
-
+      <Content>
       <Tabs>
                 <Tab heading="My Contacts">
                     <ContactsList />
@@ -43,6 +43,7 @@ export default class Contacts extends Component {
                     <AddContact />
                 </Tab>
       </Tabs>
+      </Content>
        
        
     </Container>

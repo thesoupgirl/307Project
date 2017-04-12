@@ -30,11 +30,11 @@ export default class ContactsList extends Component {
     return (
     <Container>
       <Header>
-            <Text>Contacts List</Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold', alignSelf: 'center'}}>Contacts List</Text>
       </Header>
-      
+
       <Content>
-        <List>
+       	<List>
             <ListItem>
                 <Thumbnail source={require('./img/person.png')} />
                 <Text>Anoop</Text>
@@ -45,8 +45,6 @@ export default class ContactsList extends Component {
             </ListItem>
         </List>
        </Content>
-      
-       
        
     </Container>
     );
