@@ -73,5 +73,26 @@ public class Testo
 	var response = await _client.PostAsync("/activities/69/close", contenty);
         Assert.False(response.IsSuccessStatusCode);
     }
+    [Fact]
+    public async void BadOpenAct()
+    {
+	HttpContent contenty = new StringContent("meow");
+        var response = await _client.PostAsync("/activities/69/open", contenty);
+        Assert.False(response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void BadNewNewAct() 
+    {
+	HttpContent contenty = new StringContent("meow");
+        var response = await _client.PostAsync("/activities/69/createactivity", contenty);
+        Assert.False(response.IsSuccessStatusCode);
+    }
+    [Fact]
+    public async void BadDeleteAct() 
+    {
+	HttpContent contenty = new StringContent("meow");
+        var response = await _client.PostAsync("/activities/69/deleteactivity", contenty);
+        Assert.False(response.IsSuccessStatusCode);
+    }
 }
 }
