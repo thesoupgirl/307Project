@@ -30,7 +30,7 @@ namespace Roost.Controllers
         // Gets list of activities within certain radius of user based on popularity
         // TODO: determine the criteria for popularity.
         [HttpGet("{id}/{dist}/search")]
-        public async Task<string> FindActivities(string id, string dist)
+        public async Task<string> Search(string id, string dist)
         {
             try
             {
@@ -406,21 +406,17 @@ namespace Roost.Controllers
             {
                 try
                 {
-                    GetItemResponse stuff = await db.client.GetItemAsync(
-                        tableName: "RoostActivities",
-                        key: new Dictionary<string, AttributeValue>
-                        {
-                            {"ActivityId", new AttributeValue {S = id} }
-                        }
-                    );
+
+                    var stuff = await activitiesTable.GetItemAsync(id);
 
                     // The number of people currently in the group and the size limit
-                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
-                    int capacity = Convert.ToInt32(stuff.Item["maxGroupSize"].N);
+                    int numberOfPeeps = stuff["numMembers"].AsInt();
+                    int capacity = stuff["maxGroupSize"].AsInt();
 
-                    Console.WriteLine(stuff.Item["members"].SS);
+                    Console.WriteLine(stuff["members"].AsListOfString());
                     Console.WriteLine(numberOfPeeps);
-                    List<string> membersList = stuff.Item["members"].SS;
+
+                    List<string> membersList = stuff["members"].AsListOfString();
 
                     // don't join if the user is already joined or if it's full.
                     if (membersList.Contains(username))
@@ -440,24 +436,15 @@ namespace Roost.Controllers
 
                     // Add the user to the list and update the entry in the table.
                     membersList.Add(username);
-                    Console.WriteLine(stuff.Item["numMembers"].N);
+                    Console.WriteLine(stuff["numMembers"].AsInt());
 
                     numberOfPeeps++;
                     string peopleNum = numberOfPeeps.ToString();
 
-                    await db.client.UpdateItemAsync(
-                    tableName: "RoostActivities",
-                    key: new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue {S = id} }
-                    },
+                    stuff["members"] = membersList;
+                    stuff["numMembers"] = peopleNum;
 
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                            {"members", new AttributeValueUpdate(new AttributeValue {SS = membersList}, AttributeAction.PUT)},
-                            {"numMembers", new AttributeValueUpdate(new AttributeValue {N = peopleNum}, AttributeAction.PUT)}
-                    }
-                );
+                    await activitiesTable.UpdateItemAsync(stuff);
 
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();

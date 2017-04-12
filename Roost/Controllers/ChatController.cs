@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace RoostApp.Controllers
 {
@@ -13,7 +14,11 @@ namespace RoostApp.Controllers
     public class ChatController : Controller
     {
 
-        DBHelper db = new DBHelper();
+        static DBHelper db = new DBHelper();
+
+        // Initialize the tables as Table objects
+        Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
+        Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
         // GET: /api/chat/{id}/{chat}/messages
         // Gets messages for a thread
@@ -21,6 +26,17 @@ namespace RoostApp.Controllers
         public IActionResult GetMessages(string id, string chat)
         {
             return View();
+        }
+
+        // GET: /api/chat/{id}/users
+        // gets all users in a chat
+        [HttpGet("{id}/users")]
+        public async Task<List<string>> GetUsers(string id)
+        {
+            // The id from the route is the activityId.
+            var item = await activitiesTable.GetItemAsync(id);
+
+            return item["members"].AsListOfString();
         }
 
         // POST: /api/chat/{id}/send
