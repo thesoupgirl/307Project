@@ -19,13 +19,7 @@ import path from '../properties.js'
     
 */
 
-var threads = [{title: 'baseball', description: 'come play!'},
-            {category: 'Sports', title: 'soccer', description: 'come play!'},
-            {category: 'Sports', title: 'tennis', description: 'come play!'},
-            {category: 'Sports', title: 'hockey', description: 'come play!'},
-            {category: 'Eat', title: 'breakfast', description: 'come get breakfast!'},
-            {category: 'Adventures', title: 'Hiking', description: 'come Hiking!'},
-            {category: 'Study Groups', title: 'CS307', description: 'Looking for a group!'}]
+var threads = [{user: 'Danny'}, {user: 'David'}, {user: 'Joseph'}]
 
 
 export default class Chat extends Component {
@@ -140,7 +134,7 @@ export default class Chat extends Component {
         if (this.state.page === 'chat') {
             return (
                 
-                <Container>
+        <Container>
         <Header>
             <Left>
                 <Button transparent onPress={() => {this.props.showNav(), this.props.threadsHandler()}}>
@@ -229,7 +223,9 @@ export default class Chat extends Component {
                         </Right>
                     </Header>
                     <Content>
+                    <Content style={{padding: 20}}>
                     <Text># of Members {this.state.members}</Text>
+                    </Content>
                         <List dataArray={threads} renderRow={(data) =>
                             <ListItem thumbnail>
 
@@ -237,8 +233,8 @@ export default class Chat extends Component {
                           <Thumbnail square size={40} source={require('./img/water.png')} />
                       </Left>
                       <Body>
-                          <Text>{data.name}</Text>
-                          <Text note>{data.description}</Text>
+                          <Text>{data.user}</Text>
+                          <Text/>
                       </Body>
                       <Right>
                           <Button transparent onPress={() => this.join(data.ActivityId)}>
