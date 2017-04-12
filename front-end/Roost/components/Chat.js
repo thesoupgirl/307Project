@@ -33,6 +33,7 @@ export default class Chat extends Component {
         super()
         this.state = {
             page: 'chat',
+            members: 3,
             messages: [
        
             ],
@@ -188,6 +189,10 @@ export default class Chat extends Component {
         <Content>
         <Text/>
         <View style={{padding: 20}}>
+         <Button onPress={() => {this.setState({page: 'group'})}} block>
+            <Text>Activity Members</Text>
+          </Button >
+          <Text/>
           <Button onPress={() => this.leave()} block>
             <Text>Leave Activity</Text>
           </Button >
@@ -206,6 +211,44 @@ export default class Chat extends Component {
           </View>
         </Content>
       </Container>
+            )
+        }
+        else if (this.state.page === 'group') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+                    <Text># of Members {this.state.members}</Text>
+                        <List dataArray={threads} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data.name}</Text>
+                          <Text note>{data.description}</Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.join(data.ActivityId)}>
+                              <Text>Join</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
             )
         }
     }
