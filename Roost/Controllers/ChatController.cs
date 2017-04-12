@@ -23,9 +23,10 @@ namespace RoostApp.Controllers
         // GET: /api/chat/{id}/{chat}/messages
         // Gets messages for a thread
         [HttpGet("{id}/{chat}/messages")]
-        public IActionResult GetMessages(string id, string chat)
+        public async Task<List<string>> GetMessages(string id, string chat)
         {
-            return View();
+            var item = await chatTable.GetItemAsync(chat,id);
+            return item["messagesSent"].AsListOfString();
         }
 
         // GET: /api/chat/{id}/users
@@ -35,7 +36,6 @@ namespace RoostApp.Controllers
         {
             // The id from the route is the activityId.
             var item = await activitiesTable.GetItemAsync(id);
-
             return item["members"].AsListOfString();
         }
 
@@ -44,6 +44,9 @@ namespace RoostApp.Controllers
         [HttpPost("{id}/send")]
         public IActionResult SendMessage(string id)
         {
+            // add to messagesSent list
+            // increment numMessages
+            // if list size is 200, delete the least recent message.
             return View();
         }
 
