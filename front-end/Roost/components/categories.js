@@ -139,13 +139,13 @@ export default class Categories extends Component {
             </Body>
             <Right/>
         </Header>
-          <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
+          <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'food' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Food' })}}>
                 <Text>Food</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'adventures' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
                 <Text>Adventures</Text>
             </ListItem>
             <ListItem button onPress={() => {this.setState({ page: 'study groups' })}}>
