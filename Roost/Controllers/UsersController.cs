@@ -162,6 +162,29 @@ namespace Roost.Controllers
 				return response;
 			}
 		}
+
+		// add favorite to user favorites
+		[HttpPost("{id}/{favorite}")]
+		public async Task<HttpResponseMessage> Favorite(string id, string favorite)
+		{
+			try
+			{
+				var table = Table.LoadTable(db.client, "User");
+				var item = await table.GetItemAsync(id, id);
+				item["favorite"] = favorite;
+				await table.UpdateItemAsync(item);
+				Response.StatusCode = 200;
+				HttpResponseMessage response = new HttpResponseMessage();
+				return response;
+			}
+			catch(Exception)
+			{
+				Response.StatusCode = 400;
+				HttpResponseMessage response = new HttpResponseMessage();
+				Console.WriteLine("\nexception\n");
+				return response;
+			}
+		}
 	
 		// POST: /api/users/update/{id}
 		// Update user info
