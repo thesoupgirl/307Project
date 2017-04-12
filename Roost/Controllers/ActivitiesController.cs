@@ -186,7 +186,7 @@ namespace Roost.Controllers
                         {"description", new AttributeValue { S = Request.Form["description"] } },
 
                         // The date the group was created
-                        {"createdDate", new AttributeValue { S = DateTime.Today.ToString() } },
+                        {"createdDate", new AttributeValue { S = DateTime.Now.ToString() } },
 
                         // The categories the activity will be listed under
                         {"category", new AttributeValue {S = Request.Form["category"] } },

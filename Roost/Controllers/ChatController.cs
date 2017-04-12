@@ -23,10 +23,39 @@ namespace RoostApp.Controllers
         // GET: /api/chat/{id}/{chat}/messages
         // Gets messages for a thread
         [HttpGet("{id}/{chat}/messages")]
-        public async Task<List<string>> GetMessages(string id, string chat)
+        public async Task<string> GetMessages(string id, string chat)
         {
             var item = await chatTable.GetItemAsync(chat,id);
-            return item["messagesSent"].AsListOfString();
+
+            // The indices in all lists correspond to each other.
+            List<string> messages = item["messagesSent"].AsListOfString();
+            List<string> users = item["userIdSent"].AsListOfString();
+            List<string> dates = item["timestamps"].AsListOfString();
+
+
+            // The format required by the React module is a list of message objects.
+            string messageObjects = "messages: [\n";
+            
+            for (int i = 0; i < messages.Count(); i++)
+            {
+                // Parse the date
+                DateTime time = Convert.ToDateTime(dates.ElementAt(i));
+
+                // Assemble the string
+                messageObjects += "{\n";
+
+                messageObjects = messageObjects + "_id: " + i + ",\n"
+                    + "text: '" + messages.ElementAt(i) + "',\n"
+                    + "createdAt: new Date(Date.UTC("+time.Year+","+time.Month+","+time.Day+","+time.Hour+","+time.Minute+","+time.Second+")),\n"
+                    + "user: {_id: " + users.ElementAt(i) + ","
+                    + "name: '" + users.ElementAt(i) + "'," + "},\n";
+
+                messageObjects += "},\n";
+            }
+
+            messageObjects += "],";
+
+            return messageObjects;
         }
 
         // GET: /api/chat/{id}/users
