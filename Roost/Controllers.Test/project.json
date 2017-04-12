@@ -1,10 +1,13 @@
 {
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.1.0",
-      "type": "platform"
-    },
-    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+    "System.Runtime.Serialization.Primitives": "4.3.0",
+    "xunit": "2.1.0",
+    "dotnet-test-xunit": "1.0.0-rc2-192208-24",
+        "Microsoft.AspNetCore.Diagnostics": "1.1.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.1.0",
     "Microsoft.ApplicationInsights.AspNetCore": "2.0.0",
     "Microsoft.AspNetCore": "1.1.0",
@@ -20,50 +23,25 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
     "Microsoft.Extensions.Configuration.CommandLine": "1.1.0",
-    "AWSSDK.DynamoDBv2": "3.3.3",
+    "Microsoft.DotNet.InternalAbstractions": "1.0.0",
+	"AWSSDK.DynamoDBv2": "3.3.3",
     "AWSSDK.Extensions.NETCore.Setup": "3.3.0.3",
     "AWSSDK.Core": "3.3.8",
     "Microsoft.AspNetCore.TestHost": "1.1.1"
   },
-
-  "tools": {
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
-  },
-
+  "testRunner": "xunit",
   "frameworks": {
     "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+      },
       "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
+        "dotnet5.4",
+        "portable-net451+win8"
       ]
     }
-  },
-
-  "buildOptions": {
-    "emitEntryPoint": true,
-    "preserveCompilationContext": true
-  },
-
-  "runtimeOptions": {
-    "configProperties": {
-      "System.GC.Server": true,
-      "userSecretsId": "f75906bb-1abc-4a5d-afef-ff80b014e893"
-    }
-  },
-
-  "publishOptions": {
-    "include": [
-      "wwwroot",
-      "web.config",
-      "Dockerfile"
-    ]
-  },
-
-  "scripts": {
-    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
-  },
-
-  "tooling": {
-    "defaultNamespace": "Roost"
   }
 }
