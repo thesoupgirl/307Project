@@ -67,6 +67,17 @@ namespace RoostApp.Controllers
             return item["members"].AsListOfString();
         }
 
+        // GET: /api/chat/{id}/usercount
+        // gets number of users in a chat
+        [HttpGet("{activityId}/usercount")]
+        public async Task<int> GetUserCount(string activityId)
+        {
+            List<string> users = await GetUsers(activityId);
+            return users.Count();
+        }
+
+
+
         // POST: /api/chat/{id}/send
         // Sends message to the group
         [HttpPost("{id}/send")]
