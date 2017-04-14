@@ -58,7 +58,7 @@ namespace RoostApp.Controllers
             return messageObjects;
         }
 
-        // GET: /api/chat/{id}/users
+        // GET: /api/chat/{activityId}/users
         // gets all users in a chat
         [HttpGet("{activityId}/users")]
         public async Task<List<string>> GetUsers(string activityId)
@@ -67,7 +67,7 @@ namespace RoostApp.Controllers
             return item["members"].AsListOfString();
         }
 
-        // GET: /api/chat/{id}/usercount
+        // GET: /api/chat/{activityId}/usercount
         // gets number of users in a chat
         [HttpGet("{activityId}/usercount")]
         public async Task<int> GetUserCount(string activityId)

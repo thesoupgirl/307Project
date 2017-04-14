@@ -163,14 +163,15 @@ namespace Roost.Controllers
 			}
 		}
 
-		// add favorite to user favorites
-		[HttpPost("{id}/{favorite}")]
-		public async Task<HttpResponseMessage> Favorite(string id, string favorite)
+        // POST api/users/{userId}/{favorite}
+        // add favorite to user favorites
+        [HttpPost("{userId}/{favorite}")]
+		public async Task<HttpResponseMessage> Favorite(string userId, string favorite)
 		{
 			try
 			{
 				var table = Table.LoadTable(db.client, "User");
-				var item = await table.GetItemAsync(id, id);
+				var item = await table.GetItemAsync(userId, userId);
 				item["favorite"] = favorite;
 				await table.UpdateItemAsync(item);
 				Response.StatusCode = 200;
