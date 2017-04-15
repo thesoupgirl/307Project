@@ -100,7 +100,7 @@ export default class MessageThreads extends Component {
                         <Right>
                             <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false}),
                               this.setState({id: data.ActivityId}), this.setState({group: data.name})}}>
-                                <Text>chat</Text>
+                                <Text>Chat</Text>
                             </Button>
                         </Right>
                       </ListItem>

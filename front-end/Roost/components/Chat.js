@@ -31,6 +31,7 @@ export default class Chat extends Component {
             messages: [
        
             ],
+            json: null,
             updated: false
         }
      this.onSend = this.onSend.bind(this)
@@ -41,6 +42,82 @@ export default class Chat extends Component {
      this.delete = this.delete.bind(this)
     
     }
+
+        componentWillMount() {
+
+            var id = this.props.userID
+            var gid = this.props.groupID
+            let ws = `${path}/api/chats/${gid}/{chat}/messages` //fix route
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                console.warn('succesfully grabbed messages')
+                
+            } else {
+                console.warn('failed to get messages')
+
+            }
+            }; xhr.send()
+
+            ws = `${path}/api/chat/${gid}/users` //fix route
+            xhr = new XMLHttpRequest();
+            xhr.open('GET', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                console.warn('succesfully grabbed users in chat')
+                
+            } else {
+                console.warn('failed to get users in a chat')
+
+            }
+            }; xhr.send()
+            
+            ws = `${path}/api/chat/${gid}/usercount` //fix route
+            xhr = new XMLHttpRequest();
+            xhr.open('GET', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                console.warn('succesfully grabbed the number of users in chat')
+                
+            } else {
+                console.warn('failed to get the number of users in a chat')
+
+            }
+            }; xhr.send()
+        
+
+        
+
+            
+            this.setState({
+            messages: [
+                {
+                _id: 2,
+                text: 'Please work',
+                createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
+                user: {
+                    _id: 3,
+                    name: 'React Native',
+                    avatar: 'https://facebook.github.io/react/img/logo_og.png',
+                },
+                },
+                {
+                _id: 3,
+                text: 'Hello developer',
+                createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+                user: {
+                    _id: 2,
+                    name: 'React Native',
+                    avatar: 'https://facebook.github.io/react/img/logo_og.png',
+                },
+                },
+            ],
+            });
+        }
+
+   
+
     close () {
         var id = this.props.userID
         var gid = this.props.groupID
@@ -238,7 +315,7 @@ export default class Chat extends Component {
                       </Body>
                       <Right>
                           <Button transparent onPress={() => this.join(data.ActivityId)}>
-                              <Text>Join</Text>
+                              <Text>Add</Text>
                           </Button>
                       </Right>
                     </ListItem>
@@ -248,34 +325,6 @@ export default class Chat extends Component {
             )
         }
     }
-
-    componentWillMount() {
-    this.setState({
-      messages: [
-          {
-          _id: 2,
-          text: 'Please work',
-          createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 3,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-        {
-          _id: 3,
-          text: 'Hello developer',
-          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-      ],
-    });
-  }
-
     
   render() {
     return (
