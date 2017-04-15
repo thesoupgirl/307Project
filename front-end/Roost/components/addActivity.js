@@ -160,7 +160,7 @@ export default class AddActivity extends Component {
     renderPage () {
       if (this.state.page === 'add') {
         return (
-      <Content>
+      <Container>
         <Header>
             <Left>
             </Left>
@@ -212,7 +212,7 @@ export default class AddActivity extends Component {
         <Button block success onPress={() => this.submit()}><Text>Submit Activity</Text></Button>
         </View>
       </Content>
-      </Content>
+      </Container>
     );
       }
       else if (this.state.page === 'pic') {

@@ -210,9 +210,9 @@ export default class SwipeActivities extends Component {
     }
   render() {
     return (
-      <Content>
+      <Container>
           {this.mountedData()}
-      </Content>
+      </Container>
     );
   }
 }
