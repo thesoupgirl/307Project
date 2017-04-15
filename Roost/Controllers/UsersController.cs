@@ -61,12 +61,12 @@ namespace Roost.Controllers
 				return "Error: Incorrect username or password";
 			}
 
-            // return "rawr";
-        }
+			// return "rawr";
+		}
 
 		// GET: /api/users/login/{id}/{passHash}
-        // Sign-in the user
-        [HttpGet("login/{id}/{passHash}")]
+		// Sign-in the user
+		[HttpGet("login/{id}/{passHash}")]
 		public async Task<ContentResult> Login(String id, String passHash)
 		{
 			//this takes request parameters only from the query string
@@ -90,28 +90,28 @@ namespace Roost.Controllers
 				if (stuff.Item["password"].S == passHash)
 				{
 					Response.StatusCode = 200;
-                    HttpResponseMessage response = new HttpResponseMessage();
-                    //HttpResponseMessage responset = Request.CreateResponse<string>(HttpStatusCode.OK, "meow");
+					HttpResponseMessage response = new HttpResponseMessage();
+					//HttpResponseMessage responset = Request.CreateResponse<string>(HttpStatusCode.OK, "meow");
 					//return Request.CreateResponse<HttpResponseMessage>(HttpStatusCode.OK, (HttpResponseMessage)Convert.ChangeType("meow", typeof(HttpResponseMessage)));
-                    //HttpResponseMessage responset = new HttpResponseMessage( HttpStatusCode.OK, new StringContent( "Your message here" ) );
-                    //response.Content = new StringContent("distance: ");
-                        //+ stuff.Item["distance"].S);
+					//HttpResponseMessage responset = new HttpResponseMessage( HttpStatusCode.OK, new StringContent( "Your message here" ) );
+					//response.Content = new StringContent("distance: ");
+						//+ stuff.Item["distance"].S);
 					Console.WriteLine(stuff.Item["distance"].S);
-                    Console.WriteLine(stuff.Item["notificatons"].N);
-                    //return Content("meowo");
-                    return Content("{ \"data\" : [ { \"distance\" : " + stuff.Item["distance"].S + ", \"notificatons\" : " + stuff.Item["notificatons"].N + " } ] }");
-                    //eturn Content("meow");
-                    //response.RequestMessage.set("distance");
-                    //return Request.CreateResponse(HttpStatusCode.OK,"File was processed.");
-                    //return response;
+					Console.WriteLine(stuff.Item["notificatons"].N);
+					//return Content("meowo");
+					return Content("{ \"data\" : [ { \"distance\" : " + stuff.Item["distance"].S + ", \"notificatons\" : " + stuff.Item["notificatons"].N + " } ] }");
+					//eturn Content("meow");
+					//response.RequestMessage.set("distance");
+					//return Request.CreateResponse(HttpStatusCode.OK,"File was processed.");
+					//return response;
 				}
 				else
 				{
 					Response.StatusCode = 400;
 					Console.WriteLine("in else");
-                    HttpResponseMessage response = new HttpResponseMessage();
+					HttpResponseMessage response = new HttpResponseMessage();
 					//return response;
-                    return null;
+					return null;
 				}
 				//return "meow";
 			}
@@ -120,8 +120,8 @@ namespace Roost.Controllers
 				Response.StatusCode = 400;
 				HttpResponseMessage response = new HttpResponseMessage();
 				//return response;
-                Console.WriteLine("caught booty");
-                return null;
+				Console.WriteLine("caught booty");
+				return null;
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace Roost.Controllers
 						{"displayName", new AttributeValue {S = username} },
 						{"password", new AttributeValue {S = password} },
 						{"distance", new AttributeValue {S = "5"} },
-                        {"notificatons", new AttributeValue {N = "0"} }
+						{"notificatons", new AttributeValue {N = "0"} }
 					}
 				);
 
@@ -157,16 +157,40 @@ namespace Roost.Controllers
 			catch (Exception)
 			{
 				Console.WriteLine("exception caught");
-                Response.StatusCode = 400;
+				Response.StatusCode = 400;
 				HttpResponseMessage response = new HttpResponseMessage();
 				return response;
 			}
 		}
-    
+
+        // POST api/users/{userId}/{favorite}
+        // add favorite to user favorites
+        [HttpPost("{userId}/{favorite}")]
+		public async Task<HttpResponseMessage> Favorite(string userId, string favorite)
+		{
+			try
+			{
+				var table = Table.LoadTable(db.client, "User");
+				var item = await table.GetItemAsync(userId, userId);
+				item["favorite"] = favorite;
+				await table.UpdateItemAsync(item);
+				Response.StatusCode = 200;
+				HttpResponseMessage response = new HttpResponseMessage();
+				return response;
+			}
+			catch(Exception)
+			{
+				Response.StatusCode = 400;
+				HttpResponseMessage response = new HttpResponseMessage();
+				Console.WriteLine("\nexception\n");
+				return response;
+			}
+		}
+	
 		// POST: /api/users/update/{id}
 		// Update user info
 		[HttpPost("update/{id}")]
-		public async Task<HttpResponseMessage> UpdateUser(string id)
+		public async Task<HttpResponseMessage> UpdateUser(string userId)
 		{
 			string username = Request.Form["username"];
 			string password = Request.Form["password"];
@@ -183,20 +207,19 @@ namespace Roost.Controllers
 
 			try
 			{
-				//DynamoDBContext context = new DynamoDBContext(db.client);
 				Console.WriteLine("trying...");
 				var table = Table.LoadTable(db.client, "User");
 				Console.WriteLine("found the table...");
-				var item = await table.GetItemAsync(id, id);
+				var item = await table.GetItemAsync(userId, userId);
 				Console.WriteLine("\ngot the item");
 				if (item == null)
 				{
 					// row not exists -> insert & return 1
 					Console.WriteLine("\nCouldn't find user in Dynamo");
 
-                    Response.StatusCode = 400;
-                    HttpResponseMessage response = new HttpResponseMessage();
-                    return response;
+					Response.StatusCode = 400;
+					HttpResponseMessage response = new HttpResponseMessage();
+					return response;
 				}
 				// row exists -> increment counter & update
 				//var counter = item["Counter"].AsInt();
@@ -207,26 +230,16 @@ namespace Roost.Controllers
 				Console.WriteLine("\nupdated it?  hopefully...");
 
 				Response.StatusCode = 200;
-                HttpResponseMessage responsey = new HttpResponseMessage();
-                return responsey;
-
-				// await db.client.PutItemAsync(
-				//    tableName: "User",
-				//   item: new Dictionary<string, Amazon.DynamoDBv2.Model.AttributeValue>
-				//  {
-				//     {"userId", new AttributeValue {S = id} },
-				//    {"username", new AttributeValue {S = username}},
-				//   {"password", new AttributeValue {S = password}}
-				//  });
+				HttpResponseMessage responsey = new HttpResponseMessage();
+				return responsey;
 
 			}
 			catch (Exception)
 			{
-                Response.StatusCode = 400;
-                HttpResponseMessage response = new HttpResponseMessage();
-                Console.WriteLine("\nexception...");
-                return response;
+				Response.StatusCode = 400;
+				HttpResponseMessage response = new HttpResponseMessage();
 				Console.WriteLine("\nexception...");
+				return response;
 			}
 		}
 	}
