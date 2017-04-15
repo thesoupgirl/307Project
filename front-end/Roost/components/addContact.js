@@ -29,13 +29,12 @@ export default class AddContact extends Component {
   render() {
     return (
     <Container>
-    <Header><Text style={{fontSize: 18, fontWeight: 'bold', alignSelf: 'center'}}>Input User ID and press enter.</Text></Header>
-                <Content>
-                    <InputGroup borderType='rounded'>
-                        <Icon name='md-person' style={{color:'#384850'}}/>
-                        <Input placeholder='<Search User ID Here>'/>
-                    </InputGroup>
-                </Content>
+        <Content>
+            <InputGroup borderType='rounded'>
+                <Icon name='md-person' style={{color:'#384850'}}/>
+                <Input placeholder='<Search User ID Here>'/>
+            </InputGroup>
+        </Content>
             </Container>
     );
   }

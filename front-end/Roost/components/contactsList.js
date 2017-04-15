@@ -29,10 +29,6 @@ export default class ContactsList extends Component {
   render() {
     return (
     <Container>
-      <Header>
-            <Text style={{fontSize: 18, fontWeight: 'bold', alignSelf: 'center'}}>Contacts List</Text>
-      </Header>
-
       <Content>
        	<List>
             <ListItem>

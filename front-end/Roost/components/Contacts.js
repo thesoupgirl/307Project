@@ -32,7 +32,9 @@ export default class Contacts extends Component {
     return (
     <Container>
       <Header>
-            <Text>Contacts</Text>
+            <Body>
+                <Title>Contacts</Title>
+            </Body>
       </Header>
       <Content>
       <Tabs>
