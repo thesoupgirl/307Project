@@ -29,7 +29,6 @@ export default class Chat extends Component {
             page: 'chat',
             members: 3,
             messages: [
-       
             ],
             json: null,
             updated: false,
@@ -43,7 +42,7 @@ export default class Chat extends Component {
      this.delete = this.delete.bind(this)
     
     }
-
+   
         componentWillMount() {
 
             var groupID  = this.props.groupID
@@ -56,19 +55,22 @@ export default class Chat extends Component {
             if (xhr.status===200) {
                 console.warn('succesfully grabbed messages')
                 var json = JSON.parse(xhr.responseText);
-                console.warn(json)
-                console.warn(json.messages)
-                for (var i = 0; i < json.messages.length(); i++) {
-                    json.messages[i].createdAt.toString().replaceAll("\"", "");
+                var newJson = json
+                //console.warn(json.messages.length)
+                for (var i = 0; i < json.messages.length; i++) {
+                    var date = eval(newJson.messages[i].createdAt)
+                    newJson.messages[i].createdAt = date
+                    newJson.messages[i].createdAt = newJson.messages[i].createdAt.toISOString()
+                    //console.warn("data: "+newJson.messages[i].createdAt)
                 }
-                this.setState({messages: json.messages})
+                this.setState({messages: newJson.messages})
 
                 ws = `${path}/api/chat/${groupID}/users` //fix route
                 xhr = new XMLHttpRequest();
                 xhr.open('GET', ws);
                 xhr.onload = () => {
                 if (xhr.status===200) {
-                    console.warn('succesfully grabbed users in chat')
+                    //console.warn('succesfully grabbed users in chat')
                     var json = JSON.parse(xhr.responseText);
 
                     ws = `${path}/api/chat/${groupID}/usercount` //fix route
@@ -76,9 +78,9 @@ export default class Chat extends Component {
                     xhr.open('GET', ws);
                     xhr.onload = () => {
                     if (xhr.status===200) {
-                        console.warn('succesfully grabbed the number of users in chat')
+                       // console.warn('succesfully grabbed the number of users in chat')
                         var json = JSON.parse(xhr.responseText);
-                        console.warn(+json)
+                        //console.warn(+json)
                         
                     } else {
                         console.warn('failed to get the number of users in a chat')
