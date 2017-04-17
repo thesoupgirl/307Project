@@ -163,9 +163,9 @@ namespace Roost.Controllers
 			}
 		}
 
-        // POST api/users/{userId}/{favorite}
-        // add favorite to user favorites
-        [HttpPost("{userId}/{favorite}")]
+		// POST api/users/{userId}/{favorite}
+		// add favorite to user favorites
+		[HttpPost("{userId}/{favorite}")]
 		public async Task<HttpResponseMessage> Favorite(string userId, string favorite)
 		{
 			try
