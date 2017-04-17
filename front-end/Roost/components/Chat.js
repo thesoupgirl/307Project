@@ -47,7 +47,8 @@ export default class Chat extends Component {
 
             var id = this.props.userID
             var gid = this.props.groupID
-            let ws = `${path}/api/chats/${gid}/{chat}/messages` //fix route
+            cid = this.props.chatID
+            let ws = `${path}/api/chats/${gid}/${cid}/messages` //fix route
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {

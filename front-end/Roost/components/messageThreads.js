@@ -33,6 +33,7 @@ export default class MessageThreads extends Component {
             group: '',
             threads: true,
             id: 0,
+            chatId: 0,
             data: [],
             filteredData: []
         }
@@ -99,7 +100,7 @@ export default class MessageThreads extends Component {
                         
                         <Right>
                             <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false}),
-                              this.setState({id: data.ActivityId}), this.setState({group: data.name})}}>
+                              this.setState({id: data.ActivityId}), this.setState({chatID: data.chatId}), this.setState({group: data.name})}}>
                                 <Text>Chat</Text>
                             </Button>
                         </Right>
@@ -114,6 +115,7 @@ export default class MessageThreads extends Component {
         return (
           <Chat threadsHandler={this.threadsHandler}
                 groupID={this.state.id}
+                chatID={this.state.chatID}
                 chatName = {this.state.group}
                 hideNav={this.props.hideNav}
                 showNav={this.props.showNav}
