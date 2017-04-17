@@ -58,6 +58,9 @@ export default class Chat extends Component {
                 var json = JSON.parse(xhr.responseText);
                 console.warn(json)
                 console.warn(json.messages)
+                for (var i = 0; i < json.messages.length(); i++) {
+                    json.messages[i].createdAt.toString().replaceAll("\"", "");
+                }
                 this.setState({messages: json.messages})
 
                 ws = `${path}/api/chat/${groupID}/users` //fix route
