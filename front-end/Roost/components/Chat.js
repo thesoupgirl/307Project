@@ -55,8 +55,8 @@ export default class Chat extends Component {
             xhr.onload = () => {
             if (xhr.status===200) {
                 console.warn('succesfully grabbed messages')
-                //var json = JSON.parse(xhr.responseText);
-                //console.warn(json)
+                var json = JSON.parse(xhr.responseText);
+                console.warn(json)
 
                 ws = `${path}/api/chat/${groupID}/users` //fix route
                 xhr = new XMLHttpRequest();
