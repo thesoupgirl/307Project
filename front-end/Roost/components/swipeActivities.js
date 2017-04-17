@@ -13,10 +13,8 @@ import {
 import path from '../properties.js'
 
 
-/*  
-    
-*/
-const cards = [
+var c
+var cards = [
     {
         num: 2,
         name: 'Baseball',
@@ -36,10 +34,10 @@ const cards = [
         image: require('./img/water.png')
     },
     {
-        num: 20,
-        name: 'Study',
-        description: 'Come join us to study for CS307',
-        image: require('./img/water.png')
+        "num": 20,
+        "name": 'Study',
+        "description": 'Come join us to study for CS307',
+        "image": require('./img/water.png')
     }
 ].sort(function(obj1, obj2) {
 	// Ascending: first age less than the previous
@@ -47,71 +45,28 @@ const cards = [
 
 });
 
+
+
 export default class SwipeActivities extends Component {
   constructor(user) {
         super()
         this.state = {
-            
+            index: 0,
+            mounted: false,
+            activityID: '',
+            data: [{
+             } ]
         }
        this.right = this.right.bind(this)
        this.left = this.left.bind(this)
-       this.swipe = this.swipe.bind(this)
+       this.setI = this.setI.bind(this)
+       this.data = this.data.bind(this)
+       this.mountedData = this.mountedData.bind(this)
     }
-    swipe () {
-
-    }
-
-    componentWillMount() {
-      //set activities array
-      /*
-        let ws = `ROUTE`
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', ws);
-        xhr.onload = () => {
-        if (xhr.status===200) {
-            var json = JSON.parse(xhr.responseText);
-            json = json.data
-            this.searchResults(json)
-            console.warn('successful')
-        } else {
-            console.warn('error getting activites')
-        }
-        }; xhr.send()
-        //console.log(search)
-        */
-    }
-
-    right () {
-        console.warn('right')
-        //add user to group with ajax call
-         //call to authenticate
-    
-        //console.warn(md5(this.state.password));
-        var id = this.props.user.username
-        //console.warn(id)
-        let ws = `${path}/api/activities/join/${id}`
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', ws);
-        xhr.onload = () => {
-        if (xhr.status===200) {
-            console.warn('activity joined')
-            
-        } else {
-                Alert.alert(
-                'Error joining activity',      
-        )
-
-        }
-        }; xhr.send()
-        this.renderBody       
-    }
-    left () {
-        console.warn('left')
-        //get next card
-    }
-  render() {
-    return (
-      <Container>
+    mountedData() {
+        if (this.state.mounted && this.state.data != [])
+        return (
+        <Container>
           <Header>
             <Left>
             </Left>
@@ -124,23 +79,25 @@ export default class SwipeActivities extends Component {
              <DeckSwiper
                 onSwipeRight={() => this.right()}
                 onSwipeLeft={() => this.left()}
-                dataSource={cards}
-                renderItem={item =>
-                <Card style={{ elevation: 3 }}>
+                dataSource={this.state.data}
+                renderItem={item =>  
+                <Card style={{ elevation: 2 }}>
                     <CardItem>
                         {
                         //<Left>
                         //<Thumbnail source={item.image} />
                         //</Left>
                         }
-                        
+                        {
+                            //(item) => this.setState({activityID: item.num})
+                        }
                         <Body>
                             <Text>{item.name}</Text>
                             <Text note>{item.description}</Text>
                         </Body>
                     </CardItem>
                     <CardItem cardBody>
-                        <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={item.image} />
+                        <Image style={{ resizeMode: 'cover', width: null, flex: 1, height: 300 }} source={cards[0].image} />
                     </CardItem>
                     <CardItem>
                         {//
@@ -148,11 +105,10 @@ export default class SwipeActivities extends Component {
                         <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
                         </Left>
                         }
-                        
                         <Text>{item.name}</Text>
                         {
                         <Right>
-                        <Button success onPress={() => this.right()}><Text> Join </Text></Button>
+                        <Button success onPress={() => {this.right(item.ActivityId)}}><Text> Join </Text></Button>
                         </Right>
                         }
                     </CardItem>
@@ -161,6 +117,102 @@ export default class SwipeActivities extends Component {
             />            
         </View>
       </Container>
+        )
+    }
+
+    data (d) {
+        this.setState({data: d.data})
+        var sorted = this.state.data.sort(function(obj1, obj2) {
+	    // Ascending: first age less than the previous
+	    return obj2.numMembers - obj1.numMembers;
+
+});
+    this.setState({data: sorted})
+        
+    }
+
+    setI (item) {
+        //i = item.data
+        console.warn(item)
+
+    }
+
+    componentWillMount() {
+      //set activities array
+        var dist = this.props.user.dist
+        var id = this.props.user.username
+        let ws = `${path}/api/activities/${id}/${dist}/search`
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn(xhr.responseText)
+            var json = JSON.parse(xhr.responseText);
+            //onsole.warn(json.data[1].name)
+            this.data(json)
+            //console.warn('successful getting activites')
+        } else {
+            console.warn('error getting activites')
+        }
+        }; xhr.send()
+        //console.log(search)
+    }
+
+    componentDidMount() {
+        //console.warn(routeD)
+        this.setState({mounted: true})
+        
+        var sorted = this.state.data.sort(function(obj1, obj2) {
+	    // Ascending: first age less than the previous
+	    return obj2.numMembers - obj1.numMembers;
+
+});
+    this.setState({data: sorted})
+    }
+
+    right (id) {
+        if (this.state.index == this.state.data.length-1) {
+             Alert.alert(
+                'End of new activites',      
+        )
+            return;
+        }
+        else {
+        this.setState({index: this.state.index+1})
+        console.warn(id)
+        //add user to group with ajax call
+         //call to authenticate
+    
+        //console.warn(md5(this.state.password));
+        var username = this.props.user.username
+        var password = this.props.user.password
+        //console.warn(id)
+        let ws = `${path}/api/activities/join/${id}`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('activity joined')
+            
+        } else {
+                Alert.alert(
+                'Error joining activity. You may already be joined',      
+        )
+
+        }
+        }; xhr.send(`username=${username}&password=${password}`)
+        this.renderBody  
+        }     
+    }
+    left () {
+        //console.warn('left')
+        //get next card
+    }
+  render() {
+    return (
+      <Content>
+          {this.mountedData()}
+      </Content>
     );
   }
 }

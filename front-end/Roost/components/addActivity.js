@@ -19,6 +19,7 @@ import TextField from 'react-native-md-textinput';
 var ImagePicker = require('react-native-image-picker');
 
 var pic = require('./img/water.png')
+import path from '../properties.js'
 
 
 /*  
@@ -33,7 +34,7 @@ export default class AddActivity extends Component {
             category: 'None',
             activity: '',
             description: '',
-            groupSize: '0',
+            groupSize: '',
             num: 0,
             latitude: null,
             longitude: null,
@@ -56,18 +57,44 @@ export default class AddActivity extends Component {
             )
           }
        else {
-          let ws = `${path}/api/` //TODO: finish route
+         var id = this.props.user.username
+          var groupSize = this.state.groupSize
+          var activity = this.state.activity
+          var description = this.state.description
+          var latitude = this.state.latitude
+          var longitude = this.state.longitude
+          var category = this.state.category
+          var status = 'open'
+
+          let ws = `${path}/api/activities/${id}/createactivity` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
           if (xhr.status===200) {
-              
+              Alert.alert(
+              'Created!!',      
+              )
+
+              this.setState({
+                page: 'add',
+                category: 'None',
+                activity: '',
+                description: '',
+                groupSize: '0',
+                num: 0,
+                latitude: null,
+                longitude: null,
+                error: null,
+                selected: [],
+                avatarSource: null
+              })
+
           } else {
               Alert.alert(
               'Failed to create activity',      
               )
           }
-          }; xhr.send()
+        }; xhr.send(`maxSize=${groupSize}&name=${activity}&description=${description}&latitude=${latitude}&longitude=${longitude}&status=${status}&category=${category}`)
           this.renderBody 
        }
         }
@@ -145,17 +172,17 @@ export default class AddActivity extends Component {
            <Content>
              <View style={{padding: 20}}>
           <ScrollView>
-        <TextField label={'Activity'} highlightColor={'#00BCD4'} 
+        <TextField value={this.state.activity}label={'Activity'} highlightColor={'#00BCD4'} 
                     onChangeText={(text) => {
                     this.state.activity = text}} />
       </ScrollView>
       <ScrollView>
-        <TextField label={'Description'} highlightColor={'#00BCD4'}
+        <TextField value={this.state.description} label={'Description'} highlightColor={'#00BCD4'}
                    onChangeText={(text) => {
                    this.state.description = text}} />
       </ScrollView>
       <ScrollView>
-        <TextField label={'Group Size'} highlightColor={'#00BCD4'}
+        <TextField value={this.state.groupSize}label={'Group Size'} highlightColor={'#00BCD4'}
                    keyboardType={'numeric'}
                    onChangeText={(text) => {
                    this.state.groupSize = text}} />
