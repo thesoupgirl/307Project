@@ -55,14 +55,14 @@ namespace RoostApp.Controllers
                     messageObjects += "},\n";
                 }
 
-                messageObjects += "],}";
+                messageObjects += "]}";
 
                 return messageObjects;
             }
             catch (Exception)
             {
                 // Return empty array if no messages found.
-                return "{ messages: [],}";
+                return "{ messages: []}";
             }
         }
 
