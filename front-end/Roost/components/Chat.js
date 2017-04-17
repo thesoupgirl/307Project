@@ -45,15 +45,17 @@ export default class Chat extends Component {
 
         componentWillMount() {
 
-            var id = this.props.userID
-            var gid = this.props.groupID
-            cid = this.props.chatID
-            let ws = `${path}/api/chats/${gid}/${cid}/messages` //fix route
+            var groupID  = this.props.groupID
+            var chatID = this.props.chatID
+            cid = this.props.chatID;
+            let ws = `${path}/api/chat/${groupID}/${chatID}/messages` //fix route
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
                 console.warn('succesfully grabbed messages')
+                var json = JSON.parse(xhr.responseText);
+                console.warn('recieved: '+json)
                 
             } else {
                 console.warn('failed to get messages')
@@ -61,7 +63,7 @@ export default class Chat extends Component {
             }
             }; xhr.send()
 
-            ws = `${path}/api/chat/${gid}/users` //fix route
+            ws = `${path}/api/chat/${groupID}/users` //fix route
             xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
@@ -74,7 +76,7 @@ export default class Chat extends Component {
             }
             }; xhr.send()
             
-            ws = `${path}/api/chat/${gid}/usercount` //fix route
+            ws = `${path}/api/chat/${groupID}/usercount` //fix route
             xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
