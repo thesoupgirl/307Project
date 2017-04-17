@@ -50,10 +50,13 @@ namespace RoostApp.Controllers
                         + "\"text\": \"" + messages.ElementAt(i) + "\",\n"
                         + "\"createdAt\": \"new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + "))\",\n"
                         + "\"user\": {\"_id\": \"" + users.ElementAt(i) + "\","
-                        + "\"name\": \"" + users.ElementAt(i) + "\"," + "},\n";
+                        + "\"name\": \"" + users.ElementAt(i) + "\"" + "}\n";
 
-                    messageObjects += "},\n";
+                    if (i != messages.Count()-1)
+                        messageObjects += "},\n";
                 }
+
+                messageObjects += "}\n";
 
                 messageObjects += "]}";
 
