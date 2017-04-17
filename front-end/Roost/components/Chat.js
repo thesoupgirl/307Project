@@ -57,6 +57,8 @@ export default class Chat extends Component {
                 console.warn('succesfully grabbed messages')
                 var json = JSON.parse(xhr.responseText);
                 console.warn(json)
+                console.warn(json.messages)
+                this.setState({messages: json.messages})
 
                 ws = `${path}/api/chat/${groupID}/users` //fix route
                 xhr = new XMLHttpRequest();
@@ -65,8 +67,6 @@ export default class Chat extends Component {
                 if (xhr.status===200) {
                     console.warn('succesfully grabbed users in chat')
                     var json = JSON.parse(xhr.responseText);
-                    console.warn(json.messages[0]._id)
-                    this.setState({messages: json.messages})
 
                     ws = `${path}/api/chat/${groupID}/usercount` //fix route
                     xhr = new XMLHttpRequest();
@@ -75,7 +75,7 @@ export default class Chat extends Component {
                     if (xhr.status===200) {
                         console.warn('succesfully grabbed the number of users in chat')
                         var json = JSON.parse(xhr.responseText);
-                        console.warn(json)
+                        console.warn(+json)
                         
                     } else {
                         console.warn('failed to get the number of users in a chat')
