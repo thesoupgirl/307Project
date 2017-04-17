@@ -34,7 +34,7 @@ namespace RoostApp.Controllers
 
 
             // The format required by the React module is a list of message objects.
-            string messageObjects = "messages: [";
+            string messageObjects = "{ messages: [";
             
             for (int i = 0; i < messages.Count(); i++)
             {
@@ -53,7 +53,7 @@ namespace RoostApp.Controllers
                 messageObjects += "},\n";
             }
 
-            messageObjects += "],";
+            messageObjects += "],}";
 
             return messageObjects;
         }
