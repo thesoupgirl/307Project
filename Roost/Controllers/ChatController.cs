@@ -34,7 +34,7 @@ namespace RoostApp.Controllers
 
 
             // The format required by the React module is a list of message objects.
-            string messageObjects = "messages: [\n";
+            string messageObjects = "messages: [";
             
             for (int i = 0; i < messages.Count(); i++)
             {
@@ -63,8 +63,16 @@ namespace RoostApp.Controllers
         [HttpGet("{activityId}/users")]
         public async Task<List<string>> GetUsers(string activityId)
         {
-            var item = await activitiesTable.GetItemAsync(activityId);
-            return item["members"].AsListOfString();
+            try
+            {
+                var item = await activitiesTable.GetItemAsync(activityId);
+                return item["members"].AsListOfString();
+            } catch (Exception)
+            {
+                Console.WriteLine("exeption caught");
+                return null;
+            }
+            
         }
 
         // GET: /api/chat/{activityId}/usercount
@@ -75,8 +83,6 @@ namespace RoostApp.Controllers
             List<string> users = await GetUsers(activityId);
             return users.Count();
         }
-
-
 
         // POST: /api/chat/{id}/send
         // Sends message to the group
@@ -91,24 +97,26 @@ namespace RoostApp.Controllers
 
         // POST: /api/chat/{id}/leave
         // Removes a user from the chat
-        [HttpPost("{id}/leave")]
-        public async Task<HttpResponseMessage> LeaveGroup(string id)
+        [HttpPost("{activityId}/leave")]
+        public async Task<HttpResponseMessage> LeaveGroup(string activityId)
         {
             try
             {
                 // Activity id comes from route.
                 string user = Request.Form["userID"];
 
-                Dictionary<string, AttributeValue> activityTableKey =
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue { S = id } }
-                    };
+                var item = await activitiesTable.GetItemAsync(activityId);
 
-                // Get the activity from its table along with the chat id
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
+                //Dictionary<string, AttributeValue> activityTableKey =
+                //    new Dictionary<string, AttributeValue>
+                //    {
+                //        {"ActivityId", new AttributeValue { S = activityId } }
+                //    };
 
-                if (id == activity.Item["groupLeader"].S)
+                //// Get the activity from its table along with the chat id
+                //var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
+
+                if (user == item["groupLeader"].AsString())
                 {
                     Response.StatusCode = 400;
                     HttpResponseMessage respons = new HttpResponseMessage();
@@ -116,26 +124,32 @@ namespace RoostApp.Controllers
                 }
 
                 // Remove the user's id from the list
-                List<string> updatedUserList = activity.Item["members"].SS;
+                List<string> updatedUserList = item["members"].AsListOfString();
 
                 updatedUserList.Remove(user);
 
                 // Update the activity's member count and Put the updated list back in the table
-                await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
+                item["members"] = updatedUserList;
+                item["numMembers"] = updatedUserList.Count();
 
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                        {
-                            "numMembers",
-                            new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
-                        },
-                        {
-                            "members",
-                            new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
-                        }
-                    }
+                await activitiesTable.UpdateItemAsync(item);
+
+                
+                //await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
+
+                //    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
+                //    {
+                //        {
+                //            "numMembers",
+                //            new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
+                //        },
+                //        {
+                //            "members",
+                //            new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
+                //        }
+                //    }
                     
-                );
+                //);
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
