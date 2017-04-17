@@ -34,7 +34,7 @@ namespace RoostApp.Controllers
 
 
             // The format required by the React module is a list of message objects.
-            string messageObjects = "messages: [\n";
+            string messageObjects = "messages: [";
             
             for (int i = 0; i < messages.Count(); i++)
             {
@@ -63,8 +63,16 @@ namespace RoostApp.Controllers
         [HttpGet("{activityId}/users")]
         public async Task<List<string>> GetUsers(string activityId)
         {
-            var item = await activitiesTable.GetItemAsync(activityId);
-            return item["members"].AsListOfString();
+            try
+            {
+                var item = await activitiesTable.GetItemAsync(activityId);
+                return item["members"].AsListOfString();
+            } catch (Exception)
+            {
+                Console.WriteLine("exeption caught");
+                return null;
+            }
+            
         }
 
         // GET: /api/chat/{activityId}/usercount
