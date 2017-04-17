@@ -48,7 +48,7 @@ namespace RoostApp.Controllers
 
                     messageObjects = messageObjects + "\"_id\": \"" + i + "\",\n"
                         + "\"text\": \"" + messages.ElementAt(i) + "\",\n"
-                        + "\"createdAt\": \"new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + "))\",\n"
+                        + "\"createdAt\": new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + ")),\n"
                         + "\"user\": {\"_id\": \"" + users.ElementAt(i) + "\","
                         + "\"name\": \"" + users.ElementAt(i) + "\"" + "}\n";
 
