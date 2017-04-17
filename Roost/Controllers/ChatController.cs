@@ -62,7 +62,7 @@ namespace RoostApp.Controllers
             catch (Exception)
             {
                 // Return empty array if no messages found.
-                return "{ messages: []}";
+                return "{ \"messages\": []}";
             }
         }
 
