@@ -36,7 +36,7 @@ namespace RoostApp.Controllers
 
 
                 // The format required by the React module is a list of message objects.
-                string messageObjects = "{ messages: [";
+                string messageObjects = "{ \"messages\": [";
 
                 for (int i = 0; i < messages.Count(); i++)
                 {
@@ -47,10 +47,10 @@ namespace RoostApp.Controllers
                     messageObjects += "{\n";
 
                     messageObjects = messageObjects + "_id: " + i + ",\n"
-                        + "text: '" + messages.ElementAt(i) + "',\n"
-                        + "createdAt: new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + ")),\n"
-                        + "user: {_id: " + users.ElementAt(i) + ","
-                        + "name: '" + users.ElementAt(i) + "'," + "},\n";
+                        + "\"text\": '" + messages.ElementAt(i) + "',\n"
+                        + "\"createdAt\": new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + ")),\n"
+                        + "\"user\": {_id: \"" + users.ElementAt(i) + "\","
+                        + "\"name\": '" + users.ElementAt(i) + "'," + "},\n";
 
                     messageObjects += "},\n";
                 }
