@@ -65,7 +65,8 @@ export default class Chat extends Component {
                 if (xhr.status===200) {
                     console.warn('succesfully grabbed users in chat')
                     var json = JSON.parse(xhr.responseText);
-                    console.warn(json)
+                    console.warn(json.messages[0]._id)
+                    this.setState({messages: json.messages})
 
                     ws = `${path}/api/chat/${groupID}/usercount` //fix route
                     xhr = new XMLHttpRequest();
@@ -95,30 +96,7 @@ export default class Chat extends Component {
         }; xhr.send()
 
             
-        this.setState({
-        messages: [
-            {
-            _id: 2,
-            text: 'Please work',
-            createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
-            user: {
-                _id: 3,
-                name: 'React Native',
-                avatar: 'https://facebook.github.io/react/img/logo_og.png',
-            },
-            },
-            {
-            _id: 3,
-            text: 'Hello developer',
-            createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-            user: {
-                _id: 2,
-                name: 'React Native',
-                avatar: 'https://facebook.github.io/react/img/logo_og.png',
-            },
-            },
-        ],
-        });
+       
         }
 
    
