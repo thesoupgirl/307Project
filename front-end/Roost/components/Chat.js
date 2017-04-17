@@ -32,7 +32,8 @@ export default class Chat extends Component {
        
             ],
             json: null,
-            updated: false
+            updated: false,
+            wait: true
         }
      this.onSend = this.onSend.bind(this)
      this.renderPage = this.renderPage.bind(this) 
@@ -54,69 +55,70 @@ export default class Chat extends Component {
             xhr.onload = () => {
             if (xhr.status===200) {
                 console.warn('succesfully grabbed messages')
-                var json = JSON.parse(xhr.responseText);
-                console.warn('recieved: '+json)
-                
+                //var json = JSON.parse(xhr.responseText);
+                //console.warn(json)
+
+                ws = `${path}/api/chat/${groupID}/users` //fix route
+                xhr = new XMLHttpRequest();
+                xhr.open('GET', ws);
+                xhr.onload = () => {
+                if (xhr.status===200) {
+                    console.warn('succesfully grabbed users in chat')
+                    var json = JSON.parse(xhr.responseText);
+                    console.warn(json)
+
+                    ws = `${path}/api/chat/${groupID}/usercount` //fix route
+                    xhr = new XMLHttpRequest();
+                    xhr.open('GET', ws);
+                    xhr.onload = () => {
+                    if (xhr.status===200) {
+                        console.warn('succesfully grabbed the number of users in chat')
+                        var json = JSON.parse(xhr.responseText);
+                        console.warn(json)
+                        
+                    } else {
+                        console.warn('failed to get the number of users in a chat')
+
+                    }
+                    }; xhr.send()
+    
+                } else {
+                    console.warn('failed to get users in a chat')
+
+                }
+            }; xhr.send()
+            
             } else {
                 console.warn('failed to get messages')
 
             }
-            }; xhr.send()
-
-            ws = `${path}/api/chat/${groupID}/users` //fix route
-            xhr = new XMLHttpRequest();
-            xhr.open('GET', ws);
-            xhr.onload = () => {
-            if (xhr.status===200) {
-                console.warn('succesfully grabbed users in chat')
-                
-            } else {
-                console.warn('failed to get users in a chat')
-
-            }
-            }; xhr.send()
-            
-            ws = `${path}/api/chat/${groupID}/usercount` //fix route
-            xhr = new XMLHttpRequest();
-            xhr.open('GET', ws);
-            xhr.onload = () => {
-            if (xhr.status===200) {
-                console.warn('succesfully grabbed the number of users in chat')
-                
-            } else {
-                console.warn('failed to get the number of users in a chat')
-
-            }
-            }; xhr.send()
-        
-
-        
+        }; xhr.send()
 
             
-            this.setState({
-            messages: [
-                {
-                _id: 2,
-                text: 'Please work',
-                createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
-                user: {
-                    _id: 3,
-                    name: 'React Native',
-                    avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                },
-                },
-                {
+        this.setState({
+        messages: [
+            {
+            _id: 2,
+            text: 'Please work',
+            createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
+            user: {
                 _id: 3,
-                text: 'Hello developer',
-                createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-                user: {
-                    _id: 2,
-                    name: 'React Native',
-                    avatar: 'https://facebook.github.io/react/img/logo_og.png',
-                },
-                },
-            ],
-            });
+                name: 'React Native',
+                avatar: 'https://facebook.github.io/react/img/logo_og.png',
+            },
+            },
+            {
+            _id: 3,
+            text: 'Hello developer',
+            createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+            user: {
+                _id: 2,
+                name: 'React Native',
+                avatar: 'https://facebook.github.io/react/img/logo_og.png',
+            },
+            },
+        ],
+        });
         }
 
    
