@@ -288,11 +288,64 @@ export default class Chat extends Component {
                         </Right>
                     </Header>
                     <Content>
+<<<<<<< HEAD
                     <Content style={{padding: 20}}>
                     <Text># of Members {this.state.members}</Text>
                     </Content>
                         <List dataArray={threads} renderRow={(data) =>
                             <ListItem thumbnail>
+=======
+                    <Text># of Members {this.state.members}</Text>
+                        <List dataArray={threads} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data.name}</Text>
+                          <Text note>{data.description}</Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.join(data.ActivityId)}>
+                              <Text>Join</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
+    }
+
+    componentWillMount() {
+    this.setState({
+      messages: [
+          {
+          _id: 2,
+          text: 'Please work',
+          createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
+          user: {
+            _id: 3,
+            name: 'React Native',
+            avatar: 'https://facebook.github.io/react/img/logo_og.png',
+          },
+        },
+        {
+          _id: 3,
+          text: 'Hello developer',
+          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://facebook.github.io/react/img/logo_og.png',
+          },
+        },
+      ],
+    });
+  }
+>>>>>>> contacts
 
                       <Left>
                           <Thumbnail square size={40} source={require('./img/water.png')} />
