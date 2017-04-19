@@ -147,7 +147,8 @@ namespace Roost.Controllers
 						{"displayName", new AttributeValue {S = username} },
 						{"password", new AttributeValue {S = password} },
 						{"distance", new AttributeValue {S = "5"} },
-						{"notificatons", new AttributeValue {N = "0"} }
+						{"notificatons", new AttributeValue {N = "0"} },
+						{"favorites", new AttributeValue{SS = new List<string>{"null"}} }
 					}
 				);
 
@@ -171,10 +172,10 @@ namespace Roost.Controllers
 		{
 			try
 			{
-                var fav = await userTable.GetItemAsync(favorite, favorite);
-                var item = await userTable.GetItemAsync(userId, userId);
+				var fav = await userTable.GetItemAsync(favorite, favorite);
+				var item = await userTable.GetItemAsync(userId, userId);
 
-                bool favExists = fav.ContainsKey("password");
+				bool favExists = fav.ContainsKey("password");
 
 				List<string> favorites = item["favorites"].AsListOfString();
 
