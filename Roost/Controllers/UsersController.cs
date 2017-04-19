@@ -173,11 +173,12 @@ namespace Roost.Controllers
 				var table = Table.LoadTable(db.client, "User");
 				var item = await table.GetItemAsync(userId, userId);
 
-				List<string> favorites = item["favorite"].AsListOfString();
+				List<string> favorites = item["favorites"].AsListOfString();
 
 				if (!favorites.Contains(favorite))
 				{
-					item["favorite"] = favorite;
+					favorites.Add(favorite);
+					item["favorites"] = favorites;
 					await table.UpdateItemAsync(item);
 				}
 

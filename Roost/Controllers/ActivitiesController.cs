@@ -416,8 +416,9 @@ namespace Roost.Controllers
                     Console.WriteLine(numberOfPeeps);
 
                     List<string> membersList = stuff["members"].AsListOfString();
+                    List<string> banned = stuff["banned"].AsListOfString();
 
-                    // don't join if the user is already joined or if it's full.
+                    // don't join if the user is already joined, is banned, or if it's full.
                     if (membersList.Contains(username))
                     {
                         Console.WriteLine("User already added to activity");
@@ -428,6 +429,13 @@ namespace Roost.Controllers
                     else if (numberOfPeeps == capacity)
                     {
                         Console.WriteLine("The activity is full");
+                        Response.StatusCode = 400;
+                        HttpResponseMessage responsey = new HttpResponseMessage();
+                        return responsey;
+                    }
+                    else if (banned.Contains(username))
+                    {
+                        Console.WriteLine("User is banned");
                         Response.StatusCode = 400;
                         HttpResponseMessage responsey = new HttpResponseMessage();
                         return responsey;
