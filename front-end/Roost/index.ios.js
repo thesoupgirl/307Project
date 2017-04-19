@@ -7,6 +7,7 @@ import Launch from './components/launch.js'
 import Login from './components/login.js'
 import Signup from './components/signup.js'
 import Contacts from './components/Contacts.js'
+import PollForm from './components/pollForm.js'
 import React, { Component } from 'react';
 import {
   AppRegistry,
