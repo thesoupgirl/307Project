@@ -37,7 +37,7 @@ export default class AddContact extends Component {
         xhr.onload = () => {
         if (xhr.status===200) {
             console.warn('succesfully added favorite')
-            
+            this.props.update()
             
         } else {
             console.warn('failed to add favorite')

@@ -30,18 +30,23 @@ export default class Contacts extends Component {
             this.state = {
                 favorites: []
             }  
+            this.update = this.update.bind(this)
         }
+
+        update () {
+            this.componentWillMount()
+        }
+
+
 
         componentWillMount() {
             var userID = this.props.user.username
-            console.warn(userID)
             var ws = `${path}/api/users/${userID}/favorites`
             var xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
                 var json = JSON.parse(xhr.responseText);
-                console.warn(json)
                 this.setState({favorites: json})
                 
             } else {
@@ -68,7 +73,8 @@ export default class Contacts extends Component {
                         </Tab>
                         <Tab heading="Add Contact">
                             <AddContact 
-                                user={this.props.user}/>
+                                user={this.props.user}
+                                update={this.update}/>
                         </Tab>
             </Tabs>
             </Content>

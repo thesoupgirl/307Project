@@ -22,19 +22,15 @@ export default class ContactsList extends Component {
   constructor(favorites) {
         super()
         this.state = {
-          favorites: ['Danny','Anoop69']
+          favorites: []
         }
     }
 
-    componentWillMount () {
-      
-    }
- 
   render() {
     return (
     <Container>
       <Content>
-       	<List dataArray={this.state.favorites} renderRow={(data) =>
+       	<List dataArray={this.props.favorites} renderRow={(data) =>
                             <ListItem thumbnail>
                       <Body>
                           <Text>{data}</Text>

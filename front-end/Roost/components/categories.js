@@ -77,7 +77,7 @@ export default class Categories extends Component {
         var username = this.props.user.username
         var password = this.props.user.password
         //var HARDCODED = 33284
-        console.warn(id)
+        //console.warn(id)
         //console.warn(id)
         let ws = `${path}/api/activities/join/${id}`
         let xhr = new XMLHttpRequest();
@@ -139,16 +139,16 @@ export default class Categories extends Component {
             </Body>
             <Right/>
         </Header>
-          <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
+          <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'food' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Food' })}}>
                 <Text>Food</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'adventures' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
                 <Text>Adventures</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'study groups' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Study Groups' })}}>
                 <Text>Study Groups</Text>
             </ListItem>
             </View>
