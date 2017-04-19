@@ -47,7 +47,8 @@ export default class Contacts extends Component {
             xhr.onload = () => {
             if (xhr.status===200) {
                 var json = JSON.parse(xhr.responseText);
-                this.setState({favorites: json})
+                var filteredData = json.filter((item) => item !== 'null');  
+                this.setState({favorites: filteredData})
                 
             } else {
                 console.warn('failed to get a users favorites')

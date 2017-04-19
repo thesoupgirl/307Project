@@ -41,6 +41,9 @@ export default class AddContact extends Component {
             
         } else {
             console.warn('failed to add favorite')
+            Alert.alert (
+                'Error adding favorite'
+            )
 
         }
         }; xhr.send()

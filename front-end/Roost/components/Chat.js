@@ -42,7 +42,31 @@ export default class Chat extends Component {
      this.open = this.open.bind(this)
      this.delete = this.delete.bind(this)
      this.addFriend = this.addFriend.bind(this)
+     this.kickUser = this.kickUser.bind(this)
     
+    }
+    kickUser (user) {
+        if (this.props.userID === user) {
+            Alert.alert (
+                "Can't kick yourself"
+            )
+            return 
+        } 
+        var groupID  = this.props.groupID
+        ws = `${path}/api/chat/${groupID}/kick` //fix route
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('succesfully kicked')
+            
+            
+        } else {
+            console.warn('failed to kick user')
+
+        }
+        }; xhr.send(`userId=${user}`)
+        this.componentWillMount()
     }
     addFriend (favorite) {
         //TODO::ADD CODE TO ADD FRIEND
@@ -277,7 +301,7 @@ export default class Chat extends Component {
         <View style={{padding: 20}}>
          <Button onPress={() => {this.setState({page: 'group'})}} block>
             <Text>Activity Members</Text>
-          </Button >
+          </Button>
           <Text/>
           <Button onPress={() => this.leave()} block>
             <Text>Leave Activity</Text>
@@ -290,6 +314,10 @@ export default class Chat extends Component {
           <Button onPress={() => this.open()} block>
             <Text>Re-open Activity</Text>
           </Button>
+          <Text/>
+          <Button danger onPress={() => {this.setState({page: 'kick'})}} block>
+            <Text>Kick Users</Text>
+          </Button >
           <Text/>
           <Button danger onPress={() => this.delete()} block>
             <Text>Delete Activity</Text>
@@ -332,6 +360,46 @@ export default class Chat extends Component {
                       <Right>
                           <Button transparent onPress={() => this.addFriend(data)}>
                               <Text>Add as favorite</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
+        else if (this.state.page === 'kick') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+
+                    <Content style={{padding: 20}}>
+                    </Content>
+                        <List dataArray={this.state.users} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.kickUser(data)}>
+                              <Text>Kick User</Text>
                           </Button>
                       </Right>
                     </ListItem>
