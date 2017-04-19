@@ -10,7 +10,8 @@ import {
   Image,
   TouchableHighlight,
   Dimensions,
-  Alert
+  Alert,
+  TextInput
 } from 'react-native';
 import path from '../properties.js'
 
@@ -19,23 +20,47 @@ import path from '../properties.js'
 */
 
 export default class AddContact extends Component {
-  constructor(threadsHandler, id, hideNav, showNav, userID) {
+  constructor(user) {
         super()
         this.state = {
-          
+          search: 'hi'
         }
+        this.addFriend = this.addFriend.bind(this)
+    
+    }
+    addFriend () {
+        var user = this.props.user.username
+        favorite = this.state.search
+        ws = `${path}/api/users/${user}/${favorite}` //fix route
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('succesfully added favorite')
+            
+            
+        } else {
+            console.warn('failed to add favorite')
+
+        }
+        }; xhr.send()
     }
  
   render() {
     return (
     <Container>
         <Content>
-            <InputGroup borderType='rounded'>
-                <Icon name='md-person' style={{color:'#384850'}}/>
-                <Input placeholder='<Search User ID Here>'/>
-            </InputGroup>
+        <View style={{padding: 15}}>
+            <TextInput
+            style={{height: 40}}
+            placeholder="Search for user"
+            onChangeText={(search) => this.setState({search})}
+            /> 
+            <Button transparent onPress={() => this.addFriend()}><Text>Save user</Text></Button>
+        </View>
         </Content>
-            </Container>
+    </Container>
     );
   }
 }
+

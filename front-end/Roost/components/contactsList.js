@@ -19,27 +19,29 @@ import path from '../properties.js'
 */
 
 export default class ContactsList extends Component {
-  constructor(threadsHandler, id, hideNav, showNav, userID) {
+  constructor(favorites) {
         super()
         this.state = {
-          
+          favorites: ['Danny','Anoop69']
         }
+    }
+
+    componentWillMount () {
+      //this.setState({favorites: this.props.favorites})
     }
  
   render() {
     return (
     <Container>
       <Content>
-       	<List>
-            <ListItem>
-                <Thumbnail source={require('./img/person.png')} />
-                <Text>Anoop</Text>
-            </ListItem>
-            <ListItem>
-                <Thumbnail source={require('./img/person.png')} />
-                <Text>Lord and Savior Gustavo</Text>
-            </ListItem>
-        </List>
+       	<List dataArray={this.state.favorites} renderRow={(data) =>
+                            <ListItem thumbnail>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                    </ListItem>
+            } />
        </Content>
        
     </Container>

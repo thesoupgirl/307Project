@@ -19,7 +19,7 @@ import path from '../properties.js'
     
 */
 
-var threads = [{user: 'Danny'}, {user: 'David'}, {user: 'Joseph'}]
+var threads = [{name: 'Danny'}, {name: 'David'}, {name: 'Joseph'}]
 
 
 export default class Chat extends Component {
@@ -27,7 +27,8 @@ export default class Chat extends Component {
         super()
         this.state = {
             page: 'chat',
-            members: 3,
+            groupSize: 1,
+            users: [{name: 'Danny'}, {name: 'David'}, {name: 'craig'}],
             messages: [
             ],
             json: null,
@@ -40,7 +41,25 @@ export default class Chat extends Component {
      this.close = this.close.bind(this)
      this.open = this.open.bind(this)
      this.delete = this.delete.bind(this)
+     this.addFriend = this.addFriend.bind(this)
     
+    }
+    addFriend (favorite) {
+        //TODO::ADD CODE TO ADD FRIEND
+        var user = this.props.userID
+        ws = `${path}/api/users/${user}/${favorite}` //fix route
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('succesfully added favorite')
+            
+            
+        } else {
+            console.warn('failed to add favorite')
+
+        }
+        }; xhr.send()
     }
    
         componentWillMount() {
@@ -72,6 +91,8 @@ export default class Chat extends Component {
                 if (xhr.status===200) {
                     //console.warn('succesfully grabbed users in chat')
                     var json = JSON.parse(xhr.responseText);
+                    console.warn(json)
+                   this.setState({users: json})
 
                     ws = `${path}/api/chat/${groupID}/usercount` //fix route
                     xhr = new XMLHttpRequest();
@@ -80,6 +101,7 @@ export default class Chat extends Component {
                     if (xhr.status===200) {
                        // console.warn('succesfully grabbed the number of users in chat')
                         var json = JSON.parse(xhr.responseText);
+                        this.setState({groupSize: json})
                         //console.warn(+json)
                         
                     } else {
@@ -288,27 +310,23 @@ export default class Chat extends Component {
                         </Right>
                     </Header>
                     <Content>
-<<<<<<< HEAD
+
                     <Content style={{padding: 20}}>
-                    <Text># of Members {this.state.members}</Text>
+                    <Text># of Members {this.state.groupSize}</Text>
                     </Content>
-                        <List dataArray={threads} renderRow={(data) =>
-                            <ListItem thumbnail>
-=======
-                    <Text># of Members {this.state.members}</Text>
-                        <List dataArray={threads} renderRow={(data) =>
+                        <List dataArray={this.state.users} renderRow={(data) =>
                             <ListItem thumbnail>
 
                       <Left>
                           <Thumbnail square size={40} source={require('./img/water.png')} />
                       </Left>
                       <Body>
-                          <Text>{data.name}</Text>
-                          <Text note>{data.description}</Text>
+                          <Text>{data}</Text>
+                          <Text note></Text>
                       </Body>
                       <Right>
-                          <Button transparent onPress={() => this.join(data.ActivityId)}>
-                              <Text>Join</Text>
+                          <Button transparent onPress={() => this.addFriend(data)}>
+                              <Text>Add as favorite</Text>
                           </Button>
                       </Right>
                     </ListItem>
@@ -319,53 +337,7 @@ export default class Chat extends Component {
         }
     }
 
-    componentWillMount() {
-    this.setState({
-      messages: [
-          {
-          _id: 2,
-          text: 'Please work',
-          createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 3,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-        {
-          _id: 3,
-          text: 'Hello developer',
-          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-      ],
-    });
-  }
->>>>>>> contacts
-
-                      <Left>
-                          <Thumbnail square size={40} source={require('./img/water.png')} />
-                      </Left>
-                      <Body>
-                          <Text>{data.user}</Text>
-                          <Text/>
-                      </Body>
-                      <Right>
-                          <Button transparent onPress={() => this.join(data.ActivityId)}>
-                              <Text>Add</Text>
-                          </Button>
-                      </Right>
-                    </ListItem>
-            } />
-                    </Content>
-                </Container>
-            )
-        }
-    }
+   
     
   render() {
     return (
