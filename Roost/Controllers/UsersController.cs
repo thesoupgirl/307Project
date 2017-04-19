@@ -22,7 +22,8 @@ namespace Roost.Controllers
 	{
 
 		private readonly IUserRepository _userRepository;
-		DBHelper db = new DBHelper();
+		static DBHelper db = new DBHelper();
+		Table userTable = Table.LoadTable(db.client, "User");
 
 		public UsersController(IUserRepository userRepository)
 
@@ -170,16 +171,18 @@ namespace Roost.Controllers
 		{
 			try
 			{
-				var table = Table.LoadTable(db.client, "User");
-				var item = await table.GetItemAsync(userId, userId);
+                var fav = await userTable.GetItemAsync(favorite, favorite);
+                var item = await userTable.GetItemAsync(userId, userId);
+
+                bool favExists = fav.ContainsKey("password");
 
 				List<string> favorites = item["favorites"].AsListOfString();
 
-				if (!favorites.Contains(favorite))
+				if (!favorites.Contains(favorite) && favExists)
 				{
 					favorites.Add(favorite);
 					item["favorites"] = favorites;
-					await table.UpdateItemAsync(item);
+					await userTable.UpdateItemAsync(item);
 				} else
 				{
 					Console.WriteLine("User is already a favorite");
@@ -208,8 +211,7 @@ namespace Roost.Controllers
 		{
 			try
 			{
-				var table = Table.LoadTable(db.client, "User");
-				var item = await table.GetItemAsync(userId, userId);
+				var item = await userTable.GetItemAsync(userId, userId);
 				return item["favorites"].AsListOfString();
 			} catch (Exception)
 			{
@@ -239,9 +241,8 @@ namespace Roost.Controllers
 			try
 			{
 				Console.WriteLine("trying...");
-				var table = Table.LoadTable(db.client, "User");
 				Console.WriteLine("found the table...");
-				var item = await table.GetItemAsync(userId, userId);
+				var item = await userTable.GetItemAsync(userId, userId);
 				Console.WriteLine("\ngot the item");
 				if (item == null)
 				{
@@ -253,11 +254,10 @@ namespace Roost.Controllers
 					return response;
 				}
 				// row exists -> increment counter & update
-				//var counter = item["Counter"].AsInt();
 				item["password"] = password;
 				item["notificatons"] = pushNot;
 				item["distance"] = distance;
-				await table.UpdateItemAsync(item);
+				await userTable.UpdateItemAsync(item);
 				Console.WriteLine("\nupdated it?  hopefully...");
 
 				Response.StatusCode = 200;
