@@ -180,6 +180,12 @@ namespace Roost.Controllers
 					favorites.Add(favorite);
 					item["favorites"] = favorites;
 					await table.UpdateItemAsync(item);
+				} else
+				{
+					Console.WriteLine("User is already a favorite");
+					Response.StatusCode = 400;
+					HttpResponseMessage respone = new HttpResponseMessage();
+					return respone;
 				}
 
 				Response.StatusCode = 200;
