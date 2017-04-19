@@ -27,7 +27,7 @@ export default class ContactsList extends Component {
     }
 
     componentWillMount () {
-      //this.setState({favorites: this.props.favorites})
+      
     }
  
   render() {

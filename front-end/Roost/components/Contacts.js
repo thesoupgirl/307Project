@@ -25,7 +25,7 @@ import ContactsList from './contactsList'
 
 
 export default class Contacts extends Component {
-  constructor(threadsHandler, id, hideNav, showNav, userID) {
+  constructor(threadsHandler, id, hideNav, showNav, user) {
         super()
             this.state = {
                 favorites: []
@@ -33,18 +33,19 @@ export default class Contacts extends Component {
         }
 
         componentWillMount() {
-            var ws = `${path}`//fix route
+            var userID = this.props.user.username
+            console.warn(userID)
+            var ws = `${path}/api/users/${userID}/favorites`
             var xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
-                // console.warn('succesfully grabbed the number of users in chat')
                 var json = JSON.parse(xhr.responseText);
+                console.warn(json)
                 this.setState({favorites: json})
-                //console.warn(+json)
                 
             } else {
-                console.warn('failed to get the number of users in a chat')
+                console.warn('failed to get a users favorites')
 
             }
                     }; xhr.send()
