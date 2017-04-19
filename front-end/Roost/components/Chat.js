@@ -46,6 +46,11 @@ export default class Chat extends Component {
     }
     addFriend (favorite) {
         //TODO::ADD CODE TO ADD FRIEND
+
+        if(favorite === this.props.userID)
+            Alert.alert(
+                "You can't add yourself as a favorite"
+            )
         var user = this.props.userID
         ws = `${path}/api/users/${user}/${favorite}` //fix route
         xhr = new XMLHttpRequest();
