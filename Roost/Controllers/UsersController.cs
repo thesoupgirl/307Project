@@ -193,6 +193,22 @@ namespace Roost.Controllers
 				return response;
 			}
 		}
+
+		// GET api/users/{userId}/favorites
+		// Gets a user's favorite contacts
+		[HttpGet("api/users/{userId}/favorites")]
+		public async Task<List<string>> GetFavorites(string userId)
+		{
+			try
+			{
+				var table = Table.LoadTable(db.client, "User");
+				var item = await table.GetItemAsync(userId, userId);
+				return item["favorite"].AsListOfString();
+			} catch (Exception)
+			{
+				return null;
+			}
+		} 
 	
 		// POST: /api/users/update/{id}
 		// Update user info
