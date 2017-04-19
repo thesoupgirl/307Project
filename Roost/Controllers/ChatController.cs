@@ -181,5 +181,32 @@ namespace RoostApp.Controllers
         {
             return View();
         }
+
+        // POST /api/chat/{activityId}/kick
+        // Kicks a user from the group
+        // Only the group leader has this ability
+        [HttpPost("{activityId}/kick")]
+        public async Task<HttpResponseMessage> KickUser(string activityId)
+        {
+            try
+            {
+                string userToKick = Request.Form["userID"];
+
+                await LeaveGroup(activityId);
+
+                // TODO make sure the user cannot re-join the group.
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("exception");
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
     }
 }

@@ -172,8 +172,15 @@ namespace Roost.Controllers
 			{
 				var table = Table.LoadTable(db.client, "User");
 				var item = await table.GetItemAsync(userId, userId);
-				item["favorite"] = favorite;
-				await table.UpdateItemAsync(item);
+
+				List<string> favorites = item["favorite"].AsListOfString();
+
+				if (!favorites.Contains(favorite))
+				{
+					item["favorite"] = favorite;
+					await table.UpdateItemAsync(item);
+				}
+
 				Response.StatusCode = 200;
 				HttpResponseMessage response = new HttpResponseMessage();
 				return response;
