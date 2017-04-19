@@ -207,6 +207,9 @@ namespace Roost.Controllers
                         // The maximum amount of people who can join the group
                         {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"] } },
 
+                        // The list of banned users
+                        {"banned", new AttributeValue{SS = new List<string>{"null"}} },
+
                         // A complete list of everyone in the group.
                         {"members", new AttributeValue{SS = members} },
 
@@ -405,7 +408,6 @@ namespace Roost.Controllers
             {
                 try
                 {
-
                     var stuff = await activitiesTable.GetItemAsync(id);
 
                     // The number of people currently in the group and the size limit
