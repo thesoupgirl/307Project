@@ -197,8 +197,8 @@ namespace RoostApp.Controllers
                 await LeaveGroup(activityId);
 
                 // Make a list of banned users if the activity doesn't have one.
-                //if (!item.ContainsKey("banned"))
-                //    item["banned"] = new List<string>();
+                if (!item.ContainsKey("banned"))
+                    item["banned"] = new List<string>();
 
                 List<string> bannedUsers = item["banned"].AsListOfString();
 
