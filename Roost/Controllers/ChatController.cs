@@ -195,12 +195,12 @@ namespace RoostApp.Controllers
                 string userToKick = Request.Form["userID"];
 
                 await LeaveGroup(activityId);
-                
-                List<string> bannedUsers = item["banned"].AsListOfString();
 
                 // Make a list of banned users if the activity doesn't have one.
                 if (!item.ContainsKey("banned"))
                     item["banned"] = new List<string>();
+
+                List<string> bannedUsers = item["banned"].AsListOfString();
 
                 // Add the kicked user to that list.
                 if (!bannedUsers.Contains(userToKick))
