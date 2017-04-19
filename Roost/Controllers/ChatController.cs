@@ -181,5 +181,46 @@ namespace RoostApp.Controllers
         {
             return View();
         }
+
+        // POST /api/chat/{activityId}/kick
+        // Kicks a user from the group
+        // Only the group leader has this ability
+        [HttpPost("{activityId}/kick")]
+        public async Task<HttpResponseMessage> KickUser(string activityId)
+        {
+            var item = await activitiesTable.GetItemAsync(activityId);
+
+            try
+            {
+                string userToKick = Request.Form["userID"];
+
+                await LeaveGroup(activityId);
+                
+                List<string> bannedUsers = item["banned"].AsListOfString();
+
+                // Make a list of banned users if the activity doesn't have one.
+                if (!item.ContainsKey("banned"))
+                    item["banned"] = new List<string>();
+
+                // Add the kicked user to that list.
+                if (!bannedUsers.Contains(userToKick))
+                {
+                    //bannedUsers.Add(userToKick);
+                    item["banned"].AsListOfString().Add(userToKick);
+                    await activitiesTable.UpdateItemAsync(item);
+                }
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("exception");
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
     }
 }
