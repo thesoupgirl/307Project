@@ -175,7 +175,7 @@ namespace Roost.Controllers
 
 				List<string> favorites = item["favorite"].AsListOfString();
 
-				if (!favorites.Contains(favorite))
+				if (item["favorite"] != favorite)
 				{
 					item["favorite"] = favorite;
 					await table.UpdateItemAsync(item);
