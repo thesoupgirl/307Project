@@ -226,7 +226,7 @@ namespace RoostApp.Controllers
         // Body will send column names that a message contains
         // add it to the list of messages in an activity
         // message will be "x invited y"
-        [HttpPost("{activityId}/{chatId}/sendinvite")]
+        [HttpPost("{activityId}/{chatId}/addinvite")]
         public async Task<HttpResponseMessage> AddInvite(string chatId, string activityId)
         {
             try
@@ -241,7 +241,7 @@ namespace RoostApp.Controllers
                 // Add the message's info
                 messages.Add(Request.Form["message"]);
                 users.Add(Request.Form["user"]);
-                dates.Add(Request.Form["date"]);
+                dates.Add(DateTime.Now.ToString());
 
                 item["messagesSent"] = messages;
                 item["userIdSent"] = users;
