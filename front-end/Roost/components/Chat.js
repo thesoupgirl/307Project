@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat'
 import path from '../properties.js'
+import Polls from './Polls.js'
 
 /*  
     
@@ -31,6 +32,7 @@ export default class Chat extends Component {
             users: [{name: 'Danny'}, {name: 'David'}, {name: 'craig'}],
             messages: [
             ],
+            favorites: [],
             json: null,
             updated: false,
             wait: true
@@ -43,7 +45,17 @@ export default class Chat extends Component {
      this.delete = this.delete.bind(this)
      this.addFriend = this.addFriend.bind(this)
      this.kickUser = this.kickUser.bind(this)
+     this.menu = this.menu.bind(this)
+     this.invite = this.invite.bind(this)
     
+    }
+
+    invite() {
+        //AJAX FOR JOINING GROUP
+    }
+
+    menu () {
+        this.setState({page: 'menu'})
     }
     kickUser (user) {
         if (this.props.userID === user) {
@@ -82,6 +94,7 @@ export default class Chat extends Component {
         xhr.onload = () => {
         if (xhr.status===200) {
             console.warn('succesfully added favorite')
+
             
             
         } else {
@@ -132,6 +145,23 @@ export default class Chat extends Component {
                         var json = JSON.parse(xhr.responseText);
                         this.setState({groupSize: json})
                         //console.warn(+json)
+
+                        var userID = this.props.userID
+                        ws = `${path}/api/users/${userID}/favorites`
+                        xhr = new XMLHttpRequest();
+                        xhr.open('GET', ws);
+                        xhr.onload = () => {
+                        if (xhr.status===200) {
+                            var json = JSON.parse(xhr.responseText);
+                            var filteredData = json.filter((item) => item !== 'null');  
+                            this.setState({favorites: filteredData})
+                
+            } else {
+                console.warn('failed to get a users favorites')
+
+            }
+                    }; xhr.send()
+            
                         
                     } else {
                         console.warn('failed to get the number of users in a chat')
@@ -315,6 +345,14 @@ export default class Chat extends Component {
             <Text>Re-open Activity</Text>
           </Button>
           <Text/>
+          <Button onPress={() => {this.setState({page: 'form'})}} block>
+            <Text>Add Form</Text>
+          </Button>
+          <Text/>
+          <Button onPress={() => {this.setState({page: 'add'})}} block>
+            <Text>Invite a friend</Text>
+          </Button>
+          <Text/>
           <Button danger onPress={() => {this.setState({page: 'kick'})}} block>
             <Text>Kick Users</Text>
           </Button >
@@ -400,6 +438,53 @@ export default class Chat extends Component {
                       <Right>
                           <Button transparent onPress={() => this.kickUser(data)}>
                               <Text>Kick User</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
+        else if (this.state.page === 'form') {
+            return (
+                <Polls
+                    menu={this.menu}
+                    update={this.componentWillMount}/>
+            )
+        }
+        else if (this.state.page === 'add') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+
+                    <Content style={{padding: 20}}>
+                    </Content>
+                        <List dataArray={this.state.favorites} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.invite(data)}>
+                              <Text>Invite</Text>
                           </Button>
                       </Right>
                     </ListItem>
