@@ -221,5 +221,46 @@ namespace RoostApp.Controllers
                 return response;
             }
         }
+
+        // POST /api/chat/{activityId}/{chatId}/sendinvite
+        // Body will send column names that a message contains
+        // add it to the list of messages in an activity
+        // message will be "x invited y"
+        [HttpPost("{activityId}/{chatId}/addinvite")]
+        public async Task<HttpResponseMessage> AddInvite(string chatId, string activityId)
+        {
+            try
+            {
+                // Get the lists from the table
+                var item = await chatTable.GetItemAsync(chatId, activityId);
+
+                List<string> messages = item["messagesSent"].AsListOfString();
+                List<string> users = item["userIdSent"].AsListOfString();
+                List<string> dates = item["timestamps"].AsListOfString();
+
+                // Add the message's info
+                messages.Add(Request.Form["message"]);
+                users.Add(Request.Form["user"]);
+                dates.Add(DateTime.Now.ToString());
+
+                item["messagesSent"] = messages;
+                item["userIdSent"] = users;
+                item["timestamps"] = dates;
+
+                // Update the table
+                await chatTable.UpdateItemAsync(item);
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("exception");
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
     }
 }
