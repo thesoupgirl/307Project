@@ -238,9 +238,9 @@ namespace RoostApp.Controllers
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("exception");
+                Console.WriteLine(e.Message);
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
