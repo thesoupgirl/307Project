@@ -187,9 +187,9 @@ namespace RoostApp.Controllers
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                Console.WriteLine("exception");
+                Console.WriteLine(e.Message);
                 Response.StatusCode = 400;
                 HttpResponseMessage response = new HttpResponseMessage();
                 return response;
@@ -224,11 +224,11 @@ namespace RoostApp.Controllers
                 // Add the message's info
                 Console.WriteLine(Request.Form["message"]);
                 messages.Add(Request.Form["message"]);
-                users.Add(Request.Form["user"]); // The user who sent the message
+                //users.Add(Request.Form["user"]); // The user who sent the message
                 dates.Add(DateTime.Now.ToString());
 
                 item["messagesSent"] = messages;
-                item["userIdSent"] = users;
+                //item["userIdSent"] = users;
                 item["timestamps"] = dates;
 
                 // Update the table
