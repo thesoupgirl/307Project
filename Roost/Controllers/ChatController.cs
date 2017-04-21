@@ -213,11 +213,13 @@ namespace RoostApp.Controllers
                 List<string> dates = new List<string>();
 
                 if (item.ContainsKey("messagesSent"))
-                {
                     messages = item["messagesSent"].AsListOfString();
+
+                if (item.ContainsKey("userIdSent"))
                     users = item["userIdSent"].AsListOfString();
+
+                if (item.ContainsKey("timestamps"))
                     dates = item["timestamps"].AsListOfString();
-                }
 
                 // Add the message's info
                 Console.WriteLine(Request.Form["message"]);
