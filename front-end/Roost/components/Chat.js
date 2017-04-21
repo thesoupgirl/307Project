@@ -53,6 +53,7 @@ export default class Chat extends Component {
     invite(user) {
         var username = this.props.userID
         var groupID  = this.props.groupID
+        var chatID = this.props.chatID
         var pass = 'blah'
 
         if (user === username) {
@@ -64,13 +65,39 @@ export default class Chat extends Component {
         //var HARDCODED = 33284
         //console.warn(id)
         //console.warn(id)
+        var message = 'hi'
         let ws = `${path}/api/activities/join/${groupID}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
             console.warn('Invited User')
-            
+
+
+        if (user === username) {
+            Alert.alert(
+                "You can't invite yourself",      
+             )
+             return;
+        }
+        //var HARDCODED = 33284
+        //console.warn(id)
+        //console.warn(id)
+        let ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            console.warn('Created Message')
+
+      
+        } else {
+            console.warn('Failed to create message')
+
+        }
+        }; xhr.send(`message=${message}&user=${user}`)
+        this.renderBody
+
         } else {
                 Alert.alert(
                 'Failed to Invite user',      
@@ -78,7 +105,6 @@ export default class Chat extends Component {
 
         }
         }; xhr.send(`username=${user}&password=${pass}`)
-        this.renderBody
     }
 
     menu () {
