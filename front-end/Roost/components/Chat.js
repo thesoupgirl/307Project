@@ -65,7 +65,7 @@ export default class Chat extends Component {
         //var HARDCODED = 33284
         //console.warn(id)
         //console.warn(id)
-        var message = `${username} invited ${user}`
+        var message = `hi`
         let ws = `${path}/api/activities/join/${groupID}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
