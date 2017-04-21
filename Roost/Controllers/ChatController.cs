@@ -118,15 +118,6 @@ namespace RoostApp.Controllers
 
                 var item = await activitiesTable.GetItemAsync(activityId);
 
-                //Dictionary<string, AttributeValue> activityTableKey =
-                //    new Dictionary<string, AttributeValue>
-                //    {
-                //        {"ActivityId", new AttributeValue { S = activityId } }
-                //    };
-
-                //// Get the activity from its table along with the chat id
-                //var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
-
                 if (user == item["groupLeader"].AsString())
                 {
                     Response.StatusCode = 400;
@@ -144,23 +135,6 @@ namespace RoostApp.Controllers
                 item["numMembers"] = updatedUserList.Count();
 
                 await activitiesTable.UpdateItemAsync(item);
-
-                
-                //await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
-
-                //    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                //    {
-                //        {
-                //            "numMembers",
-                //            new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
-                //        },
-                //        {
-                //            "members",
-                //            new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
-                //        }
-                //    }
-                    
-                //);
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
@@ -244,8 +218,9 @@ namespace RoostApp.Controllers
                     users = item["userIdSent"].AsListOfString();
                     dates = item["timestamps"].AsListOfString();
                 }
-                
+
                 // Add the message's info
+                Console.WriteLine(Request.Form["message"]);
                 messages.Add(Request.Form["message"]);
                 users.Add(Request.Form["user"]); // The user who sent the message
                 dates.Add(DateTime.Now.ToString());
