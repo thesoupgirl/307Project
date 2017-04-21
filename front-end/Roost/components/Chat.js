@@ -65,7 +65,7 @@ export default class Chat extends Component {
         //var HARDCODED = 33284
         //console.warn(id)
         //console.warn(id)
-        var message = 'hi'
+        var message = `${username} invited ${user}`
         let ws = `${path}/api/activities/join/${groupID}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
@@ -95,7 +95,7 @@ export default class Chat extends Component {
             console.warn('Failed to create message')
 
         }
-        }; xhr.send(`message=${message}&user=${user}`)
+        }; xhr.send(`message=${message}&user=${username}`)
         this.renderBody
 
         } else {
@@ -136,10 +136,12 @@ export default class Chat extends Component {
     addFriend (favorite) {
         //TODO::ADD CODE TO ADD FRIEND
 
-        if(favorite === this.props.userID)
+        if(favorite === this.props.userID) {
             Alert.alert(
                 "You can't add yourself as a favorite"
             )
+            return
+        }
         var user = this.props.userID
         ws = `${path}/api/users/${user}/${favorite}` //fix route
         xhr = new XMLHttpRequest();
