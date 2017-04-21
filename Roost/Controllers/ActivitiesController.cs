@@ -218,10 +218,6 @@ namespace Roost.Controllers
                     }
                 );
 
-                // This list will store the userIds of all members in the activity
-                // Add the activity's creator to the list
-                //List<string> users = new List<string> { id };
-
                 // Attach a chat to the activity
                 // Must use UpdateItemAsync in order to use atomic counter
                 await db.client.PutItemAsync(
@@ -245,9 +241,6 @@ namespace Roost.Controllers
 
                         // Unique ids for each message
                         //{"messageIds", new AttributeValue{SS = new List<string>()} },
-
-                        // Links for pictures sent in the chat
-                        //{"picLinks", new AttributeValue{SS = new List<string>()} },
 
                         // The current number of messages in the chat (200 max)
                         {"numMessages", new AttributeValue{N = "0"} }
