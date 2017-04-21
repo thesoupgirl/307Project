@@ -418,7 +418,10 @@ namespace Roost.Controllers
                     Console.WriteLine(numberOfPeeps);
 
                     List<string> membersList = stuff["members"].AsListOfString();
-                    List<string> banned = stuff["banned"].AsListOfString();
+                    List<string> banned = new List<string>();
+
+                    if (stuff.ContainsKey("banned"))
+                        banned = stuff["banned"].AsListOfString();
 
                     // don't join if the user is already joined, is banned, or if it's full.
                     if (membersList.Contains(username))

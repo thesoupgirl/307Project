@@ -234,7 +234,6 @@ namespace RoostApp.Controllers
                 // Get the lists from the table
                 var item = await chatTable.GetItemAsync(chatId, activityId);
 
-
                 List<string> messages = new List<string>();
                 List<string> users = new List<string>();
                 List<string> dates = new List<string>();
@@ -248,7 +247,7 @@ namespace RoostApp.Controllers
                 
                 // Add the message's info
                 messages.Add(Request.Form["message"]);
-                users.Add(Request.Form["user"]);
+                users.Add(Request.Form["user"]); // The user who sent the message
                 dates.Add(DateTime.Now.ToString());
 
                 item["messagesSent"] = messages;
