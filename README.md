@@ -9,7 +9,7 @@ For local deployment, the server deploys to port 60756.  To deploy using Visual 
 If it doesn't build, manage NuGet packages and add React.AspNet, Microsoft.NETCore.App, and Microsoft.NETCore.Mvc
 ### Local Deployment - Command Line
 If you'd like to run it via your terminal...
-Then go to the directory with the repo and go to `/RoostApp/src/Roost`
+Then go to the directory with the repo and go to `/Roost/Roost`
 Type the following: `dotnet run`
 Note:  Must have dotnet cli installed for this to work...if you have issues, run `dotnet restore`
 To deploy, run `dotnet run` after that and it'll deploy on port 5000
