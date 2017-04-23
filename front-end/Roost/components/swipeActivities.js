@@ -75,10 +75,10 @@ export default class SwipeActivities extends Component {
             </Body>
             <Right/>
         </Header>
-        <View padder >
+        <View padder>
              <DeckSwiper
-                onSwipeRight={() => this.right()}
-                onSwipeLeft={() => this.left()}
+                //onSwipeRight={() => this.right()}
+                //onSwipeLeft={() => this.left()}
                 dataSource={this.state.data}
                 renderItem={item =>  
                 <Card style={{ elevation: 2 }}>
@@ -102,10 +102,10 @@ export default class SwipeActivities extends Component {
                     <CardItem>
                         {//
                         <Left>
-                        <Button danger onPress={() => this.left()}><Text> Skip </Text></Button>
+                        <Text>{item.name}</Text>
                         </Left>
                         }
-                        <Text>{item.name}</Text>
+                        
                         {
                         <Right>
                         <Button success onPress={() => {this.right(item.ActivityId)}}><Text> Join </Text></Button>
