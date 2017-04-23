@@ -4,8 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using Microsoft.AspNetCore.Http.Extensions;
+using System.Text;
 
 namespace RoostApp.Controllers
 {
@@ -29,6 +32,48 @@ namespace RoostApp.Controllers
         public IActionResult SendMessage(string id)
         {
             return View();
+        }
+
+        // POST: /api/chat/createpoll
+        // Creates a poll
+        [HttpPost("createpoll")]
+        public async Task<HttpResponseMessage> CreatePoll() 
+        {
+            try {
+                String username = "lisasoupcampbell@gmail.com";
+                String password = "fuckyou";
+                String encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("UTF-8").GetBytes(username + ":" + password));
+                //client.Headers.Add("Authorization", "Basic " + encoded);
+                HttpClient client = new HttpClient(new LoggingHandler(new HttpClientHandler()));
+
+                //get stuff from form
+                string question = "what day is it?";
+                Console.WriteLine("before async");
+                string authInfo = username + ":" + password;
+                //authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
+                //req.Headers["Authorization"] = "Basic " + authInfo;
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encoded);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+                //client.DefaultRequestHeaders.Add("Content-Type", "application/json");
+                //var content = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json");
+                Console.WriteLine(client.DefaultRequestHeaders);
+                var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":null,\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":null,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"red\",\"keyword\":null},{\"id\":null,\"value\":\"blue\",\"keyword\":null},{\"id\":null,\"value\":\"green\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                //Console.WriteLine(contents.ToString());
+                //HttpResponseMessage responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                HttpResponseMessage responsey = client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents).Result;
+                Console.WriteLine(responsey);
+                Console.WriteLine("after client post async");
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+
+            }
+            catch(Exception) {
+                Console.WriteLine("caught exception");
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
         }
 
         // POST: /api/chat/{id}/leave
