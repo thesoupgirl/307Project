@@ -30,7 +30,9 @@ export default class Polls extends Component {
         this.sendForm = this.sendForm.bind(this)
     }
 
+
     sendForm () {
+      var link, temp, web
       if (this.state.response1 === '') {
           Alert.alert(
             'You need at least one response!',      
@@ -49,15 +51,20 @@ export default class Polls extends Component {
       xhr.onload = () => {
       if (xhr.status===200) {
           console.warn('created poll')
+          
+          
           var json = JSON.parse(xhr.responseText);
           for (var i = 0; i < json.headers.length; i++) {
-           // console.warn(json.headers[i].value)
+           //console.warn(json.headers[i].value)
             if (json.headers[i].key === "Location")
-              this.setState({link: json.headers[i].value})  
+             temp = json.headers[i].value
+             this.setState({link: temp})
           }
+
           var groupID = this.props.gid
           var chatID = this.props.cid
-          var message = this.state.link
+          var message = 'Results: '+temp
+          console.warn(message)
           var user = this.props.username
           ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
           xhr = new XMLHttpRequest();
@@ -65,6 +72,42 @@ export default class Polls extends Component {
           xhr.onload = () => {
           if (xhr.status===200) {
               console.warn('Created Message')
+
+              setTimeout(function(){
+                web = '/web'
+              link = 'https://PollEv.com/multiple_choice_polls' 
+            
+            //console.warn(temp)
+            temp = temp.toString().substr(52, temp.toString().length)
+            link = link+temp+web
+            console.warn("VOTINGGGGG: "+link)
+
+            message = 'Vote Here: '+link
+            //user = this.props.username
+            //console.warn(message)
+            ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
+            xhr = new XMLHttpRequest();
+            xhr.open('POST', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                console.warn('Created Message')
+                setTimeout(function(){
+              
+
+               }, 100);
+               
+
+          
+            } else {
+                console.warn('Failed to create second message')
+
+            }
+            }; xhr.send(`message=${message}`)
+            this.renderBody
+
+
+              }, 500);
+              
 
         
           } else {
@@ -83,6 +126,9 @@ export default class Polls extends Component {
       this.renderBody
 
       //this.props.update()
+
+       //this.props.update()
+        this.props.menu()
 
     }
  
