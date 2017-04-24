@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using Amazon.DynamoDBv2.DocumentModel;
 
 namespace RoostApp.Controllers
 {
@@ -13,14 +14,86 @@ namespace RoostApp.Controllers
     public class ChatController : Controller
     {
 
-        DBHelper db = new DBHelper();
+        static DBHelper db = new DBHelper();
+
+        // Initialize the tables as Table objects
+        Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
+        Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
         // GET: /api/chat/{id}/{chat}/messages
         // Gets messages for a thread
-        [HttpGet("{id}/{chat}/messages")]
-        public IActionResult GetMessages(string id, string chat)
+        [HttpGet("{activityId}/{chat}/messages")]
+        public async Task<string> GetMessages(string activityId, string chat)
         {
-            return View();
+            try
+            {
+                // Most recent version
+                Console.WriteLine("Most recent version");
+                var item = await chatTable.GetItemAsync(chat, activityId);
+
+                // The indices in all lists correspond to each other.
+                List<string> messages = item["messagesSent"].AsListOfString();
+                List<string> dates = item["timestamps"].AsListOfString();
+
+                // The format required by the React module is a list of message objects.
+                string messageObjects = "{ \"messages\": [";
+
+                for (int i = 0; i < messages.Count(); i++)
+                {
+                    // Parse the date
+                    DateTime time = Convert.ToDateTime(dates.ElementAt(i));
+
+                    // Assemble the string
+                    messageObjects += "{\n";
+
+                    messageObjects = messageObjects + "\"_id\": \"" + i + "\",\n"
+                        + "\"text\": \"" + messages.ElementAt(i) + "\",\n"
+                        + "\"createdAt\": \"new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + "))\",\n"
+                        + "\"user\": {\"_id\": \"" + "\","
+                        + "\"name\": \"" + "\"" + "}\n";
+
+                    if (i != messages.Count()-1)
+                        messageObjects += "},\n";
+                }
+
+                messageObjects += "}\n";
+
+                messageObjects += "]}";
+
+                return messageObjects;
+            }
+            catch (Exception e)
+            {
+                // Return empty array if no messages found.
+                Console.WriteLine(e.Message);
+                return "{ \"messages\": []}";
+            }
+        }
+
+        // GET: /api/chat/{activityId}/users
+        // gets all users in a chat
+        [HttpGet("{activityId}/users")]
+        public async Task<List<string>> GetUsers(string activityId)
+        {
+            try
+            {
+                var item = await activitiesTable.GetItemAsync(activityId);
+                return item["members"].AsListOfString();
+            } catch (Exception)
+            {
+                Console.WriteLine("exeption caught");
+                return null;
+            }
+            
+        }
+
+        // GET: /api/chat/{activityId}/usercount
+        // gets number of users in a chat
+        [HttpGet("{activityId}/usercount")]
+        public async Task<int> GetUserCount(string activityId)
+        {
+            List<string> users = await GetUsers(activityId);
+            return users.Count();
         }
 
         // POST: /api/chat/{id}/send
@@ -28,29 +101,25 @@ namespace RoostApp.Controllers
         [HttpPost("{id}/send")]
         public IActionResult SendMessage(string id)
         {
+            // add to messagesSent list
+            // increment numMessages
+            // if list size is 200, delete the least recent message.
             return View();
         }
 
         // POST: /api/chat/{id}/leave
         // Removes a user from the chat
-        [HttpPost("{id}/leave")]
-        public async Task<HttpResponseMessage> LeaveGroup(string id)
+        [HttpPost("{activityId}/leave")]
+        public async Task<HttpResponseMessage> LeaveGroup(string activityId)
         {
             try
             {
                 // Activity id comes from route.
                 string user = Request.Form["userID"];
 
-                Dictionary<string, AttributeValue> activityTableKey =
-                    new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue { S = id } }
-                    };
+                var item = await activitiesTable.GetItemAsync(activityId);
 
-                // Get the activity from its table along with the chat id
-                var activity = await db.client.GetItemAsync(tableName: "RoostActivities", key: activityTableKey);
-
-                if (id == activity.Item["groupLeader"].S)
+                if (user == item["groupLeader"].AsString())
                 {
                     Response.StatusCode = 400;
                     HttpResponseMessage respons = new HttpResponseMessage();
@@ -58,26 +127,15 @@ namespace RoostApp.Controllers
                 }
 
                 // Remove the user's id from the list
-                List<string> updatedUserList = activity.Item["members"].SS;
+                List<string> updatedUserList = item["members"].AsListOfString();
 
                 updatedUserList.Remove(user);
 
                 // Update the activity's member count and Put the updated list back in the table
-                await db.client.UpdateItemAsync(tableName: "RoostActivities", key: activityTableKey,
+                item["members"] = updatedUserList;
+                item["numMembers"] = updatedUserList.Count();
 
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                        {
-                            "numMembers",
-                            new AttributeValueUpdate {Action = "ADD", Value = new AttributeValue { N = "-1" } }
-                        },
-                        {
-                            "members",
-                            new AttributeValueUpdate { Action = "PUT", Value = new AttributeValue { SS = updatedUserList } }
-                        }
-                    }
-                    
-                );
+                await activitiesTable.UpdateItemAsync(item);
 
                 Response.StatusCode = 200;
                 HttpResponseMessage response = new HttpResponseMessage();
@@ -98,5 +156,90 @@ namespace RoostApp.Controllers
         {
             return View();
         }
+
+        // POST /api/chat/{activityId}/kick
+        // Kicks a user from the group
+        // Only the group leader has this ability
+        [HttpPost("{activityId}/kick")]
+        public async Task<HttpResponseMessage> KickUser(string activityId)
+        {
+            var item = await activitiesTable.GetItemAsync(activityId);
+
+            try
+            {
+                string userToKick = Request.Form["userID"];
+
+                await LeaveGroup(activityId);
+
+                List<string> bannedUsers = new List<string>();
+
+                if (item.ContainsKey("banned"))
+                    bannedUsers = item["banned"].AsListOfString();
+
+                // Add the kicked user to that list.
+                if (!bannedUsers.Contains(userToKick))
+                {
+                    bannedUsers.Add(userToKick);
+                    item["banned"] = bannedUsers;
+                    await activitiesTable.UpdateItemAsync(item);
+                }
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+        }
+
+        // POST /api/chat/{activityId}/{chatId}/sendinvite
+        // Body will send column names that a message contains
+        // add it to the list of messages in an activity
+        // message will be "x invited y"
+        [HttpPost("{activityId}/{chatId}/addinvite")]
+        public async Task<HttpResponseMessage> AddInvite(string activityId, string chatId)
+        {
+            try
+            {
+                // Get the lists from the table
+                var item = await chatTable.GetItemAsync(chatId, activityId);
+
+                List<string> messages = new List<string>();
+                List<string> dates = new List<string>();
+
+                if (item.ContainsKey("messagesSent"))
+                    messages = item["messagesSent"].AsListOfString();
+
+                if (item.ContainsKey("timestamps"))
+                    dates = item["timestamps"].AsListOfString();
+
+                // Add the message's info
+                Console.WriteLine(Request.Form["message"]);
+                messages.Add(Request.Form["message"]);
+                dates.Add(DateTime.Now.ToString());
+
+                item["messagesSent"] = messages;
+                item["timestamps"] = dates;
+
+                // Update the table
+                await chatTable.UpdateItemAsync(item);
+
+                Response.StatusCode = 200;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Response.StatusCode = 400;
+                HttpResponseMessage response = new HttpResponseMessage();
+                return response;
+            }
+}
     }
 }

@@ -26,11 +26,10 @@ namespace Roost.Controllers
         Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
         Table chatTable = Table.LoadTable(db.client, "RoostChats");
 
-        // GET: /api/activities/{id}/{dist}
+        // GET: /api/activities/{userId}/{dist}
         // Gets list of activities within certain radius of user based on popularity
-        // TODO: determine the criteria for popularity.
-        [HttpGet("{id}/{dist}/search")]
-        public async Task<string> FindActivities(string id, string dist)
+        [HttpGet("{userId}/{dist}/search")]
+        public async Task<string> Search(string userId, string dist)
         {
             try
             {
@@ -55,7 +54,7 @@ namespace Roost.Controllers
                         // Only return activities the user is not in.
                         List<string> members = d["members"].AsListOfString();
 
-                        if (!members.Contains(id))
+                        if (!members.Contains(userId))
                             data = data + d.ToJson().ToString() + " , ";
 
                     }
@@ -76,10 +75,10 @@ namespace Roost.Controllers
             }
         }
 
-        // GET /api/activities/{id}/getactivities
-        // Get all the activities a user is in. UserId is parameter.
-        [HttpGet("{id}/getactivities")]
-        public async Task<string> GetActivities(string id)
+        // GET /api/activities/{userId}/getactivities
+        // Get all the activities a user is in.
+        [HttpGet("{userId}/getactivities")]
+        public async Task<string> GetActivities(string userId)
         {
             try
             {
@@ -102,7 +101,7 @@ namespace Roost.Controllers
                     {   // Find all the groups a user belongs to and return them as JSON.
                         List<string> members = d["members"].AsListOfString();
 
-                        if (members.Contains(id))
+                        if (members.Contains(userId))
                             data = data + d.ToJson().ToString() + " , ";
                     }
                 } while (!search.IsDone);
@@ -123,10 +122,10 @@ namespace Roost.Controllers
             }
         }
 
-        // POST: /api/activities/{id}/createactivity
+        // POST: /api/activities/{userId}/createactivity
         // Creates an activity
-        [HttpPost("{id}/createactivity")]
-        public async Task<HttpResponseMessage> CreateActivity(string id)
+        [HttpPost("{userId}/createactivity")]
+        public async Task<HttpResponseMessage> CreateActivity(string userId)
         {
             // Use a randomly generated number for activity and chat IDs
             Random r = new Random();
@@ -150,7 +149,7 @@ namespace Roost.Controllers
                     base64Image = "none";
                 }
 
-                List<string> members = new List<string> { id };
+                List<string> members = new List<string> { userId };
 
                 Console.WriteLine(Request.Form["name"]);
                 Console.WriteLine(Request.Form["description"]);
@@ -173,7 +172,7 @@ namespace Roost.Controllers
                     tableName: "RoostActivities",
                     item: new Dictionary<String, AttributeValue>
                     {
-                        // Primary key: The unique activity id, an atomic number concatenated w/userId
+                        // Primary key: The unique activity id
                         {"ActivityId", new AttributeValue { S = activityID } },
 
                         // The number of people in the group
@@ -186,7 +185,7 @@ namespace Roost.Controllers
                         {"description", new AttributeValue { S = Request.Form["description"] } },
 
                         // The date the group was created
-                        {"createdDate", new AttributeValue { S = DateTime.Today.ToString() } },
+                        {"createdDate", new AttributeValue { S = DateTime.Now.ToString() } },
 
                         // The categories the activity will be listed under
                         {"category", new AttributeValue {S = Request.Form["category"] } },
@@ -208,17 +207,16 @@ namespace Roost.Controllers
                         // The maximum amount of people who can join the group
                         {"maxGroupSize", new AttributeValue{ N = Request.Form["maxSize"] } },
 
+                        // The list of banned users
+                        {"banned", new AttributeValue{SS = new List<string>{"null"}} },
+
                         // A complete list of everyone in the group.
                         {"members", new AttributeValue{SS = members} },
 
                         // The user who created the group
-                        {"groupLeader", new AttributeValue{ S = id } }
+                        {"groupLeader", new AttributeValue{ S = userId } }
                     }
                 );
-
-                // This list will store the userIds of all members in the activity
-                // Add the activity's creator to the list
-                //List<string> users = new List<string> { id };
 
                 // Attach a chat to the activity
                 // Must use UpdateItemAsync in order to use atomic counter
@@ -244,9 +242,6 @@ namespace Roost.Controllers
                         // Unique ids for each message
                         //{"messageIds", new AttributeValue{SS = new List<string>()} },
 
-                        // Links for pictures sent in the chat
-                        //{"picLinks", new AttributeValue{SS = new List<string>()} },
-
                         // The current number of messages in the chat (200 max)
                         {"numMessages", new AttributeValue{N = "0"} }
 
@@ -267,17 +262,17 @@ namespace Roost.Controllers
             }
         }
 
-        // POST: {id}/open
+        // POST: {activityId}/open
         // Makes a group public
-        [HttpPost("{id}/open")]
-        public async Task<HttpResponseMessage> OpenGroup(string id)
+        [HttpPost("{activityId}/open")]
+        public async Task<HttpResponseMessage> OpenGroup(string activityId)
         {
             try
             {
                 string user = Request.Form["userId"];
 
                 // Get an item from the table.
-                var item = await activitiesTable.GetItemAsync(id);
+                var item = await activitiesTable.GetItemAsync(activityId);
                 Console.WriteLine("yay");
                 Console.WriteLine(user);
                 if (item["status"] == "closed" && item["groupLeader"] == user)
@@ -308,15 +303,15 @@ namespace Roost.Controllers
             }
         }
 
-        // POST: {id}/close
+        // POST: {activityId}/close
         // Makes a group private
-        [HttpPost("{id}/close")]
-        public async Task<HttpResponseMessage> CloseGroup(string id)
+        [HttpPost("{activityId}/close")]
+        public async Task<HttpResponseMessage> CloseGroup(string activityId)
         {
             try
             {
                 string user = Request.Form["userId"];
-                var item = await activitiesTable.GetItemAsync(id);
+                var item = await activitiesTable.GetItemAsync(activityId);
 
                 // Don't try to close a group that already is closed.
                 if (item["status"] == "open" && item["groupLeader"] == user)
@@ -344,10 +339,10 @@ namespace Roost.Controllers
             }
         }
 
-        // POST: /api/activities/{id}/deleteactivity
+        // POST: /api/activities/{activityId}/deleteactivity
         // Deletes an activity
-        [HttpPost("{id}/deleteactivity")]
-        public async Task<HttpResponseMessage> DeleteActivity(string id)
+        [HttpPost("{activityId}/deleteactivity")]
+        public async Task<HttpResponseMessage> DeleteActivity(string activityId)
         {
             try
             {
@@ -360,15 +355,15 @@ namespace Roost.Controllers
                 }
 
                 // Get the activity from the table
-                var activity = await activitiesTable.GetItemAsync(id);
+                var activity = await activitiesTable.GetItemAsync(activityId);
 
                 string chatId = activity["chatId"];
 
                 // Only the group leader can delete an activity.
                 if (activity["groupLeader"] == user)
                 {
-                    await chatTable.DeleteItemAsync(chatId, id);
-                    await activitiesTable.DeleteItemAsync(id);
+                    await chatTable.DeleteItemAsync(chatId, activityId);
+                    await activitiesTable.DeleteItemAsync(activityId);
                 }
                 else {
                     Response.StatusCode = 400;
@@ -406,23 +401,22 @@ namespace Roost.Controllers
             {
                 try
                 {
-                    GetItemResponse stuff = await db.client.GetItemAsync(
-                        tableName: "RoostActivities",
-                        key: new Dictionary<string, AttributeValue>
-                        {
-                            {"ActivityId", new AttributeValue {S = id} }
-                        }
-                    );
+                    var stuff = await activitiesTable.GetItemAsync(id);
 
                     // The number of people currently in the group and the size limit
-                    int numberOfPeeps = Convert.ToInt32(stuff.Item["numMembers"].N);
-                    int capacity = Convert.ToInt32(stuff.Item["maxGroupSize"].N);
+                    int numberOfPeeps = stuff["numMembers"].AsInt();
+                    int capacity = stuff["maxGroupSize"].AsInt();
 
-                    Console.WriteLine(stuff.Item["members"].SS);
+                    Console.WriteLine(stuff["members"].AsListOfString());
                     Console.WriteLine(numberOfPeeps);
-                    List<string> membersList = stuff.Item["members"].SS;
 
-                    // don't join if the user is already joined or if it's full.
+                    List<string> membersList = stuff["members"].AsListOfString();
+                    List<string> banned = new List<string>();
+
+                    if (stuff.ContainsKey("banned"))
+                        banned = stuff["banned"].AsListOfString();
+
+                    // don't join if the user is already joined, is banned, or if it's full.
                     if (membersList.Contains(username))
                     {
                         Console.WriteLine("User already added to activity");
@@ -437,27 +431,25 @@ namespace Roost.Controllers
                         HttpResponseMessage responsey = new HttpResponseMessage();
                         return responsey;
                     }
+                    else if (banned.Contains(username))
+                    {
+                        Console.WriteLine("User is banned");
+                        Response.StatusCode = 400;
+                        HttpResponseMessage responsey = new HttpResponseMessage();
+                        return responsey;
+                    }
 
                     // Add the user to the list and update the entry in the table.
                     membersList.Add(username);
-                    Console.WriteLine(stuff.Item["numMembers"].N);
+                    Console.WriteLine(stuff["numMembers"].AsInt());
 
                     numberOfPeeps++;
                     string peopleNum = numberOfPeeps.ToString();
 
-                    await db.client.UpdateItemAsync(
-                    tableName: "RoostActivities",
-                    key: new Dictionary<string, AttributeValue>
-                    {
-                        {"ActivityId", new AttributeValue {S = id} }
-                    },
+                    stuff["members"] = membersList;
+                    stuff["numMembers"] = peopleNum;
 
-                    attributeUpdates: new Dictionary<string, AttributeValueUpdate>
-                    {
-                            {"members", new AttributeValueUpdate(new AttributeValue {SS = membersList}, AttributeAction.PUT)},
-                            {"numMembers", new AttributeValueUpdate(new AttributeValue {N = peopleNum}, AttributeAction.PUT)}
-                    }
-                );
+                    await activitiesTable.UpdateItemAsync(stuff);
 
                     Response.StatusCode = 200;
                     HttpResponseMessage response = new HttpResponseMessage();
