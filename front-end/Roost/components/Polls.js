@@ -51,7 +51,7 @@ export default class Polls extends Component {
           console.warn('created poll')
           var json = JSON.parse(xhr.responseText);
           for (var i = 0; i < json.headers.length; i++) {
-           // console.warn(json.headers[i].value)
+           //console.warn(json.headers[i].value)
             if (json.headers[i].key === "Location")
               this.setState({link: json.headers[i].value})  
           }
@@ -59,12 +59,15 @@ export default class Polls extends Component {
           var chatID = this.props.cid
           var message = this.state.link
           var user = this.props.username
+          console.warn(message)
           ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
           xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
           if (xhr.status===200) {
               console.warn('Created Message')
+              this.props.menu()
+              this.props.update()
 
         
           } else {

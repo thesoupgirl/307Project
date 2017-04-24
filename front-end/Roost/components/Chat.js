@@ -47,8 +47,14 @@ export default class Chat extends Component {
      this.kickUser = this.kickUser.bind(this)
      this.menu = this.menu.bind(this)
      this.invite = this.invite.bind(this)
+     this.update = this.update.bind(this)
+
     
     }
+
+    update () {
+            this.componentWillMount()
+        }
 
     invite(user) {
         var username = this.props.userID
@@ -401,7 +407,7 @@ export default class Chat extends Component {
           </Button>
           <Text/>
           <Button onPress={() => {this.setState({page: 'form'})}} block>
-            <Text>Add Form</Text>
+            <Text>Add Poll</Text>
           </Button>
           <Text/>
           <Button onPress={() => {this.setState({page: 'add'})}} block>
@@ -505,7 +511,7 @@ export default class Chat extends Component {
             return (
                 <Polls
                     menu={this.menu}
-                    update={this.componentWillMount}
+                    update={this.update}
                     gid={this.props.groupID}
                     cid={this.props.chatID}
                     username ={this.props.userID}/>
