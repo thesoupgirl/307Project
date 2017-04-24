@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Amazon.DynamoDBv2.DocumentModel;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Text;
+using System.IO;
 
 namespace RoostApp.Controllers
 {
@@ -19,8 +20,10 @@ namespace RoostApp.Controllers
     {
 
         static DBHelper db = new DBHelper();
-        Stopwatch timer = new Stopwatch();
-        string pollId;
+        static Stopwatch timer = new Stopwatch();
+        static string pollId = "ew";
+        static StringContent openPoll;
+        static StringContent closedPoll;
 
         // Initialize the tables as Table objects
         Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
@@ -33,21 +36,47 @@ namespace RoostApp.Controllers
         {
             try
             {
-                /*
+                Console.WriteLine("Is timer running?");
+                Console.WriteLine(timer.IsRunning);
+                TimeSpan bleh = timer.Elapsed;
+                Console.WriteLine(bleh.Seconds);
+                int yayMe = bleh.Seconds;
+                int minutes = bleh.Minutes;
                 if(timer.IsRunning) {
                     TimeSpan ts = timer.Elapsed;
-                    if(ts.Seconds >= 30) {
+                    Console.WriteLine("timer is running");
+                    Console.WriteLine(yayMe);
+                    Console.WriteLine("ew");
+                    Console.WriteLine(pollId);
+                    if(yayMe >= 30 || minutes > 0) {
+                        Console.WriteLine("overtime...hammertime?");
                         String username = "lisasoupcampbell@gmail.com";
                         String password = "fuckyou";
-                        String encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("UTF-8").GetBytes(username + ":" + password));
-                        //client.Headers.Add("Authorization", "Basic " + encoded);
+                        int killMeNao = pollId.IndexOf("perma");
+                        //int meowmeow = pollId.IndexOf("type");
+                        Console.WriteLine("please kill me");
+                        pollId = pollId.Substring(killMeNao);
+                        killMeNao = pollId.IndexOf(":");
+                        pollId = pollId.Substring(killMeNao);
+                        int meowmeow = pollId.IndexOf(",");
+                        Console.WriteLine(pollId.Substring(0, meowmeow));
+                        pollId = pollId.Substring(0, meowmeow);
+                        pollId = pollId.Substring(1, pollId.Length - 1);
+                        pollId = pollId.Substring(1, pollId.Length - 2);
+                        Console.WriteLine("jk don't");
                         HttpClient client = new HttpClient(new LoggingHandler(new HttpClientHandler()));
-                        client.GetAsync("https://www.polleverywhere.com/multiple_choice_polls/" + pollId + "/results");
-                        
+                        string pollUrl = "https://www.polleverywhere.com/multiple_choice_polls/" + pollId;
+                        String encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("UTF-8").GetBytes(username + ":" + password));
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", encoded);
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
+                        //client.Headers.Add("Authorization", "Basic " + encoded);
+                        //client.PutAsync("https://www.polleverywhere.com/multiple_choice_polls/" + pollId + "/results");
+                        client.PutAsync(pollUrl, closedPoll);
+                        timer.Reset();
                         //var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":14827345,\"updated_at\":\"2016-06-21T07:04:42-07:00\",\"title\":\"I like different titles\",\"opened_at\":null,\"permalink\":\"w8MrohMVVPRUOJx\",\"state\":\"closed\",\"sms_enabled\":false,\"twitter_enabled\":null,\"web_enabled\":false,\"sharing_enabled\":null,\"simple_keywords\":false,\"options\":[{\"id\":77972458,\"value\":\"red\",\"keyword\":null},{\"id\":77972459,\"value\":\"blue\",\"keyword\":null},{\"id\":77972460,\"value\":\"green\",\"keyword\":null}]}}");
                     }
                 }
-                */
+                
                 // Most recent version
                 Console.WriteLine("Most recent version");
                 var item = await chatTable.GetItemAsync(chat, activityId);
@@ -128,6 +157,12 @@ namespace RoostApp.Controllers
             return View();
         }
 
+        public string ContentToString(HttpContent httpContent)
+        {
+            var readAsStringAsync = httpContent.ReadAsStringAsync();
+            return readAsStringAsync.Result;
+        }
+
         // POST: /api/chat/createpoll
         // Creates a poll
         [HttpPost("createpoll")]
@@ -156,32 +191,63 @@ namespace RoostApp.Controllers
                 Console.WriteLine(client.DefaultRequestHeaders);
                 HttpResponseMessage responsey;
                 timer.Start();
+                Console.WriteLine(timer.IsRunning);
                 //check if null
                 if(response2 == "") {
-                    var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":true,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
-                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                    openPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":true,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json");
+                    closedPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":closed\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":true,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json");  
+                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", openPoll);
+                    //Stream receiveStream = responsey.Content.ReadAsStringAsync();
+                    //StreamReader readStream = new StreamReader (receiveStream, Encoding.UTF8);
+                    pollId = ContentToString(responsey.Content);
+                    Console.WriteLine("argh");
+                    Console.WriteLine(pollId);
+                    Console.WriteLine("bleh");
                     return responsey;
                 }
                 else if(response3 == "") {
-                    var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
-                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                    openPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    closedPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"closed\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", openPoll);
+                    pollId = ContentToString(responsey.Content);
+                    Console.WriteLine("argh");
+                    Console.WriteLine(pollId);
+                    Console.WriteLine("bleh");
                     return responsey;
                 }
                 else if(response4 == "") {
-                    var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
-                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                    openPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    closedPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"closed\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", openPoll);
+                    pollId = ContentToString(responsey.Content);
+                    Console.WriteLine("argh");
+                    Console.WriteLine(pollId);
+                    Console.WriteLine("bleh");
                     return responsey;
                 }
                 else if(response5 == "") {
-                    var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}, {\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
-                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                    openPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}, {\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    closedPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"closed\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null}, {\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", openPoll);
+                    pollId = ContentToString(responsey.Content);
+                    Console.WriteLine("argh");
+                    Console.WriteLine(pollId);
+                    Console.WriteLine("bleh");
                     return responsey;
                 }
                 else {
-                    var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response5 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
-                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", contents);
+                    openPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response5 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    closedPoll = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":\"closed\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":true,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response2 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response3 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response4 + "\",\"keyword\":null},{\"id\":null,\"value\":\"" + response5 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
+                    responsey = await client.PostAsync("https://www.polleverywhere.com/multiple_choice_polls", openPoll);
+                    pollId = ContentToString(responsey.Content);
+                    Console.WriteLine("argh");
+                    Console.WriteLine(pollId);
+                    Console.WriteLine("bleh");
                     return responsey;
                 }
+                //Stream receiveStream = response.GetResponseStream ();
+                //StreamReader readStream = new StreamReader (receiveStream, Encoding.UTF8);
+                //string blah = readStream.ReadToEnd();
                 Console.WriteLine("meow");
                 Console.WriteLine(responsey.Content);
                 Console.WriteLine("after client post async");
