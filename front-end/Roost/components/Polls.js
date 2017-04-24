@@ -30,11 +30,34 @@ export default class Polls extends Component {
     }
 
     sendForm () {
-        //AJAX
+      if (this.state.response1 === '') {
+          Alert.alert(
+            'You need at least one response!',      
+          )
+        return
+      }
+      var question = this.state.question
+      var response1 = this.state.response1
+      var response2 = this.state.response2
+      var response3 = this.state.response3
+      var response4 = this.state.response4
+      var response5 = this.state.response5
+      let ws = `${path}/api/chat/createpoll`
+      let xhr = new XMLHttpRequest();
+      xhr.open('POST', ws);
+      xhr.onload = () => {
+      if (xhr.status===200) {
+          console.warn('created poll')
+          
+      } else {
+              Alert.alert(
+              'Error creating poll',      
+      )
+      }
+      }; xhr.send(`question=${question}&response1=${response1}&response2=${response2}&response3=${response3}&response4${response4}&response5=${response5}`)
+      this.renderBody
 
-
-        //then
-        this.props.update()
+      this.props.update()
     }
  
   render() {
