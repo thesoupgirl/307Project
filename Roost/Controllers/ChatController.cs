@@ -34,9 +34,7 @@ namespace RoostApp.Controllers
 
                 // The indices in all lists correspond to each other.
                 List<string> messages = item["messagesSent"].AsListOfString();
-                List<string> users = item["userIdSent"].AsListOfString();
                 List<string> dates = item["timestamps"].AsListOfString();
-
 
                 // The format required by the React module is a list of message objects.
                 string messageObjects = "{ \"messages\": [";
@@ -52,8 +50,8 @@ namespace RoostApp.Controllers
                     messageObjects = messageObjects + "\"_id\": \"" + i + "\",\n"
                         + "\"text\": \"" + messages.ElementAt(i) + "\",\n"
                         + "\"createdAt\": \"new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + "))\",\n"
-                        + "\"user\": {\"_id\": \"" + users.ElementAt(i) + "\","
-                        + "\"name\": \"" + users.ElementAt(i) + "\"" + "}\n";
+                        + "\"user\": {\"_id\": \"" + "\","
+                        + "\"name\": \"" + "\"" + "}\n";
 
                     if (i != messages.Count()-1)
                         messageObjects += "},\n";
@@ -65,9 +63,10 @@ namespace RoostApp.Controllers
 
                 return messageObjects;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 // Return empty array if no messages found.
+                Console.WriteLine(e.Message);
                 return "{ \"messages\": []}";
             }
         }
@@ -281,14 +280,10 @@ namespace RoostApp.Controllers
                 var item = await chatTable.GetItemAsync(chatId, activityId);
 
                 List<string> messages = new List<string>();
-                List<string> users = new List<string>();
                 List<string> dates = new List<string>();
 
                 if (item.ContainsKey("messagesSent"))
                     messages = item["messagesSent"].AsListOfString();
-
-                if (item.ContainsKey("userIdSent"))
-                    users = item["userIdSent"].AsListOfString();
 
                 if (item.ContainsKey("timestamps"))
                     dates = item["timestamps"].AsListOfString();
@@ -296,11 +291,9 @@ namespace RoostApp.Controllers
                 // Add the message's info
                 Console.WriteLine(Request.Form["message"]);
                 messages.Add(Request.Form["message"]);
-                //users.Add(Request.Form["user"]); // The user who sent the message
                 dates.Add(DateTime.Now.ToString());
 
                 item["messagesSent"] = messages;
-                //item["userIdSent"] = users;
                 item["timestamps"] = dates;
 
                 // Update the table
