@@ -31,7 +31,6 @@ namespace RoostApp.Controllers
 
                 // The indices in all lists correspond to each other.
                 List<string> messages = item["messagesSent"].AsListOfString();
-                List<string> users = item["userIdSent"].AsListOfString();
                 List<string> dates = item["timestamps"].AsListOfString();
 
                 // The format required by the React module is a list of message objects.
@@ -48,8 +47,8 @@ namespace RoostApp.Controllers
                     messageObjects = messageObjects + "\"_id\": \"" + i + "\",\n"
                         + "\"text\": \"" + messages.ElementAt(i) + "\",\n"
                         + "\"createdAt\": \"new Date(Date.UTC(" + time.Year + "," + time.Month + "," + time.Day + "," + time.Hour + "," + time.Minute + "," + time.Second + "))\",\n"
-                        + "\"user\": {\"_id\": \"" + users.ElementAt(i) + "\","
-                        + "\"name\": \"" + users.ElementAt(i) + "\"" + "}\n";
+                        + "\"user\": {\"_id\": \"" + "\","
+                        + "\"name\": \"" + "\"" + "}\n";
 
                     if (i != messages.Count()-1)
                         messageObjects += "},\n";
