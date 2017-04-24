@@ -95,7 +95,7 @@ export default class Chat extends Component {
             console.warn('Failed to create message')
 
         }
-        }; xhr.send(`message=${message}&user=${username}`)
+        }; xhr.send(`message=${message}`)
         this.renderBody
 
         } else {
@@ -163,7 +163,7 @@ export default class Chat extends Component {
 
             var groupID  = this.props.groupID
             var chatID = this.props.chatID
-            cid = this.props.chatID;
+            console.warn(chatID)
             let ws = `${path}/api/chat/${groupID}/${chatID}/messages` //fix route
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
@@ -505,7 +505,10 @@ export default class Chat extends Component {
             return (
                 <Polls
                     menu={this.menu}
-                    update={this.componentWillMount}/>
+                    update={this.componentWillMount}
+                    gid={this.props.groupID}
+                    cid={this.props.chatID}
+                    username ={this.props.userID}/>
             )
         }
         else if (this.state.page === 'add') {

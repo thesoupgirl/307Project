@@ -25,6 +25,7 @@ export default class Polls extends Component {
           response3: '',
           response4: '',
           response5: '',
+          link: ''
         }
         this.sendForm = this.sendForm.bind(this)
     }
@@ -48,6 +49,30 @@ export default class Polls extends Component {
       xhr.onload = () => {
       if (xhr.status===200) {
           console.warn('created poll')
+          var json = JSON.parse(xhr.responseText);
+          for (var i = 0; i < json.headers.length; i++) {
+           // console.warn(json.headers[i].value)
+            if (json.headers[i].key === "Location")
+              this.setState({link: json.headers[i].value})  
+          }
+          var groupID = this.props.gid
+          var chatID = this.props.cid
+          var message = 'hi'
+          var user = this.props.username
+          ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
+          xhr = new XMLHttpRequest();
+          xhr.open('POST', ws);
+          xhr.onload = () => {
+          if (xhr.status===200) {
+              console.warn('Created Message')
+
+        
+          } else {
+              console.warn('Failed to create message')
+
+          }
+          }; xhr.send(`message=${message}&user=${user}`)
+          this.renderBody
           
       } else {
               Alert.alert(
@@ -58,6 +83,7 @@ export default class Polls extends Component {
       this.renderBody
 
       this.props.update()
+
     }
  
   render() {
@@ -78,7 +104,7 @@ export default class Polls extends Component {
       <Content>
         <View style={{padding: 20}}>
          <TextInput
-            style={{height: 60}}
+            style={{height: 60, fontSize: 25}}
             placeholder = 'Enter Poll Question Here'
             onChangeText={(question) => this.setState({question})}
          />
@@ -116,6 +142,8 @@ export default class Polls extends Component {
 
             onChangeText={(response5) => this.setState({response5})}
          />
+
+         <Button onPress={() => this.sendForm()} block><Text>Add Poll</Text></Button>
          
       </View>
       </Content>
