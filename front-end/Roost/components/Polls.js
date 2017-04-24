@@ -26,10 +26,12 @@ export default class Polls extends Component {
           response4: '',
           response5: '',
           link: '',
-          time: '10'
+          time: '30'
         }
         this.sendForm = this.sendForm.bind(this)
     }
+
+ 
 
 
     sendForm () {
@@ -49,6 +51,7 @@ export default class Polls extends Component {
       let ws = `${path}/api/chat/createpoll`
       let xhr = new XMLHttpRequest();
       xhr.open('POST', ws);
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.onload = () => {
       if (xhr.status===200) {
           //console.warn('created poll')
@@ -70,9 +73,10 @@ export default class Polls extends Component {
           ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
           xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
           xhr.onload = () => {
           if (xhr.status===200) {
-             // console.warn('Created Message')
+             //console.warn('Created Message')
 
               setTimeout(function(){
                 web = '/web'
@@ -94,6 +98,7 @@ export default class Polls extends Component {
             if (xhr.status===200) {
                 //console.warn('Created Message')
                 setTimeout(function(){
+              //this.props.update()
               
 
                }, 100);
@@ -127,10 +132,10 @@ export default class Polls extends Component {
       }; xhr.send(`question=${question}&response1=${response1}&response2=${response2}&response3=${response3}&response4${response4}&response5=${response5}`)
       this.renderBody
 
-      //this.props.update()
 
-       //this.props.update()
-        this.props.menu()
+       this.props.menu()
+
+       
 
     }
  
@@ -197,8 +202,8 @@ export default class Polls extends Component {
                         mode="dropdown"
                         selectedValue={this.state.time}
                         onValueChange={(time) => {this.setState({time: time})}}>
-                        <Item label="45 seconds" value="10" />
-                        <Item label="60 seconds" value="20" />
+                        <Item label="30 seconds" value="30" />
+                        <Item label="45 seconds" value="45" />
                         
                    </Picker>
 
