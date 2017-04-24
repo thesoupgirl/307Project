@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Amazon.DynamoDBv2.Model;
 using Roost;
+using System.Diagnostics;
 using Amazon.DynamoDBv2.DocumentModel;
 using Microsoft.AspNetCore.Http.Extensions;
 using System.Text;
@@ -18,6 +19,8 @@ namespace RoostApp.Controllers
     {
 
         static DBHelper db = new DBHelper();
+        Stopwatch timer = new Stopwatch();
+        string pollId;
 
         // Initialize the tables as Table objects
         Table activitiesTable = Table.LoadTable(db.client, "RoostActivities");
@@ -30,6 +33,21 @@ namespace RoostApp.Controllers
         {
             try
             {
+                /*
+                if(timer.IsRunning) {
+                    TimeSpan ts = timer.Elapsed;
+                    if(ts.Seconds >= 30) {
+                        String username = "lisasoupcampbell@gmail.com";
+                        String password = "fuckyou";
+                        String encoded = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("UTF-8").GetBytes(username + ":" + password));
+                        //client.Headers.Add("Authorization", "Basic " + encoded);
+                        HttpClient client = new HttpClient(new LoggingHandler(new HttpClientHandler()));
+                        client.GetAsync("https://www.polleverywhere.com/multiple_choice_polls/" + pollId + "/results");
+                        
+                        //var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":14827345,\"updated_at\":\"2016-06-21T07:04:42-07:00\",\"title\":\"I like different titles\",\"opened_at\":null,\"permalink\":\"w8MrohMVVPRUOJx\",\"state\":\"closed\",\"sms_enabled\":false,\"twitter_enabled\":null,\"web_enabled\":false,\"sharing_enabled\":null,\"simple_keywords\":false,\"options\":[{\"id\":77972458,\"value\":\"red\",\"keyword\":null},{\"id\":77972459,\"value\":\"blue\",\"keyword\":null},{\"id\":77972460,\"value\":\"green\",\"keyword\":null}]}}");
+                    }
+                }
+                */
                 var item = await chatTable.GetItemAsync(chat, activityId);
 
                 // The indices in all lists correspond to each other.
@@ -83,7 +101,7 @@ namespace RoostApp.Controllers
                 return item["members"].AsListOfString();
             } catch (Exception)
             {
-                Console.WriteLine("exeption caught");
+                Console.WriteLine("exception caught");
                 return null;
             }
             
@@ -136,6 +154,7 @@ namespace RoostApp.Controllers
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
                 Console.WriteLine(client.DefaultRequestHeaders);
                 HttpResponseMessage responsey;
+                timer.Start();
                 //check if null
                 if(response2 == "") {
                     var contents = new StringContent("{\"multiple_choice_poll\": {\"id\":null,\"updated_at\":null,\"title\":\"" + question + "\",\"opened_at\":null,\"permalink\":null,\"state\":opened\",\"sms_enabled\":null,\"twitter_enabled\":null,\"web_enabled\":null,\"sharing_enabled\":null,\"simple_keywords\":null,\"options\":[{\"id\":null,\"value\":\"" + response1 + "\",\"keyword\":null}]}}", Encoding.UTF8, "application/json"); 
