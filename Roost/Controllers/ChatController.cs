@@ -27,6 +27,8 @@ namespace RoostApp.Controllers
         {
             try
             {
+                // Most recent version
+                Console.WriteLine("Most recent version");
                 var item = await chatTable.GetItemAsync(chat, activityId);
 
                 // The indices in all lists correspond to each other.
