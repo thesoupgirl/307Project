@@ -121,14 +121,15 @@ export default class SwipeActivities extends Component {
     }
 
     data (d) {
-        this.setState({data: d.data})
-        var sorted = this.state.data.sort(function(obj1, obj2) {
+        
+        var sorted = d.data.sort(function(obj1, obj2) {
 	    // Ascending: first age less than the previous
 	    return obj2.numMembers - obj1.numMembers;
+        //this.setState({data: sorted})
 
 });
     this.setState({data: sorted})
-        
+    this.setState({mounted: true})
     }
 
     setI (item) {
@@ -160,14 +161,9 @@ export default class SwipeActivities extends Component {
 
     componentDidMount() {
         //console.warn(routeD)
-        this.setState({mounted: true})
         
-        var sorted = this.state.data.sort(function(obj1, obj2) {
-	    // Ascending: first age less than the previous
-	    return obj2.numMembers - obj1.numMembers;
 
-});
-    this.setState({data: sorted})
+
     }
 
     right (id) {
