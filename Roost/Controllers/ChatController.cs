@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -98,5 +99,15 @@ namespace RoostApp.Controllers
         {
             return View();
         }
+	
+	// Sets a time in milliseconds until the poll will close
+	public void startTimer(int time)
+	{
+		timed = new System.Timers.Timer (time);
+		//timed.Elapsed += pollCloseEvent;
+		//                 ^this event will be the function that closes the poll
+		timed.AutoReset = false;
+		timed.Enabled = true;
+	}
     }
 }
