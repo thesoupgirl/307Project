@@ -142,7 +142,7 @@ export default class Categories extends Component {
           <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'Food' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Eat' })}}>
                 <Text>Food</Text>
             </ListItem>
             <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>

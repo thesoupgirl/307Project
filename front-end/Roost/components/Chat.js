@@ -110,11 +110,15 @@ export default class Chat extends Component {
         )
 
         }
-        }; xhr.send(`username=${user}&password=${pass}`)
+    }; xhr.send(`username=${user}&password=${pass}`)
+    
+    this.setState({page: 'menu'})
+    this.componentWillMount()
     }
 
     menu () {
         this.setState({page: 'menu'})
+       // this.componentWillMount()
     }
     kickUser (user) {
         if (this.props.userID === user) {
