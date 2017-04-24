@@ -36,11 +36,11 @@ export default class AddContact extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('succesfully added favorite')
+            //console.warn('succesfully added favorite')
             this.props.update()
             
         } else {
-            console.warn('failed to add favorite')
+            //console.warn('failed to add favorite')
             Alert.alert (
                 'Error adding favorite'
             )

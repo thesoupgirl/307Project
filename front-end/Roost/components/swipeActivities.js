@@ -134,7 +134,7 @@ export default class SwipeActivities extends Component {
 
     setI (item) {
         //i = item.data
-        console.warn(item)
+        //console.warn(item)
 
     }
 
@@ -147,13 +147,13 @@ export default class SwipeActivities extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn(xhr.responseText)
+            //console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)
             //console.warn('successful getting activites')
         } else {
-            console.warn('error getting activites')
+            //console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
@@ -167,15 +167,10 @@ export default class SwipeActivities extends Component {
     }
 
     right (id) {
-        if (this.state.index == this.state.data.length-1) {
-             Alert.alert(
-                'End of new activites',      
-        )
-            return;
-        }
-        else {
+
+
         this.setState({index: this.state.index+1})
-        console.warn(id)
+        //console.warn(id)
         //add user to group with ajax call
          //call to authenticate
     
@@ -188,7 +183,7 @@ export default class SwipeActivities extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity joined')
+            //console.warn('activity joined')
             
         } else {
                 Alert.alert(
@@ -198,7 +193,7 @@ export default class SwipeActivities extends Component {
         }
         }; xhr.send(`username=${username}&password=${password}`)
         this.renderBody  
-        }     
+          
     }
     left () {
         //console.warn('left')

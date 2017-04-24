@@ -51,7 +51,7 @@ export default class Contacts extends Component {
                 this.setState({favorites: filteredData})
                 
             } else {
-                console.warn('failed to get a users favorites')
+               // console.warn('failed to get a users favorites')
 
             }
                     }; xhr.send()

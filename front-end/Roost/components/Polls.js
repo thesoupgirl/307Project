@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text, Footer, 
 Icon, FooterTab, Header, View, Left, Body, Title,
-Right, DeckSwiper, Card, CardItem, Thumbnail, H1, List, ListItem, Segment, Tab, Tabs} from 'native-base';
+Right, DeckSwiper, Card, CardItem, Thumbnail, H1, List, ListItem, Segment, Tab, Tabs, Picker, Item} from 'native-base';
 var styles = require('./styles'); 
 import {
   AppRegistry,
@@ -25,7 +25,8 @@ export default class Polls extends Component {
           response3: '',
           response4: '',
           response5: '',
-          link: ''
+          link: '',
+          time: '10'
         }
         this.sendForm = this.sendForm.bind(this)
     }
@@ -50,7 +51,7 @@ export default class Polls extends Component {
       xhr.open('POST', ws);
       xhr.onload = () => {
       if (xhr.status===200) {
-          console.warn('created poll')
+          //console.warn('created poll')
           
           
           var json = JSON.parse(xhr.responseText);
@@ -64,14 +65,14 @@ export default class Polls extends Component {
           var groupID = this.props.gid
           var chatID = this.props.cid
           var message = 'Results: '+temp
-          console.warn(message)
+          //console.warn(message)
           var user = this.props.username
           ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
           xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
           xhr.onload = () => {
           if (xhr.status===200) {
-              console.warn('Created Message')
+             // console.warn('Created Message')
 
               setTimeout(function(){
                 web = '/web'
@@ -80,7 +81,7 @@ export default class Polls extends Component {
             //console.warn(temp)
             temp = temp.toString().substr(52, temp.toString().length)
             link = link+temp+web
-            console.warn("VOTINGGGGG: "+link)
+            //console.warn("VOTINGGGGG: "+link)
 
             message = 'Vote Here: '+link
             //user = this.props.username
@@ -90,7 +91,7 @@ export default class Polls extends Component {
             xhr.open('POST', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
-                console.warn('Created Message')
+                //console.warn('Created Message')
                 setTimeout(function(){
               
 
@@ -99,7 +100,7 @@ export default class Polls extends Component {
 
           
             } else {
-                console.warn('Failed to create second message')
+                //console.warn('Failed to create second message')
 
             }
             }; xhr.send(`message=${message}`)
@@ -111,7 +112,7 @@ export default class Polls extends Component {
 
         
           } else {
-              console.warn('Failed to create message')
+              //console.warn('Failed to create message')
 
           }
           }; xhr.send(`message=${message}`)
@@ -189,7 +190,18 @@ export default class Polls extends Component {
             onChangeText={(response5) => this.setState({response5})}
          />
 
-         <Button onPress={() => this.sendForm()} block><Text>Add Poll</Text></Button>
+         <Text>Poll Duration:</Text>
+                    <Picker
+                        iosHeader="Select one"
+                        mode="dropdown"
+                        selectedValue={this.state.time}
+                        onValueChange={(time) => {this.setState({time: time})}}>
+                        <Item label="45 seconds" value="10" />
+                        <Item label="60 seconds" value="20" />
+                        
+                   </Picker>
+
+          <Button onPress={() => this.sendForm()} block><Text>Add Poll</Text></Button>
          
       </View>
       </Content>

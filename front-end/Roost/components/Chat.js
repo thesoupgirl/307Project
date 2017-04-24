@@ -77,7 +77,7 @@ export default class Chat extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('Invited User')
+            //console.warn('Invited User')
 
 
         if (user === username) {
@@ -94,11 +94,11 @@ export default class Chat extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('Created Message')
+            //console.warn('Created Message')
 
       
         } else {
-            console.warn('Failed to create message')
+            //console.warn('Failed to create message')
 
         }
         }; xhr.send(`message=${message}`)
@@ -133,11 +133,11 @@ export default class Chat extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('succesfully kicked')
+            //console.warn('succesfully kicked')
             
             
         } else {
-            console.warn('failed to kick user')
+            //console.warn('failed to kick user')
 
         }
         }; xhr.send(`userId=${user}`)
@@ -158,12 +158,12 @@ export default class Chat extends Component {
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('succesfully added favorite')
+            //console.warn('succesfully added favorite')
 
             
             
         } else {
-            console.warn('failed to add favorite')
+            //console.warn('failed to add favorite')
 
         }
         }; xhr.send()
@@ -179,7 +179,7 @@ export default class Chat extends Component {
             xhr.open('GET', ws);
             xhr.onload = () => {
             if (xhr.status===200) {
-                console.warn('succesfully grabbed messages')
+                //console.warn('succesfully grabbed messages')
                 var json = JSON.parse(xhr.responseText);
                 var newJson = json
                 //console.warn(json.messages.length)
@@ -198,7 +198,7 @@ export default class Chat extends Component {
                 if (xhr.status===200) {
                     //console.warn('succesfully grabbed users in chat')
                     var json = JSON.parse(xhr.responseText);
-                    console.warn(json)
+                    //console.warn(json)
                    this.setState({users: json})
 
                     ws = `${path}/api/chat/${groupID}/usercount` //fix route
@@ -222,26 +222,26 @@ export default class Chat extends Component {
                             this.setState({favorites: filteredData})
                 
             } else {
-                console.warn('failed to get a users favorites')
+                //console.warn('failed to get a users favorites')
 
             }
                     }; xhr.send()
             
                         
                     } else {
-                        console.warn('failed to get the number of users in a chat')
+                        //console.warn('failed to get the number of users in a chat')
 
                     }
                     }; xhr.send()
     
                 } else {
-                    console.warn('failed to get users in a chat')
+                    //console.warn('failed to get users in a chat')
 
                 }
             }; xhr.send()
             
             } else {
-                console.warn('failed to get messages')
+                //console.warn('failed to get messages')
 
             }
         }; xhr.send()
@@ -255,13 +255,13 @@ export default class Chat extends Component {
     close () {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/activities/${gid}/close`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity closed')
+            //console.warn('activity closed')
             
         } else {
                 Alert.alert(
@@ -275,13 +275,13 @@ export default class Chat extends Component {
     open() {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/activities/${gid}/open`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity opened')
+            //console.warn('activity opened')
             
         } else {
                 Alert.alert(
@@ -295,13 +295,13 @@ export default class Chat extends Component {
     delete () {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/activities/${gid}/deleteactivity`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity deleted')
+           // console.warn('activity deleted')
             
         } else {
                 Alert.alert(
@@ -315,13 +315,13 @@ export default class Chat extends Component {
     leave () {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/chat/${gid}/leave`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity left')
+            //console.warn('activity left')
             this.setState({page: 'chat'})
             
         } else {
