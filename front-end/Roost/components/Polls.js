@@ -57,7 +57,7 @@ export default class Polls extends Component {
           }
           var groupID = this.props.gid
           var chatID = this.props.cid
-          var message = 'hi'
+          var message = this.state.link
           var user = this.props.username
           ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
           xhr = new XMLHttpRequest();
@@ -71,7 +71,7 @@ export default class Polls extends Component {
               console.warn('Failed to create message')
 
           }
-          }; xhr.send(`message=${message}&user=${user}`)
+          }; xhr.send(`message=${message}`)
           this.renderBody
           
       } else {
@@ -82,7 +82,7 @@ export default class Polls extends Component {
       }; xhr.send(`question=${question}&response1=${response1}&response2=${response2}&response3=${response3}&response4${response4}&response5=${response5}`)
       this.renderBody
 
-      this.props.update()
+      //this.props.update()
 
     }
  

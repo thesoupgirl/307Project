@@ -163,7 +163,7 @@ export default class Chat extends Component {
 
             var groupID  = this.props.groupID
             var chatID = this.props.chatID
-            console.warn(chatID)
+            //console.warn(chatID)
             let ws = `${path}/api/chat/${groupID}/${chatID}/messages` //fix route
             let xhr = new XMLHttpRequest();
             xhr.open('GET', ws);
