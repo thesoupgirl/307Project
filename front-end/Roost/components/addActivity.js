@@ -69,6 +69,7 @@ export default class AddActivity extends Component {
           let ws = `${path}/api/activities/${id}/createactivity` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
           xhr.onload = () => {
           if (xhr.status===200) {
               Alert.alert(

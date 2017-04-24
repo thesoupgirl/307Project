@@ -89,6 +89,7 @@ export default class Polls extends Component {
             ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
             xhr = new XMLHttpRequest();
             xhr.open('POST', ws);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.onload = () => {
             if (xhr.status===200) {
                 //console.warn('Created Message')

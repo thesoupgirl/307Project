@@ -259,6 +259,7 @@ export default class Chat extends Component {
         let ws = `${path}/api/activities/${gid}/close`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
             //console.warn('activity closed')
@@ -279,6 +280,7 @@ export default class Chat extends Component {
         let ws = `${path}/api/activities/${gid}/open`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
             //console.warn('activity opened')
@@ -299,6 +301,7 @@ export default class Chat extends Component {
         let ws = `${path}/api/activities/${gid}/deleteactivity`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
            // console.warn('activity deleted')
@@ -319,6 +322,7 @@ export default class Chat extends Component {
         let ws = `${path}/api/chat/${gid}/leave`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
             //console.warn('activity left')

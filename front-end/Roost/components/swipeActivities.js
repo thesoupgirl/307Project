@@ -181,6 +181,7 @@ export default class SwipeActivities extends Component {
         let ws = `${path}/api/activities/join/${id}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
             //console.warn('activity joined')
