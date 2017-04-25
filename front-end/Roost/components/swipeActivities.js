@@ -188,7 +188,7 @@ export default class SwipeActivities extends Component {
             
         } else {
                 Alert.alert(
-                'Error joining activity. You may already be joined',      
+                'Error joining activity. You may already be joined! (or kicked)',      
         )
 
         }

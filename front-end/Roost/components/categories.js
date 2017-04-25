@@ -85,7 +85,7 @@ export default class Categories extends Component {
             
         } else {
                 Alert.alert(
-                'Error joining activity. You may already be joined',      
+                'Error joining activity. You may already be joined! (or kicked)',      
                 //console.warn('activity joined')
         )
 
