@@ -7,6 +7,7 @@ import Categories from './categories.js';
 import AddActivity from './addActivity.js';
 import MessageThreads from './messageThreads.js';
 import Profile from './Profile.js';
+import Contacts from './Contacts.js'
 
 
 //import getTheme from './native-base-theme';
@@ -60,7 +61,7 @@ export default class Nav extends Component {
                           <Button active={this.state.page === 'explore'}
                                   onPress={() => {this.setState({ page: 'explore' })
                                   this.selectedPage()}}>
-                              <Icon name="globe" />
+                              <Icon name="globe"/>
                           </Button>
                           <Button active={this.state.page === 'categories'}
                                   onPress={() => {this.setState({ page: 'categories' })
@@ -76,6 +77,11 @@ export default class Nav extends Component {
                                   onPress={() => {this.setState({ page: 'messages' })
                                   this.selectedPage()}}>
                               <Icon name="chatboxes" />
+                          </Button>
+                          <Button active={this.state.page === 'friends'}
+                                  onPress={() => {this.setState({ page: 'friends' })
+                                  this.selectedPage()}}>
+                              <Icon name="contacts" />
                           </Button>
                           <Button active={this.state.page === 'profile'}
                                   onPress={() => {this.setState({ page: 'profile' })
@@ -108,6 +114,10 @@ export default class Nav extends Component {
             return <Profile handler = {this.props.handler}
                             hideNav = {this.hideNav}
                             user = {this.props.user}/>
+        else if (this.state.page === 'friends')
+            return <Contacts handler = {this.props.handler}
+                             hideNav = {this.hideNav}
+                             user = {this.props.user}/>                        
 
     }
 

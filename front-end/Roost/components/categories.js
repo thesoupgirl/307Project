@@ -53,13 +53,13 @@ export default class Categories extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn(xhr.responseText)
+            //console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)
             //console.warn('successful getting activites')
         } else {
-            console.warn('error getting activites')
+            //console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
@@ -70,30 +70,29 @@ export default class Categories extends Component {
     }
 
     join (id) {
-        //add user to group with ajax call
-        //call to authenticate
-    
-        //console.warn(md5(this.state.password));
+
         var username = this.props.user.username
         var password = this.props.user.password
         //var HARDCODED = 33284
-        console.warn(id)
-        //console.warn(id)
+        //console.warn('before')
         let ws = `${path}/api/activities/join/${id}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity joined')
+            //console.warn('activity joined')
             
         } else {
                 Alert.alert(
-                'Error joining activity. You may already be joined',      
+                'Error joining activity. You may already be joined! (or kicked)',      
+                //console.warn('activity joined')
         )
 
         }
         }; xhr.send(`username=${username}&password=${password}`)
-        this.renderBody
+    
+       // console.warn('after')
     }
 
     renderData () {
@@ -139,16 +138,16 @@ export default class Categories extends Component {
             </Body>
             <Right/>
         </Header>
-          <ListItem button onPress={() => {this.setState({ page: 'sports' })}}>
+          <ListItem button onPress={() => {this.setState({ page: 'Sports' })}}>
                 <Text>Sports</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'food' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Eat' })}}>
                 <Text>Food</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'adventures' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Adventures' })}}>
                 <Text>Adventures</Text>
             </ListItem>
-            <ListItem button onPress={() => {this.setState({ page: 'study groups' })}}>
+            <ListItem button onPress={() => {this.setState({ page: 'Study Groups' })}}>
                 <Text>Study Groups</Text>
             </ListItem>
             </View>
@@ -159,7 +158,7 @@ export default class Categories extends Component {
         <View>
           <Header>
             <Left>
-                <Button transparent onPress={() => {this.setState({ page: 'search' })}}>
+                <Button transparent onPress={() => this.setState({ page: 'search' })}>
                     <Icon name='arrow-back' />
                 </Button>
             </Left>

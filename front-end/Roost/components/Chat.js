@@ -14,18 +14,13 @@ import {
 } from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat'
 import path from '../properties.js'
+import Polls from './Polls.js'
 
 /*  
     
 */
 
-var threads = [{title: 'baseball', description: 'come play!'},
-            {category: 'Sports', title: 'soccer', description: 'come play!'},
-            {category: 'Sports', title: 'tennis', description: 'come play!'},
-            {category: 'Sports', title: 'hockey', description: 'come play!'},
-            {category: 'Eat', title: 'breakfast', description: 'come get breakfast!'},
-            {category: 'Adventures', title: 'Hiking', description: 'come Hiking!'},
-            {category: 'Study Groups', title: 'CS307', description: 'Looking for a group!'}]
+var threads = [{name: 'Danny'}, {name: 'David'}, {name: 'Joseph'}]
 
 
 export default class Chat extends Component {
@@ -33,10 +28,14 @@ export default class Chat extends Component {
         super()
         this.state = {
             page: 'chat',
+            groupSize: 1,
+            users: [{name: 'Danny'}, {name: 'David'}, {name: 'craig'}],
             messages: [
-       
             ],
-            updated: false
+            favorites: [],
+            json: null,
+            updated: false,
+            wait: true
         }
      this.onSend = this.onSend.bind(this)
      this.renderPage = this.renderPage.bind(this) 
@@ -44,18 +43,226 @@ export default class Chat extends Component {
      this.close = this.close.bind(this)
      this.open = this.open.bind(this)
      this.delete = this.delete.bind(this)
+     this.addFriend = this.addFriend.bind(this)
+     this.kickUser = this.kickUser.bind(this)
+     this.menu = this.menu.bind(this)
+     this.invite = this.invite.bind(this)
+     this.update = this.update.bind(this)
+
     
     }
-    close () {
-        var id = this.props.userID
-        var gid = this.props.groupID
-        console.warn(gid)
-        let ws = `${path}/api/activities/${gid}/close`
+
+    update () {
+            this.componentWillMount()
+        }
+
+    invite(user) {
+        var username = this.props.userID
+        var groupID  = this.props.groupID
+        var chatID = this.props.chatID
+        var pass = 'blah'
+
+        if (user === username) {
+            Alert.alert(
+                "You can't invite yourself",      
+             )
+             return;
+        }
+        //var HARDCODED = 33284
+        //console.warn(id)
+        //console.warn(id)
+        var message = `User ${username} invited ${user}`
+        let ws = `${path}/api/activities/join/${groupID}`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity closed')
+            //console.warn('Invited User')
+
+
+        if (user === username) {
+            Alert.alert(
+                "You can't invite yourself",      
+             )
+             return;
+        }
+        //var HARDCODED = 33284
+        //console.warn(id)
+        //console.warn(id)
+        let ws = `${path}/api/chat/${groupID}/${chatID}/addinvite`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            //console.warn('Created Message')
+
+      
+        } else {
+            //console.warn('Failed to create message')
+
+        }
+        }; xhr.send(`message=${message}`)
+        this.renderBody
+
+        } else {
+                Alert.alert(
+                'Failed to Invite user',      
+        )
+
+        }
+    }; xhr.send(`username=${user}&password=${pass}`)
+    
+    this.setState({page: 'menu'})
+    this.componentWillMount()
+    }
+
+    menu () {
+        this.setState({page: 'menu'})
+       // this.componentWillMount()
+    }
+    kickUser (user) {
+        if (this.props.userID === user) {
+            Alert.alert (
+                "Can't kick yourself"
+            )
+            return 
+        } 
+        var groupID  = this.props.groupID
+        ws = `${path}/api/chat/${groupID}/kick` //fix route
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            //console.warn('succesfully kicked')
+            
+            
+        } else {
+            //console.warn('failed to kick user')
+
+        }
+        }; xhr.send(`userId=${user}`)
+        this.componentWillMount()
+    }
+    addFriend (favorite) {
+        //TODO::ADD CODE TO ADD FRIEND
+
+        if(favorite === this.props.userID) {
+            Alert.alert(
+                "You can't add yourself as a favorite"
+            )
+            return
+        }
+        var user = this.props.userID
+        ws = `${path}/api/users/${user}/${favorite}` //fix route
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            //console.warn('succesfully added favorite')
+
+            
+            
+        } else {
+            //console.warn('failed to add favorite')
+
+        }
+        }; xhr.send()
+    }
+   
+        componentWillMount() {
+
+            var groupID  = this.props.groupID
+            var chatID = this.props.chatID
+            //console.warn(chatID)
+            let ws = `${path}/api/chat/${groupID}/${chatID}/messages` //fix route
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', ws);
+            xhr.onload = () => {
+            if (xhr.status===200) {
+                //console.warn('succesfully grabbed messages')
+                var json = JSON.parse(xhr.responseText);
+                var newJson = json
+                //console.warn(json.messages.length)
+                for (var i = 0; i < json.messages.length; i++) {
+                    var date = eval(newJson.messages[i].createdAt)
+                    newJson.messages[i].createdAt = date
+                    newJson.messages[i].createdAt = newJson.messages[i].createdAt.toISOString()
+                    //console.warn("data: "+newJson.messages[i].createdAt)
+                }
+                this.setState({messages: newJson.messages})
+
+                ws = `${path}/api/chat/${groupID}/users` //fix route
+                xhr = new XMLHttpRequest();
+                xhr.open('GET', ws);
+                xhr.onload = () => {
+                if (xhr.status===200) {
+                    //console.warn('succesfully grabbed users in chat')
+                    var json = JSON.parse(xhr.responseText);
+                    //console.warn(json)
+                   this.setState({users: json})
+
+                    ws = `${path}/api/chat/${groupID}/usercount` //fix route
+                    xhr = new XMLHttpRequest();
+                    xhr.open('GET', ws);
+                    xhr.onload = () => {
+                    if (xhr.status===200) {
+                       // console.warn('succesfully grabbed the number of users in chat')
+                        var json = JSON.parse(xhr.responseText);
+                        this.setState({groupSize: json})
+                        //console.warn(+json)
+
+                        var userID = this.props.userID
+                        ws = `${path}/api/users/${userID}/favorites`
+                        xhr = new XMLHttpRequest();
+                        xhr.open('GET', ws);
+                        xhr.onload = () => {
+                        if (xhr.status===200) {
+                            var json = JSON.parse(xhr.responseText);
+                            var filteredData = json.filter((item) => item !== 'null');  
+                            this.setState({favorites: filteredData})
+                
+            } else {
+                //console.warn('failed to get a users favorites')
+
+            }
+                    }; xhr.send()
+            
+                        
+                    } else {
+                        //console.warn('failed to get the number of users in a chat')
+
+                    }
+                    }; xhr.send()
+    
+                } else {
+                    //console.warn('failed to get users in a chat')
+
+                }
+            }; xhr.send()
+            
+            } else {
+                //console.warn('failed to get messages')
+
+            }
+        }; xhr.send()
+
+            
+       
+        }
+
+   
+
+    close () {
+        var id = this.props.userID
+        var gid = this.props.groupID
+        //console.warn(gid)
+        let ws = `${path}/api/activities/${gid}/close`
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.onload = () => {
+        if (xhr.status===200) {
+            //console.warn('activity closed')
             
         } else {
                 Alert.alert(
@@ -69,13 +276,14 @@ export default class Chat extends Component {
     open() {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/activities/${gid}/open`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity opened')
+            //console.warn('activity opened')
             
         } else {
                 Alert.alert(
@@ -89,13 +297,14 @@ export default class Chat extends Component {
     delete () {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/activities/${gid}/deleteactivity`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity deleted')
+           // console.warn('activity deleted')
             
         } else {
                 Alert.alert(
@@ -109,13 +318,14 @@ export default class Chat extends Component {
     leave () {
         var id = this.props.userID
         var gid = this.props.groupID
-        console.warn(gid)
+        //console.warn(gid)
         let ws = `${path}/api/chat/${gid}/leave`
         let xhr = new XMLHttpRequest();
         xhr.open('POST', ws);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn('activity left')
+            //console.warn('activity left')
             this.setState({page: 'chat'})
             
         } else {
@@ -139,7 +349,7 @@ export default class Chat extends Component {
         if (this.state.page === 'chat') {
             return (
                 
-                <Container>
+        <Container>
         <Header>
             <Left>
                 <Button transparent onPress={() => {this.props.showNav(), this.props.threadsHandler()}}>
@@ -188,6 +398,10 @@ export default class Chat extends Component {
         <Content>
         <Text/>
         <View style={{padding: 20}}>
+         <Button onPress={() => {this.setState({page: 'group'})}} block>
+            <Text>Activity Members</Text>
+          </Button>
+          <Text/>
           <Button onPress={() => this.leave()} block>
             <Text>Leave Activity</Text>
           </Button >
@@ -200,6 +414,18 @@ export default class Chat extends Component {
             <Text>Re-open Activity</Text>
           </Button>
           <Text/>
+          <Button onPress={() => {this.setState({page: 'form'})}} block>
+            <Text>Add Poll</Text>
+          </Button>
+          <Text/>
+          <Button onPress={() => {this.setState({page: 'add'})}} block>
+            <Text>Invite a friend</Text>
+          </Button>
+          <Text/>
+          <Button danger onPress={() => {this.setState({page: 'kick'})}} block>
+            <Text>Kick Users</Text>
+          </Button >
+          <Text/>
           <Button danger onPress={() => this.delete()} block>
             <Text>Delete Activity</Text>
           </Button>
@@ -208,35 +434,140 @@ export default class Chat extends Component {
       </Container>
             )
         }
+        else if (this.state.page === 'group') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+
+                    <Content style={{padding: 20}}>
+                    <Text># of Members {this.state.groupSize}</Text>
+                    </Content>
+                        <List dataArray={this.state.users} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.addFriend(data)}>
+                              <Text>Add as favorite</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
+        else if (this.state.page === 'kick') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+
+                    <Content style={{padding: 20}}>
+                    </Content>
+                        <List dataArray={this.state.users} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.kickUser(data)}>
+                              <Text>Kick User</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
+        else if (this.state.page === 'form') {
+            return (
+                <Polls
+                    menu={this.menu}
+                    update={this.update}
+                    gid={this.props.groupID}
+                    cid={this.props.chatID}
+                    username ={this.props.userID}/>
+            )
+        }
+        else if (this.state.page === 'add') {
+            return (
+                <Container>
+                    <Header>
+                        <Left>
+                            <Button transparent onPress={() => {this.setState({page: 'menu'})}}>
+                                <Icon name='arrow-back' />
+                            </Button>
+                        </Left>
+                        <Body>
+                            <Title>Chat Menu</Title>
+                        </Body>
+                        <Right>
+                        </Right>
+                    </Header>
+                    <Content>
+
+                    <Content style={{padding: 20}}>
+                    </Content>
+                        <List dataArray={this.state.favorites} renderRow={(data) =>
+                            <ListItem thumbnail>
+
+                      <Left>
+                          <Thumbnail square size={40} source={require('./img/water.png')} />
+                      </Left>
+                      <Body>
+                          <Text>{data}</Text>
+                          <Text note></Text>
+                      </Body>
+                      <Right>
+                          <Button transparent onPress={() => this.invite(data)}>
+                              <Text>Invite</Text>
+                          </Button>
+                      </Right>
+                    </ListItem>
+            } />
+                    </Content>
+                </Container>
+            )
+        }
     }
 
-    componentWillMount() {
-    this.setState({
-      messages: [
-          {
-          _id: 2,
-          text: 'Please work',
-          createdAt: new Date(Date.UTC(2017, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 3,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-        {
-          _id: 3,
-          text: 'Hello developer',
-          createdAt: new Date(Date.UTC(2016, 7, 30, 17, 20, 0)),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://facebook.github.io/react/img/logo_og.png',
-          },
-        },
-      ],
-    });
-  }
-
+   
     
   render() {
     return (

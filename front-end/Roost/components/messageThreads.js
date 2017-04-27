@@ -33,6 +33,7 @@ export default class MessageThreads extends Component {
             group: '',
             threads: true,
             id: 0,
+            chatId: 0,
             data: [],
             filteredData: []
         }
@@ -57,13 +58,13 @@ export default class MessageThreads extends Component {
         xhr.open('GET', ws);
         xhr.onload = () => {
         if (xhr.status===200) {
-            console.warn(xhr.responseText)
+            //console.warn(xhr.responseText)
             var json = JSON.parse(xhr.responseText);
             //onsole.warn(json.data[1].name)
             this.data(json)
             //console.warn('successful getting activites')
         } else {
-            console.warn('error getting activites')
+            //console.warn('error getting activites')
         }
         }; xhr.send()
         //console.log(search)
@@ -86,7 +87,7 @@ export default class MessageThreads extends Component {
         </Header>
         <Content>
           <List dataArray={this.state.filteredData} renderRow={(data) =>
-                <TouchableHighlight onPress={ () => console.warn('press') }>
+                <TouchableHighlight>
                   <ListItem thumbnail>
                         <Left>
                             <Thumbnail square size={40} source={require('./img/water.png')} />
@@ -99,8 +100,8 @@ export default class MessageThreads extends Component {
                         
                         <Right>
                             <Button transparent onPress={() => {this.props.hideNav(), this.setState({threads: false}),
-                              this.setState({id: data.ActivityId}), this.setState({group: data.name})}}>
-                                <Text>chat</Text>
+                              this.setState({id: data.ActivityId}), this.setState({chatID: data.chatId}), this.setState({group: data.name})}}>
+                                <Text>Chat</Text>
                             </Button>
                         </Right>
                       </ListItem>
@@ -114,6 +115,7 @@ export default class MessageThreads extends Component {
         return (
           <Chat threadsHandler={this.threadsHandler}
                 groupID={this.state.id}
+                chatID={this.state.chatID}
                 chatName = {this.state.group}
                 hideNav={this.props.hideNav}
                 showNav={this.props.showNav}

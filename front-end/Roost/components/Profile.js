@@ -153,9 +153,9 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <Content>
+      <Container>
         {this.disp()}
-      </Content>
+      </Container>
     );
   }
 }

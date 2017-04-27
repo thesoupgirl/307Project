@@ -69,6 +69,7 @@ export default class AddActivity extends Component {
           let ws = `${path}/api/activities/${id}/createactivity` //TODO: finish route
           let xhr = new XMLHttpRequest();
           xhr.open('POST', ws);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
           xhr.onload = () => {
           if (xhr.status===200) {
               Alert.alert(
@@ -137,8 +138,8 @@ export default class AddActivity extends Component {
     componentDidMount() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.warn('lat: ' +position.coords.latitude )
-          console.warn('long: ' +position.coords.longitude )
+          //console.warn('lat: ' +position.coords.latitude )
+          //console.warn('long: ' +position.coords.longitude )
 
           this.setState({
             latitude: position.coords.latitude,
@@ -160,7 +161,7 @@ export default class AddActivity extends Component {
     renderPage () {
       if (this.state.page === 'add') {
         return (
-      <Content>
+      <Container>
         <Header>
             <Left>
             </Left>
@@ -212,7 +213,7 @@ export default class AddActivity extends Component {
         <Button block success onPress={() => this.submit()}><Text>Submit Activity</Text></Button>
         </View>
       </Content>
-      </Content>
+      </Container>
     );
       }
       else if (this.state.page === 'pic') {
